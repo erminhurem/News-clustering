@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Vijesti{% endblock %}
+
+{% block content %}
+<h1>News Headlines</h1>
+
+{% for headline in headlines %}
+    <div>
+        <h2>{{ headline.title }}</h2>
+        <p>{{ headline.description }}</p>
+        
+        {% if headline.image_urls %}
+    
+            {% for image_url in headline.image_urls %}
+                <img src="{{ image_url }}" alt="Image">
+            {% endfor %}
+        {% endif %}
+        
+        <p><a href="{{ headline.link }}" target="_blank">Read more</a></p>
+        <p>Published on: {{ headline.published_date }}</p>
+        <p>Source: {{ headline.source }}</p>
+    </div>
+    <hr>
+{% endfor %}
+{% endblock %}
