@@ -1,26 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Vijesti{% endblock %}
-
 {% block content %}
-<h1>News Headlines</h1>
 
-{% for headline in headlines %}
-    <div>
-        <h2>{{ headline.title }}</h2>
-        <p>{{ headline.description }}</p>
-        
-        {% if headline.image_urls %}
-    
-            {% for image_url in headline.image_urls %}
-                <img src="{{ image_url }}" alt="Image">
+<div id="split_pane">
+    <div id="news_pane" class="top">
+        <div id="latest_news">
+            <h1>Najnovije vijesti</h1>
+            {% for news in latest_news %}
+            <div class="cluster">
+                <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                <div class="article_body">
+                    <p>{{ news.description }}</p>
+                </div>
+                <!-- Dodajte prikaz slike i ostale detalje ako je potrebno -->
+                <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                <p>Objavljeno: {{ news.published_date }}</p>
+                <p>Izvor: {{ news.source }}</p>
+            </div>
+            <div class="clear"></div>
             {% endfor %}
-        {% endif %}
-        
-        <p><a href="{{ headline.link }}" target="_blank">Read more</a></p>
-        <p>Published on: {{ headline.published_date }}</p>
-        <p>Source: {{ headline.source }}</p>
+        </div>
+
     </div>
-    <hr>
-{% endfor %}
+</div>
+
+
+
+<!-- Prikazuje po tri vijesti iz svake kategorije -->
+
+
+{% for category, details in news_by_category.items %}
+    <div class="kategorija_wrap"></div>
+    <div class="kategorija_naslov" id="{{ details.id }}">
+        <h10></h10>
+        <span>{{ category }}</span>
+    </div>
+    <div class="kategorija_clusters">
+    {% for headline in headlines %}
+    <div class="article">
+        <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
+        <p>{{ headline.description }}</p>
+        <!-- Dodajte prikaz slike i ostale detalje ako je potrebno -->
+        <p><a href="{{ headline.link }}" target="_blank">Pročitaj više</a></p>
+        <p>Objavljeno: {{ headline.published_date }}</p>
+        <p>Izvor: {{ headline.source }}</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="h_clear"></div>
+    {% endfor %}
+</div>
+
+
 {% endblock %}

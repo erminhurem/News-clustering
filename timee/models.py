@@ -5,6 +5,7 @@ class Headlines(models.Model):
     link = models.URLField()
     description = models.TextField()
     published_date = models.DateTimeField()
+    category = models.CharField(max_length=200, null=True, blank=True)
     source = models.CharField(max_length=100)
     image_urls= models.URLField(default=None,blank=True, null=True)
 
