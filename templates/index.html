@@ -10,11 +10,10 @@
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
                 <div class="article_body">
+                    <h2><a href="s/kurir" class="source">{{ news.source }}</a> - <span class="when_now"> {{ news.published_date }}</span></h2>
                     <p>{{ news.description }}</p>
                 </div>
-                <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
-                <p>Objavljeno: {{ news.published_date }}</p>
-                <p>Izvor: {{ news.source }}</p>
+                <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>          
             </div>
             <div class="clear"></div>
             {% endfor %}
@@ -39,8 +38,8 @@
         </div>
         {% endfor %}
     </div>
-    <div class="h_clear"></div>
 </div>
+<div class="h_clear"></div>
 {% endfor %}
-
 {% endblock %}
+
