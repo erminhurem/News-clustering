@@ -9,11 +9,19 @@
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                {% if news.images %}
+                <div class="article_image">
+                    <div class="image" style="background-image:url('{{ news.images.0 }}');-ms-behavior:url(dizajn/script/backgroundsize.min.htc);">
+                        <div class="image_inner">
+                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
                 <div class="article_body">
-                    <h2><a href="s/kurir" class="source">{{ news.source }}</a> - <span class="when_now"> {{ news.published_date }}</span></h2>
+                    <h2><a href="s/{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                     <p>{{ news.description }}</p>
                 </div>
-                <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>          
             </div>
             <div class="clear"></div>
             {% endfor %}
@@ -42,4 +50,3 @@
 <div class="h_clear"></div>
 {% endfor %}
 {% endblock %}
-

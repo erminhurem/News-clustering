@@ -2,32 +2,61 @@ import feedparser
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
+from django.utils.timezone import make_aware, now
 from .models import Headlines
 from bs4 import BeautifulSoup
 from django.db.models import Count
+import datetime
+
+# Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
+def get_friendly_source_name(url):
+    if 'telegraf.rs' in url:
+        return 'Telegraf'
+    elif 'kurir.rs' in url:
+        return 'Kurir'
+    elif 'nova.rs' in url:
+        return 'Nova'
+    elif 'n1info.ba' in url:
+        return 'N1'
+    # Dodajte više uslova za ostale izvore
+    else:
+        return 'Nepoznati izvor'
+    
+# Pomoćna funkcija za dobijanje relativnog vremena
+def get_relative_time(published_date):
+    if published_date:
+        delta = now() - published_date
+        if delta.days > 0:
+            return f"prije {delta.days} dana"
+        elif delta.seconds // 3600 > 0:
+            return f"prije {delta.seconds // 3600} sati"
+        elif delta.seconds // 60 > 0:
+            return f"prije {delta.seconds // 60} minuta"
+        else:
+            return "upravo objavljeno"
+    return "Nepoznato vrijeme"
 
 def index(request):
-    # Dohvati tri najnovije vijesti
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
 
-    # Definiše kategorije i pridružuje im jedinstvene ID-eve
     categories = ['Ekonomija', 'Sport', 'Srbija', 'Ostalo']
-    category_ids = {category: f'c{idx+1}' for idx, category in enumerate(categories)}
-
-    # Dohvati po tri vijesti za svaku kategoriju
     news_by_category = {}
     for category in categories:
-        news_by_category[category] = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
+        news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
+        for item in news_items:
+            item.source_name = get_friendly_source_name(item.source)
+            item.time_since = get_relative_time(item.published_date)
+        news_by_category[category] = news_items
 
-    # Pakuj sve potrebne informacije u kontekst
     context = {
         'latest_news': latest_news,
         'news_by_category': news_by_category,
-        'category_ids': category_ids,
     }
-
-    # Renderuj šablon sa kontekstom
     return render(request, "index.html", context)
+
 
 
 
