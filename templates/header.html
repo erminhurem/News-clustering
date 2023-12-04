@@ -1,0 +1,24 @@
+{% block header %}
+<div id="header_content"><a href="st/vesti.html">
+    <div id="logo"></div>
+  </a>
+  <div id="page_title">
+    <center>
+      <p>Vesti dana</p><span>Obnovljeno : <span>11:59</span></span>
+    </center>
+  </div>
+  <script>var a = document.getElementById("page_title"); 33 <= a.getElementsByTagName("p")[0].innerHTML.length && (a.className = "long");</script>
+  <div id="search" onMouseOver="this.style.opacity=1">
+    <form id="form" method="get" action="#">
+      <div id="searchbar"><input type="text" name="q" id="searchmain" style="color:#CCC;" value="Pretraga..."
+          onfocus="if(this.value == 'Pretraga...') {this.value = '';style.color='#000'; style.fontWeight='400'; style.boxShadow='inset 0 0 4px #bfcde8'}"
+          onblur="if (this.value == '') {this.value = 'Pretraga...';style.color='#CCC';style.fontWeight='100';}"><input
+          type="submit" class="send" value=""></div>
+      <div id="opts"><span><input type="radio" name="search" value="news"
+            checked></span><span>вести</span><span><input type="radio" name="search"
+            value="dict"></span><span>речник</span><span><input type="radio" name="search"
+            value="arch"></span><span>архива</span></div>
+    </form>
+  </div>
+</div>
+{% endblock header %}
