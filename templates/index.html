@@ -12,7 +12,6 @@
                 <div class="article_body">
                     <p>{{ news.description }}</p>
                 </div>
-                <!-- Dodajte prikaz slike i ostale detalje ako je potrebno -->
                 <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                 <p>Objavljeno: {{ news.published_date }}</p>
                 <p>Izvor: {{ news.source }}</p>
@@ -20,36 +19,28 @@
             <div class="clear"></div>
             {% endfor %}
         </div>
-
     </div>
 </div>
 
-
-
-<!-- Prikazuje po tri vijesti iz svake kategorije -->
-
-
-{% for category, details in news_by_category.items %}
-    <div class="kategorija_wrap"></div>
-    <div class="kategorija_naslov" id="{{ details.id }}">
+{% for category, headlines in news_by_category.items %}
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c{{ forloop.counter }}">
         <h10></h10>
-        <span>{{ category }}</span>
+        <span>{{ category }} »</span>
     </div>
     <div class="kategorija_clusters">
-    {% for headline in headlines %}
-    <div class="article">
-        <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
-        <p>{{ headline.description }}</p>
-        <!-- Dodajte prikaz slike i ostale detalje ako je potrebno -->
-        <p><a href="{{ headline.link }}" target="_blank">Pročitaj više</a></p>
-        <p>Objavljeno: {{ headline.published_date }}</p>
-        <p>Izvor: {{ headline.source }}</p>
+        {% for headline in headlines %}
+        <div class="article">
+            <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
+            <p>{{ headline.description }}</p>
+            <p><a href="{{ headline.link }}" target="_blank">Pročitaj više</a></p>
+            <p>Objavljeno: {{ headline.published_date }}</p>
+            <p>Izvor: {{ headline.source }}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    <div class="h_clear"></div>
 </div>
-<div class="h_clear"></div>
-    {% endfor %}
-</div>
-
+{% endfor %}
 
 {% endblock %}

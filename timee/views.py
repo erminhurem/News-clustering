@@ -7,20 +7,26 @@ from bs4 import BeautifulSoup
 from django.db.models import Count
 
 def index(request):
+    # Dohvati tri najnovije vijesti
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
-    categories = ['Ekonomija', 'Sport', 'Srbija', 'Ostalo']  # Definišite svoje kategorije
 
+    # Definiše kategorije i pridružuje im jedinstvene ID-eve
+    categories = ['Ekonomija', 'Sport', 'Srbija', 'Ostalo']
+    category_ids = {category: f'c{idx+1}' for idx, category in enumerate(categories)}
+
+    # Dohvati po tri vijesti za svaku kategoriju
     news_by_category = {}
-    for idx, category in enumerate(categories, start=1):  # Počnite sa 1
-        news_by_category[category] = {
-            'news': Headlines.objects.filter(category=category).order_by('-published_date')[:3],
-            'id': f'c{idx}'  # Kreirajte ID kao c1, c2, c3...
-        }
+    for category in categories:
+        news_by_category[category] = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
 
+    # Pakuj sve potrebne informacije u kontekst
     context = {
         'latest_news': latest_news,
         'news_by_category': news_by_category,
+        'category_ids': category_ids,
     }
+
+    # Renderuj šablon sa kontekstom
     return render(request, "index.html", context)
 
 
