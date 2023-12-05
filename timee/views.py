@@ -110,5 +110,5 @@ def categorize_news(url):
     
     elif 'srbija' in url:
         return 'Srbija'
-    # Ovdje dodajte dodatne kategorije prema potrebi
+    # Ovdje dodaj dodatne kategorije prema potrebi
     return 'Ostalo'
