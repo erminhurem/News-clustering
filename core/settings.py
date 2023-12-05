@@ -27,7 +27,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.222.21']
 
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Pretpostavlja se da koristite Redis kao broker
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Sarajevo'
 
+CELERY_BEAT_SCHEDULE = {
+    'fetch-news-every-10-minutes': {
+        'task': 'ime_vaše_aplikacije.tasks.task_fetch_news',
+        'schedule': 600,  # vremenski interval u sekundama (600 sekundi = 10 minuta)
+    },
+}
 
 # Application definition
 

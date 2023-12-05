@@ -65,7 +65,11 @@ def fetch_news():
         'https://www.telegraf.rs/rss',
         'https://www.kurir.rs/rss',
         'https://nova.rs/rss',
-        'https://n1info.ba/feed/'
+        'https://n1info.ba/feed/',
+        'https://www.euronews.rs/rss',
+        'https://informer.rs/rss',
+        'https://n1info.ba/rss',
+        'https://n1info.hr/rss'
     ]
 
     for feed_url in feeds:
