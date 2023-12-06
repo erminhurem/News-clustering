@@ -1,4 +1,3 @@
-
 from celery import shared_task
 from .views import fetch_news  
 

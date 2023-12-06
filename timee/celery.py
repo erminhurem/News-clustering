@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 app = Celery('timee')
 
 # Učitajte postavke iz vašeg Django settings fajla
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object('django.conf:settings')
 
 # Otkrijte zadatke iz svih registrovanih Django app aplikacija
-app.autodiscover_tasks()
+app.autodiscover_tasks(packages=None)

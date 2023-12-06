@@ -42,7 +42,7 @@ def index(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Ekonomija', 'Sport', 'Srbija', 'Ostalo']
+    categories = ['Ekonomija', 'Sport', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]

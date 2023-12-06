@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u2!6bqy*61$l&e59$e09=h08&63)7#jf36k+$nrww^7nd#2+cp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.222.21']
+ALLOWED_HOSTS = []
 
 # Celery settings
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Pretpostavlja se da koristite Redis kao broker
@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'timeba',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root',
         'HOST': 'localhost',   # Ili IP adresa vašeg MySQL servera
         'PORT': '3306',        # Defaultni MySQL port
     }
