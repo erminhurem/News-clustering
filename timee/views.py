@@ -42,7 +42,7 @@ def index(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Ekonomija', 'Sport', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
+    categories = ['Ekonomija', 'Sport', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'SPORT', 'MAGAZIN']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -57,7 +57,47 @@ def index(request):
     }
     return render(request, "index.html", context)
 
+def sport(request):
+    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
 
+    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo','VIJESTI','MAGAZIN']
+    news_by_category = {}
+    for category in categories:
+        news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
+        for item in news_items:
+            item.source_name = get_friendly_source_name(item.source)
+            item.time_since = get_relative_time(item.published_date)
+        news_by_category[category] = news_items
+
+    context = {
+        'latest_news': latest_news,
+        'news_by_category': news_by_category,
+    }
+    return render(request, "sport.html", context)
+
+def magazin(request):
+    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    categories = ['Zabava', 'Automobili / Motori', 'Tehnologija', 'Lifestyle','Hrana / Zdravlje','Intima / Sex', 'VIJESTI','SPORT']
+    news_by_category = {}
+    for category in categories:
+        news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
+        for item in news_items:
+            item.source_name = get_friendly_source_name(item.source)
+            item.time_since = get_relative_time(item.published_date)
+        news_by_category[category] = news_items
+
+    context = {
+        'latest_news': latest_news,
+        'news_by_category': news_by_category,
+    }
+    return render(request, "magazin.html", context)
 
 
 def fetch_news():
