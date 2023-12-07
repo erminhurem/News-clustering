@@ -239,49 +239,42 @@ body {
     margin: 0px
 }
 
-.tab {
-    cursor: pointer;
-    margin: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    display: inline-block;
-}
 
 #logo {
     width: 195px;
     height: 85px;
     margin-left: 2px;
-    background-image: url('..//images/main_logo.svg');
+    background-image: url('/static/images/main_logo.PNG');
     background-position: bottom;
     background-repeat: no-repeat;
     cursor: pointer
 }
 
 .site_srbtimemk #logo,.site_timers #logo {
-    background-image: url('../images/srbtimemk/main_logo.svg')
+    background-image: url('{% static "images/srbtimemk/main_logo.svg" %}')
 }
 
 .site_time3ro #logo {
-    background-image: url('../images/time3ro/main_logo.png')
+    background-image: url('{% static "images/time3ro/main_logo.png" %}')
 }
 
 .site_crotimemk #logo {
-    background-image: url('../images/crotimemk/main_logo.png');
+    background-image: url(' {% static "images/crotimemk/main_logo.png" %}');
     background-position: center
 }
 
 .site_shqiptimemk #logo {
-    background-image: url('../images/shqiptimemk/main_logo.png');
+    background-image: url(' {% static "images/shqiptimemk/main_logo.png" %}');
     background-position: center
 }
 
 .site_bgtimemk #logo {
-    background-image: url('../images/bgtimemk/main_logo.png');
+    background-image: url(' {% static "images/bgtimemk/main_logo.png" %}');
     background-position: center
 }
 
 .site_bihtimemk #logo {
-    background-image: url('../images/bihtimemk/main_logo.png');
+    background-image: url(' {% static "images/bihtimemk/main_logo.png" %}');
     background-position: center
 }
 
