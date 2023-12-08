@@ -30,6 +30,7 @@
 </div>
 
 {% for category, headlines in news_by_category.items %}
+
 <div class="kategorija_wrap">
     <div class="kategorija_naslov" id="c{{ forloop.counter }}">
         <h10></h10>
@@ -47,6 +48,8 @@
         {% endfor %}
     </div>
 </div>
-<div class="h_clear"></div>
+
+
 {% endfor %}
+<div class="h_clear"></div>
 {% endblock %}

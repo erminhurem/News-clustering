@@ -1122,7 +1122,9 @@ body .pagination span:hover {
     height: auto;
     margin: 0;
     margin-top: 10px;
-    float: left
+    float: left;
+    padding-right: 8px;
+ 
 }
 
 .h_clear {
