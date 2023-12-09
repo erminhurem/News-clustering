@@ -1,4 +1,16 @@
 
+<style>
+
+
+#step1 .super_btn.active {
+    position: relative;
+    width: 120px;
+    float: left;
+    border-right: 1px solid #fff;
+}
+
+
+</style>
 <div id="menu">
     <div id="step1"><a class="super_btn" id="super_0" href="/">
             <center>Vijesti</center><span></span>
@@ -62,46 +74,35 @@
 </div>
 
 <script>
-// Funkcija koja se poziva kada se klikne na link u meniju
-function setActiveLink(linkId) {
-    // Poništite aktivnu klasu sa svih linkova
-    var allLinks = document.querySelectorAll(".super_btn, .extra_btn");
-    allLinks.forEach(function(link) {
-        link.classList.remove("active-link");
-    });
+document.addEventListener("DOMContentLoaded", function() {
+    var menuLinks = document.querySelectorAll("#menu .super_btn, #menu .extra_btn");
+    var savedActiveLinkId = localStorage.getItem('activeLinkId');
 
-    // Postavite aktivnu klasu samo na kliknuti link
-    var clickedLink = document.getElementById(linkId);
-    if (clickedLink) {
-        clickedLink.classList.add("active-link");
+    if (savedActiveLinkId) {
+        var savedActiveLink = document.querySelector("#menu #" + savedActiveLinkId);
+        if (savedActiveLink) {
+            savedActiveLink.classList.add('active');
+        }
     }
-}
 
-var superLinks = document.querySelectorAll(".super_btn, .extra_btn");
-superLinks.forEach(function(link) {
-    link.addEventListener("click", function() {
-        var linkId = link.id;
-        setActiveLink(linkId);
+    menuLinks.forEach(function(link) {
+        link.addEventListener("click", function() {
+            // Ukloni klasu 'active' sa svih linkova
+            menuLinks.forEach(function(otherLink) {
+                otherLink.classList.remove('active');
+            });
+
+            // Dodaj klasu 'active' na kliknuti link
+            this.classList.add('active');
+            // Spremi ID kliknutog linka u localStorage
+            localStorage.setItem('activeLinkId', this.id);
+
+            // Ovdje možete dodati logiku za preusmjeravanje ako je potrebno
+            // window.location.href = this.href;
+        });
     });
 });
-// Dodajte event listenere za svaki link u meniju
-document.getElementById("super_0").addEventListener("click", function() {
-    setActiveLink("super_0");
-});
-document.getElementById("super_1").addEventListener("click", function() {
-    setActiveLink("super_1");
-});
-document.getElementById("super_2").addEventListener("click", function() {
-    setActiveLink("super_2");
-});
-document.getElementById("super_IMDB").addEventListener("click", function() {
-    setActiveLink("super_IMDB");
-});
-document.getElementById("super_sources").addEventListener("click", function() {
-    setActiveLink("super_sources");
-});
-document.getElementById("super_newest").addEventListener("click", function() {
-    setActiveLink("super_newest");
-});
+
+
 
 </script>

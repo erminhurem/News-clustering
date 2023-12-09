@@ -6,6 +6,7 @@ from django.utils.timezone import make_aware, now
 from .models import Headlines
 from bs4 import BeautifulSoup
 from django.db.models import Count
+
 import datetime
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
@@ -109,7 +110,10 @@ def fetch_news():
         'https://www.euronews.rs/rss',
         'https://informer.rs/rss',
         'https://n1info.ba/rss',
-        'https://n1info.hr/rss'
+        'https://n1info.hr/rss',
+        'https://toxictv.rs/feed/',
+        'https://www.vijesti.ba/rss/svevijesti',
+        'https://balkans.aljazeera.net/rss.xml'
     ]
 
     for feed_url in feeds:
@@ -152,3 +156,4 @@ def categorize_news(url):
         return 'Srbija'
     # Ovdje dodaj dodatne kategorije prema potrebi
     return 'Ostalo'
+

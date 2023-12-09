@@ -10,6 +10,7 @@
     <meta http-equiv="refresh" content="1850" />
     <meta http-equiv="Author" content="Time.ba">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="images/time.ico" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width" />
     <title>Time.ba</title>
@@ -53,11 +54,56 @@
         {% endblock %}
         
         {% include "footer.html" %}
+
+        <center>
+            <a onclick="scrollUp();" id='btt'></a>
+        </center>
         
     </div>
 
     <script>var a = document.getElementById("page_title"); 33 <= a.getElementsByTagName("p")[0].innerHTML.length && (a.className = "long");</script>
 
-</body>
+    <script type="text/javascript">
+        var startBTTPos = 600
+          , btt = document.getElementById("btt");
+        function pofs() {
+            pageYOffset > startBTTPos ? (window.btt.classList.add("scrl")) : (window.btt.classList.remove("scrl"))
+        }
+        ;try {
+            scr_branding();
+            window.onscroll = function() {
+                scr_branding();
+                pofs()
+            }
+        } catch (err) {
+            window.onscroll = pofs
+        }
+        ;var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+        function scrollT(a, b, c) {
+            var d = a.scrollTop
+              , g = b - d
+              , e = 0
+              , f = function() {
+                e += 20;
+                var b = Math.easeInOutQuad(e, d, g, c);
+                a.scrollTop = b;
+                e < c && setTimeout(f, 20)
+            };
+            f()
+        }
+        Math.easeInOutQuad = function(a, b, c, d) {
+            a /= d / 2;
+            if (1 > a)
+                return c / 2 * a * a + b;
+            a--;
+            return -c / 2 * (a * (a - 2) - 1) + b
+        }
+        ;
+        function scrollUp() {
+            window.scrollTo(0, 0)
+        }
+        ;pofs()
+    </script>
 
 </html>
