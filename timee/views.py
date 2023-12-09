@@ -169,7 +169,6 @@ def categorize_news(url):
         return 'Tehnologija'
     elif 'zdravlje' in url:
         return 'Zdravlje'
-    # Dodajte više uslova za ostale kategorije
     else:
         return 'Ostalo'
 
