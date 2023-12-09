@@ -26,7 +26,7 @@
             <center>Najnovije vijesti</center><span></span>
         </a></div>
     {% if request.path == '/sport/' %}
-        <div id="step2"><a class="category_btn" id="c1" href="st/vesti/srbija.html">
+        <div id="step2"><a class="category_btn" id="c1" href="{% url 'timee:fudbal_category' %}">
             <center>FUDBAL</center>
         </a><a class="category_btn" id="c2" href="st/vesti/ekonomija.html">
             <center>KOSARKA</center>
@@ -52,21 +52,22 @@
             <center>INTIMA / SEX</center>
         </div>
     {% else %}
-        <div id="step2"><a class="category_btn" id="c1" href="st/vesti/srbija.html">
+        <div id="step2">
+            <a class="category_btn" id="c1" href="{% url 'timee:bih_category' %}">
                 <center>BiH</center>
-            </a><a class="category_btn" id="c2" href="st/vesti/ekonomija.html">
+            </a><a class="category_btn" id="c2" href="{% url 'timee:ekonomija_category' %}">
                 <center>Ekonomija</center>
-            </a><a class="category_btn" id="c3" href="st/vesti/balkan.html">
+            </a><a class="category_btn" id="c3" href="{% url 'timee:balkan_category' %}">
                 <center>Balkan</center>
-            </a><a class="category_btn" id="c4" href="st/vesti/svet.html">
+            </a><a class="category_btn" id="c4" href="{% url 'timee:svijet_category'%}">
                 <center>Svijet</center>
-            </a><a class="category_btn" id="c5" href="st/vesti/beograd.html">
+            </a><a class="category_btn" id="c5" href="{% url 'timee:sarajevo_category' %}">
                 <center>Sarajevo</center>
-            </a><a class="category_btn" id="c6" href="st/vesti/hronika.html">
+            </a><a class="category_btn" id="c6" href="{% url 'timee:hronika_category' %}">
                 <center>Hronika</center>
-            </a><a class="category_btn" id="c7" href="st/vesti/kultura.html">
+            </a><a class="category_btn" id="c7" href="{% url 'timee:kultura_category' %}">
                 <center>Kultura</center>
-            </a><a class="category_btn" id="c8" href="st/vesti/scena.html">
+            </a><a class="category_btn" id="c8" href="{% url 'timee:scena_category' %}">
                 <center>Scena</center>
             </a>
         </div>

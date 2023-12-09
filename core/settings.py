@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.222.21',
-    '185.50.56.145'
+    '185.50.56.145',
+    '127.0.0.1'
 ]
 
 # Celery settings
@@ -100,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'timeba',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root',
         'HOST': 'localhost',   # Ili IP adresa vašeg MySQL servera
         'PORT': '3306',        # Defaultni MySQL port
     }

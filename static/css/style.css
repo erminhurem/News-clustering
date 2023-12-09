@@ -251,30 +251,30 @@ body {
 }
 
 .site_srbtimemk #logo,.site_timers #logo {
-    background-image: url('{% static "images/srbtimemk/main_logo.svg" %}')
+    background-image: url('/static/images/srbtimemk/main_logo.svg')
 }
 
 .site_time3ro #logo {
-    background-image: url('{% static "images/time3ro/main_logo.png" %}')
+    background-image: url('/static/images/time3ro/main_logo.png')
 }
 
 .site_crotimemk #logo {
-    background-image: url(' {% static "images/crotimemk/main_logo.png" %}');
+    background-image: url('/static/images/crotimemk/main_logo.png');
     background-position: center
 }
 
 .site_shqiptimemk #logo {
-    background-image: url(' {% static "images/shqiptimemk/main_logo.png" %}');
+    background-image: url('/static/images/shqiptimemk/main_logo.png');
     background-position: center
 }
 
 .site_bgtimemk #logo {
-    background-image: url(' {% static "images/bgtimemk/main_logo.png" %}');
+    background-image: url('/static/images/bgtimemk/main_logo.png');
     background-position: center
 }
 
 .site_bihtimemk #logo {
-    background-image: url(' {% static "images/bihtimemk/main_logo.png" %}');
+    background-image: url('/static/images/bihtimemk/main_logo.png');
     background-position: center
 }
 
@@ -332,7 +332,7 @@ body {
 }
 
 .send,.single_news#news_pane #dates .order_icon,#sharing_container a,#news_pane table h11,.content_bottom div a,.lbar a span {
-    background-image: url('../images/lbar_icons.png?ver=2')
+    background-image: url('/static/images/lbar_icons.png')
 }
 
 .send {

@@ -5,21 +5,23 @@
 <div id="split_pane">
     <div id="news_pane" class="top">
         <div id="latest_news">
-         
+            
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
                 {% if news.images %}
                 <div class="article_image">
-                    <div class="image" style="background-image:url('{{ news.images.0 }}');-ms-behavior:url(dizajn/script/backgroundsize.min.htc);">
-                        <div class="image_inner">
-                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                    <div class="wait_image">
+                        <div class="image" style="background-image: url('{{ news.images.0 }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% endif %}
                 <div class="article_body">
-                    <h2><a href="s/{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                    <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                     <p>{{ news.description }}</p>
                 </div>
             </div>
