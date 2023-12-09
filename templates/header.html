@@ -1,6 +1,14 @@
+{% load static %}
 {% block header %}
-<div id="header_content"><a href="st/vesti.html">
-    <div id="logo"></div>
+<div id="header_content"><a href="/">
+    <div id="logo" style="
+    width: 195px;
+    height: 85px;
+    margin-left: -5px;
+    background-image: url({% static 'images/main_logo.PNG' %});
+    background-position: bottom;
+    background-repeat: no-repeat;
+    cursor: pointer"></div>
   </a>
   <div id="page_title">
     <center>
