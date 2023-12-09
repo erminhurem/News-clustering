@@ -151,9 +151,26 @@ def categorize_news(url):
         return 'Ekonomija'
     elif 'sport' in url:
         return 'Sport'
-    
     elif 'srbija' in url:
         return 'Srbija'
-    # Ovdje dodaj dodatne kategorije prema potrebi
-    return 'Ostalo'
+    elif 'bih' in url or 'bosna-i-hercegovina' in url:
+        return 'BiH'
+    elif 'balkan' in url:
+        return 'Balkan'
+    elif 'svijet' in url:
+        return 'Svijet'
+    elif 'politika' in url:
+        return 'Politika'
+    elif 'kultura' in url:
+        return 'Kultura'
+    elif 'zabava' in url or 'showbiz' in url:
+        return 'Zabava'
+    elif 'tehnologija' in url:
+        return 'Tehnologija'
+    elif 'zdravlje' in url:
+        return 'Zdravlje'
+    # Dodajte više uslova za ostale kategorije
+    else:
+        return 'Ostalo'
+
 
