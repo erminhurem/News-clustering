@@ -282,12 +282,12 @@ def scena_category(request):
 
 # početak koda vezano za rubriku Sport
 def sport(request):
-    latest_news = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
+    latest_news = Headlines.objects.filter(category="SPORT").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo','VIJESTI','MAGAZIN']
+    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'VIJESTI', 'MAGAZIN']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -303,7 +303,7 @@ def sport(request):
     return render(request, "sport.html", context)
 
 def fudbal_category(request):
-    news_items = Headlines.objects.filter(category='Sport - Fudbal').order_by('-published_date')
+    news_items = Headlines.objects.filter(category='Fudbal').order_by('-published_date')
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -328,11 +328,90 @@ def fudbal_category(request):
     }
     return render(request, "fudbal_category.html", context)
 
+def kosarka_category(request):
+    news_items = Headlines.objects.filter(category='Kosarka').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Kosarka': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "kosarka_category.html", context)
+
+def tenis_category(request):
+    news_items = Headlines.objects.filter(category='Tenis').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Tenis': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "tenis_category.html", context)
+
+def ostalo_category(request):
+    news_items = Headlines.objects.filter(category='Ostalo').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Ostalo': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "ostalo_category.html", context)
+
 # kraj koda vezano za rubriku Sport
 
 # početak koda vezano za rubriku Magazin
+
 def magazin(request):
-    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    latest_news = Headlines.objects.filter(category="MAGAZIN").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
@@ -351,6 +430,184 @@ def magazin(request):
         'news_by_category': news_by_category,
     }
     return render(request, "magazin.html", context)
+
+def zabava_category(request):
+    news_items = Headlines.objects.filter(category='Zabava').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Zabava': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "zabava_category.html", context)
+
+def automobili_category(request):
+    news_items = Headlines.objects.filter(category='Automobili / Motori').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Automobili': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "automobili_category.html", context)
+
+def tehnologija_category(request):
+    news_items = Headlines.objects.filter(category='Tehnologija').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Tehnologija': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "tehnologija_category.html", context)
+
+def lifestyle_category(request):
+    news_items = Headlines.objects.filter(category='Lifestyle').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Lifestyle': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "lifestyle_category.html", context)
+
+def hrana_category(request):
+    news_items = Headlines.objects.filter(category='Hrana / Zdravlje').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Hrana': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "hrana_category.html", context)
+
+def intima_category(request):
+    news_items = Headlines.objects.filter(category='Intima / Sex').order_by('-published_date')
+    
+    items_per_page = 10
+    paginator = Paginator(news_items, items_per_page)
+    page = request.GET.get("page")
+
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        
+        news_page = paginator.page(1)
+    except EmptyPage:
+        
+        news_page = paginator.page(paginator.num_pages)
+
+    for news in news_page:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'news_by_category': {'Intima': news_page},
+        'latest_news': news_page.object_list,
+    }
+    return render(request, "intima_category.html", context)
+
+# kraj koda vezano za rubriku Magazin
+
+def najnovije_vijesti(request):
+    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    context = {
+        'latest_news': latest_news,
+    }
+
+    return render(request, "najnovije_vijesti.html", context)
+
+def izvori(request):
+
+    return render(request, "izvori.html")
+
+def film(request):
+
+    return render(request, "film.html")
 
 
 def fetch_news():
@@ -420,22 +677,32 @@ def categorize_news(url):
         return 'Politika'
     elif 'kultura' in url:
         return 'Kultura'
-    elif 'zabava' in url or 'lifestyle' in url:
+    elif 'zabava' in url:
         return 'Zabava'
+    elif 'lifestyle' in url:
+        return 'Lifestyle'
+    elif 'hrana' or 'zdravlje'in url:
+        return 'Hrana / Zdravlje'
     elif 'tehnologija' in url:
         return 'Tehnologija'
+    elif 'intima' or 'sex' in url:
+        return 'Intima / Sex'
     elif 'zdravlje' in url:
         return 'Zdravlje'
     elif 'magazin' in url:
         return 'Magazin'
-    elif 'scena' in url or 'showbiz' in url:
+    elif 'scena' or 'showbiz' in url:
         return 'Scena'
-    elif 'fudbal' in url or 'nogomet' in url:
+    elif 'fudbal' or 'nogomet' in url:
         return 'Fudbal'
-    elif 'košarka' in url:
-        return 'Fudbal'
+    elif 'košarka' or 'kosarka' or 'sport/kosarka' or 'sport-klub/kosarka' in url:
+        return 'Kosarka'
     elif 'tenis' in url:
         return 'Tenis'
+    elif 'plivanje' or 'rukomet' or 'atletika' in url:
+        return 'Ostalo'
+    elif 'automobili' or 'motori' in url:
+        return 'Automobili / Motori'
     else:
         return 'Vijesti'
 

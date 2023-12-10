@@ -31,28 +31,6 @@
     </div>
 </div>
 
-{% for category, headlines in news_by_category.items %}
-
-<div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c{{ forloop.counter }}">
-        <h10></h10>
-        <span>{{ category }} »</span>
-    </div>
-    <div class="kategorija_clusters">
-        {% for headline in headlines %}
-        <div class="article">
-            <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
-            <p>{{ headline.description }}</p>
-            <p><a href="{{ headline.link }}" target="_blank">Pročitaj više</a></p>
-            <p>Objavljeno: {{ headline.published_date }}</p>
-            <p>Izvor: {{ headline.source }}</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-
-{% endfor %}
 
 <div class="h_clear"></div>
 {% endblock %}
