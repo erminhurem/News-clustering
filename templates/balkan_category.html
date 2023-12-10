@@ -12,6 +12,7 @@
                 </div>
                 <div class="h_rule" ></div>
                 {% for news in latest_news %}
+                <div class="kategorija_clusters">
                 <div class="cluster">
                     <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
                     {% if news.image_urls %}
@@ -28,6 +29,7 @@
                         <p>{{ news.description }}</p>
                     </div>
                 </div>
+            </div>
                 <div class="clear"></div>
                 {% endfor %}
                 <div class="h_rule" ></div>

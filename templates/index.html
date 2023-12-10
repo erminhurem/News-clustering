@@ -41,6 +41,15 @@
     </div>
     <div class="kategorija_clusters">
         {% for headline in headlines %}
+        {% if headline.image_urls %}
+        <div class="article_image">
+            <div class="image" style="background-image: url('{{ headline.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                <div class="image_inner">
+                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <div class="article">
             <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
             <p>{{ headline.description }}</p>
