@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import logging
 from django.db.models import Count
 import datetime
+import requests
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
 def get_friendly_source_name(url):
@@ -708,4 +709,58 @@ def categorize_news(url):
     else:
         return 'Vijesti'
 
+
+
+def get_weather_forecast(api_key):
+    # List of cities in Bosnia
+    cities = ["Sarajevo", "Banja Luka", "Tuzla", "Zenica", "Mostar", "Brčko", "Bijeljina", "Prijedor", "Trebinje", "Doboj", "Cazin", "Sanski Most", "Bihać", "Travnik", "Gradiška", "Goražde", "Živinice", "Zvornik", "Konjic"]
+
+    # Initialize an empty dictionary to store forecasts for each city
+    forecasts = {}
+
+    # Base URL for the OpenWeatherMap API
+    base_url = "https://api.openweathermap.org/data/2.5/weather"
+
+    # Loop through the list of cities and make API requests for each
+    for city in cities:
+        params = {
+            "q": f"{city},BA",
+            "appid": api_key,
+            "units": "metric"  # You can change units to 'imperial' for Fahrenheit
+        }
+
+        # Make the API request
+        response = requests.get(base_url, params=params)
+        data = response.json()
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Extract relevant weather information
+            weather_description = data['weather'][0]['description']
+            temperature = data['main']['temp']
+
+            # Store the forecast in the dictionary
+            forecasts[city] = {
+                "Description": weather_description,
+                "Temperature (°C)": temperature
+            }
+        else:
+            # Handle the case where the request was not successful
+            forecasts[city] = {"Error": "Failed to fetch data"}
+
+    return forecasts
+
+# Replace 'your_api_key_here' with your actual OpenWeatherMap API key
+api_key = "your_api_key_here"
+weather_forecasts = get_weather_forecast(api_key)
+
+# Print the weather forecasts for all cities
+for city, forecast in weather_forecasts.items():
+    print(f"Weather in {city}:")
+    if "Error" in forecast:
+        print(f"  Error: {forecast['Error']}")
+    else:
+        print(f"  Description: {forecast['Description']}")
+        print(f"  Temperature: {forecast['Temperature (°C)']}°C")
+    print()
 
