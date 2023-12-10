@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}  
     <div id="split_pane">
         <div id="news_pane" class="top">
             <div id="latest_news">
-                <div class="k_naslov" id="c3"><h10></h10><span>Balkan</span></div>
+                <div class="k_naslov" id="c2"><h10></h10><span>Kosarka</span></div>
                 <div class="pagination">
-                    {% for i in news_by_category.Balkan.paginator.page_range %}
+                    {% for i in news_by_category.Kosarka.paginator.page_range %}
                         <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
                     {% endfor %}    
                 </div>
@@ -16,7 +16,7 @@
                     <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
                     {% if news.images %}
                     <div class="article_image">
-                        <div class="image" style="background-image: url('{{ news.images.0 }}');-ms-behavior: url({% static '/script/backgroundsize.min.htc'%});">
+                        <div class="image" style="background-image: url('{{ news.images.0 }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
                             <div class="image_inner">
                                 <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                             </div>
@@ -32,7 +32,7 @@
                 {% endfor %}
                 <div class="h_rule" ></div>
                 <div class="pagination">
-                    {% for i in news_by_category.Balkan.paginator.page_range %}
+                    {% for i in news_by_category.Kosarka.paginator.page_range %}
                         <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
                     {% endfor %}    
                 </div>

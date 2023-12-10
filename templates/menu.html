@@ -18,37 +18,37 @@
             <center>Sport</center><span></span>
         </a><a class="super_btn" id="super_2" href="{% url 'timee:magazin' %}">
             <center>Magazin</center><span></span>
-        </a><a class="extra_btn" id="super_IMDB" href="film/index.html">
+        </a><a class="extra_btn" id="super_IMDB" href="{% url 'timee:film' %}">
             <center>Film</center><span></span>
-        </a><a class="extra_btn" id="super_sources" href="s/all.html">
+        </a><a class="extra_btn" id="super_sources" href="{% url 'timee:izvori' %}">
             <center>Izvori</center><span></span>
-        </a><a class="extra_btn" id="super_newest" href="n/all.html">
+        </a><a class="extra_btn" id="super_newest" href="{% url 'timee:najnovije_vijesti' %}">
             <center>Najnovije vijesti</center><span></span>
         </a></div>
     {% if request.path == '/sport/' %}
         <div id="step2"><a class="category_btn" id="c1" href="{% url 'timee:fudbal_category' %}">
             <center>FUDBAL</center>
-        </a><a class="category_btn" id="c2" href="st/vesti/ekonomija.html">
+        </a><a class="category_btn" id="c2" href="{% url 'timee:kosarka_category' %}">
             <center>KOSARKA</center>
-        </a><a class="category_btn" id="c3" href="st/vesti/balkan.html">
+        </a><a class="category_btn" id="c3" href="{% url 'timee:tenis_category' %}">
             <center>TESNIS</center>
-        </a><a class="category_btn" id="c4" href="st/vesti/svet.html">
+        </a><a class="category_btn" id="c4" href="{% url 'timee:ostalo_category' %}">
             <center>OSTALO</center>
         </div>
     {% elif request.path == '/magazin/' %}    
-        <div id="step2"><a class="category_btn" id="c1" href="st/vesti/srbija.html">
+        <div id="step2"><a class="category_btn" id="c1" href="{% url 'timee:zabava_category' %}">
             <center>ZABAVA</center>
-        </a><a class="category_btn" id="c2" href="st/vesti/ekonomija.html">
+        </a><a class="category_btn" id="c2" href="{% url 'timee:automobili_category' %}">
             <center>AUTOMOBILI / MOTORI</center>
-        </a><a class="category_btn" id="c3" href="st/vesti/balkan.html">
+        </a><a class="category_btn" id="c3" href="{% url 'timee:tehnologija_category' %}">
             <center>TEHNOLOGIJA</center>
-        </a><a class="category_btn" id="c4" href="st/vesti/svet.html">
+        </a><a class="category_btn" id="c4" href="{% url 'timee:lifestyle_category' %}">
             <center>LIFESTYLE</center>
         
-        </a><a class="category_btn" id="c4" href="st/vesti/svet.html">
+        </a><a class="category_btn" id="c4" href="{% url 'timee:hrana_category' %}">
             <center>HRANA / ZDRAVLJE</center>
         
-        </a><a class="category_btn" id="c4" href="st/vesti/svet.html">
+        </a><a class="category_btn" id="c4" href="{% url 'timee:intima_category' %}">
             <center>INTIMA / SEX</center>
         </div>
     {% else %}
