@@ -9,5 +9,5 @@ class Headlines(models.Model):
     source = models.CharField(max_length=100)
     image_urls= models.URLField(default=None,blank=True, null=True)
 
-    def str(self):
+    def __str__(self):
         return self.title

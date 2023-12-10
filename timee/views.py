@@ -6,6 +6,7 @@ from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
 from .models import Headlines
 from bs4 import BeautifulSoup
+import logging
 from django.db.models import Count
 import datetime
 
@@ -627,7 +628,7 @@ def fetch_news():
         'https://www.oslobodjenje.ba/feed',
         'https://okanal.oslobodjenje.ba/okanal/feed',
     ]
-
+    logger = logging.getLogger(__name__)
     for feed_url in feeds:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries:
@@ -656,6 +657,7 @@ def fetch_news():
                     category=category,  # Dodajemo kategoriju u model
                     image_urls=','.join(image_urls) if image_urls else None
                 )
+                logger.info('Fetching news from %s', feed_url)
                 news_item.save()
 
 def categorize_news(url):
