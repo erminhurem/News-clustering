@@ -56,7 +56,7 @@ def index(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'SPORT', 'MAGAZIN']
+    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -283,12 +283,12 @@ def scena_category(request):
 
 # početak koda vezano za rubriku Sport
 def sport(request):
-    latest_news = Headlines.objects.filter(category="SPORT").order_by('-published_date')[:3]
+    latest_news = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'VIJESTI', 'MAGAZIN']
+    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Vijesti', 'Magazin']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -412,7 +412,7 @@ def ostalo_category(request):
 # početak koda vezano za rubriku Magazin
 
 def magazin(request):
-    latest_news = Headlines.objects.filter(category="MAGAZIN").order_by('-published_date')[:3]
+    latest_news = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
