@@ -8,15 +8,15 @@
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
-                {% if news.images %}
+                {% if news.image_urls %}
                 <div class="article_image">
-                    <div class="image" style="background-image:url('{{ news.images.0 }}');-ms-behavior:url(dizajn/script/backgroundsize.min.htc);">
+                    <div class="image" style="background-image:url('{{ news.image_urls }}');-ms-behavior:url(dizajn/script/backgroundsize.min.htc);">
                         <div class="image_inner">
                             <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                         </div>
                     </div>
                 </div>
-            {% endif %}
+                {% endif %}
                 <div class="article_body">
                     <h2><a href="s/{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                     <p>{{ news.description }}</p>

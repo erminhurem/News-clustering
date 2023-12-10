@@ -14,7 +14,7 @@
                 {% for news in latest_news %}
                 <div class="cluster">
                     <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
-                    {{ news.image_urls }}
+                    {% if news.image_urls %}
                     <div class="article_image">
                         <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
                             <div class="image_inner">
