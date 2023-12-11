@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="images/time.ico" rel="icon" type="image/x-icon">
+    <link id="color_css_link" rel="stylesheet" type="text/css" href="css/default.css">
     <meta name="viewport" content="width=device-width" />
     <title>{{ naslov_stranice }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -30,12 +31,11 @@
 
         // Funkcija za postavljanje sheme boja i ažuriranje linka CSS datoteke
         function set_color_scheme(shade) {
-            var color_css_link = document.querySelector('link[attr="color_css"]');
-            color_css_link.setAttribute('rel', 'stylesheet');
-            color_css_link.setAttribute('type', 'text/css');
+            var color_css_link = document.getElementById('color_css_link');
             color_css_link.setAttribute('href', 'css/' + shade + '.css?ver=44');
             save_color_scheme(shade);
         }
+
 
         // Provjeravanje korisničkih preferencija i postavljanje sheme boja
         if ((localStorage.getItem('color_scheme') == 'dark') ||

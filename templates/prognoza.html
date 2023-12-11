@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="split_pane" class="infopage">
+    <div class="k_naslov" id="c0">
+        <h10></h10><span>Vremenska prognoza</span>
+    </div>
+    <div class="h_rule"></div>
+
+
+
+    <div class="section">
+
+
+        <a href="https://www.meteoblue.com/en/weather/widget/three/tuzla_bosnia-and-herzegovina_3188582?geoloc=fixed&amp;nocurrent=0&amp;noforecast=0&amp;days=7&amp;tempunit=CELSIUS&amp;windunit=KILOMETER_PER_HOUR&amp;layout=monochrome"
+            target="weather_iframe">Tuzla</a> &nbsp; &nbsp;
+
+        <a href="https://www.meteoblue.com/en/weather/widget/three/sarajevo_bosnia-and-herzegovina_3191281?geoloc=fixed&amp;nocurrent=0&amp;noforecast=0&amp;days=7&amp;tempunit=CELSIUS&amp;windunit=KILOMETER_PER_HOUR&amp;layout=monochrome"
+            target="weather_iframe">Sarajevo</a> &nbsp; &nbsp;
+
+        <a href="https://www.meteoblue.com/en/weather/widget/three/zenica_bosnia-and-herzegovina_3186573?geoloc=fixed&amp;nocurrent=0&amp;noforecast=0&amp;days=7&amp;tempunit=CELSIUS&amp;windunit=KILOMETER_PER_HOUR&amp;layout=monochrome"
+            target="weather_iframe">Zenica</a> &nbsp; &nbsp;
+
+        <br><br>
+
+        <div id="wu_frame">
+
+            <iframe
+                src="https://www.meteoblue.com/en/weather/widget/three/sarajevo_bosnia-and-herzegovina_3191281?geoloc=fixed&amp;nocurrent=0&amp;noforecast=0&amp;days=7&amp;tempunit=CELSIUS&amp;windunit=KILOMETER_PER_HOUR&amp;layout=monochrome"
+                frameborder="0" scrolling="NO" allowtransparency="true"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                style="width: 805px; height: 620px" name="weather_iframe"></iframe>
+
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock %}

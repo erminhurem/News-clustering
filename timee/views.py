@@ -8,6 +8,7 @@ from .models import Headlines
 from bs4 import BeautifulSoup
 import logging
 from django.db.models import Count
+from django.http import JsonResponse
 import datetime
 import requests
 
@@ -68,7 +69,6 @@ def index(request):
 
     context = {
         'latest_news': latest_news,
-        'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "index.html", context)
@@ -95,7 +95,6 @@ def bih_category(request):
 
     context = {
         'news_by_category': {'BiH': news_page},
-        'naslov_stranice': 'BiH - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "bih_category.html", context)
@@ -122,7 +121,6 @@ def ekonomija_category(request):
 
     context = {
         'news_by_category': {'Ekonomija': news_page},
-        'naslov_stranice': 'Ekonomija - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "ekonomija_category.html", context)
@@ -149,7 +147,7 @@ def balkan_category(request):
 
     context = {
         'news_by_category': {'Balkan': news_page},
-        'naslov_stranice': 'Balkan - Time.ba',
+         'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "balkan_category.html", context)
@@ -525,7 +523,7 @@ def tehnologija_category(request):
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
         'naslov_stranice': 'Tehnologija - Time.ba',
-        'aktivna_kategorija': 'Magazin',
+         'aktivna_kategorija': 'Magazin',
         'aktivna_podkategorija': 'Tehnologija',
     }
 
@@ -623,22 +621,18 @@ def najnovije_vijesti(request):
 
     context = {
         'latest_news': latest_news,
-        'naslov_stranice': 'Najnovije vijesti - Time.ba',
+         'naslov_stranice': 'Vijesti - Time.ba',
     }
 
     return render(request, "najnovije_vijesti.html", context)
 
 def izvori(request):
-    context = {'naslov_stranice': 'Izvori - Time.ba',}
-    return render(request, "izvori.html", context)
 
-def firme(request):
-    context = {'naslov_stranice': 'Firme - Time.ba',}
-    return render(request, "firme.html", context)
+    return render(request, "izvori.html")
 
-def vremenska_prognoza(request):
-    context = {'naslov_stranice': 'Prognoza - Time.ba',}
-    return render(request, 'vremenska_prognoza.html', context)
+def film(request):
+
+    return render(request, "film.html")
 
 
 def fetch_news():
@@ -672,7 +666,7 @@ def fetch_news():
 
                 content = entry.content[0].value if 'content' in entry else ''
                 soup = BeautifulSoup(content, 'html.parser')
-                images = soup.find_all('img') + soup.find_all('image')
+                images = soup.find_all('img')
 
                 image_urls = [img['src'] for img in images]
 
@@ -740,10 +734,16 @@ def categorize_news(url):
 
 
 def contact(request):
-    context = {'naslov_stranice': 'Izvori - Time.ba',}
+    context = {
+         'naslov_stranice': 'Kontakt - Time.ba',
+    }
     return render(request, 'kontakt.html', context)
 
-
+def prognoza(request):
+    context = {
+         'naslov_stranice': 'Prognoza - Time.ba',
+    }
+    return render(request, 'prognoza.html', context)
 
 def news_archive(request):
     date_from = request.GET.get('date_from')
@@ -765,3 +765,29 @@ def news_archive(request):
         news = paginator.page(paginator.num_pages)
 
     return render(request, 'week.html', {'news': news})
+
+
+def news_archive(request):
+    date = request.GET.get('date')
+    if date:
+        # Pretvaranje stringa datuma u objekat datuma i filtriranje vijesti
+        news_items = Headlines.objects.filter(published_date__date=date)
+    else:
+        news_items = Headlines.objects.all()
+
+    # Pretvaranje vijesti u JSON format
+    news_list = [{'title': news.title, 'description': news.description} for news in news_items]
+
+    return JsonResponse(news_list, safe=False)
+
+def widget(request):
+    context = {
+         'naslov_stranice': 'Widget - Time.ba',
+    }
+    return render(request, 'widget.html', context)
+
+def rsspage(request):
+    context = {
+         'naslov_stranice': 'Rss - Time.ba',
+    }
+    return render(request, 'rss.html', context)
