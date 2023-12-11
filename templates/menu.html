@@ -37,7 +37,7 @@
                 '<a class="category_btn" href="{% url "timee:ostalo_category" %}"><center>Ostalo</center></a>',
             'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a>' +
                 '<a class="category_btn" href="{% url "timee:automobili_category" %}"><center>Automobili / Motori</center></a>' +
-                '<a class="category_btn" href="{% url "timee:tehnologija_category" %}"><center>Tehnologija / Motori</center></a>' +
+                '<a class="category_btn" href="{% url "timee:tehnologija_category" %}"><center>Tehnologija</center></a>' +
                 '<a class="category_btn" href="{% url "timee:lifestyle_category" %}"><center>Lifestyle</center></a>' +
                 '<a class="category_btn" href="{% url "timee:hrana_category" %}"><center>Hrana / Zdravlje</center></a>' +
                 '<a class="category_btn" href="{% url "timee:intima_category" %}"><center>Intima / Sex</center></a>',
@@ -128,7 +128,7 @@
                     color = '#079107';
                 } else if (category === 'magazin') {
                     color = '#8a60b3';
-                }
+                } 
                 setActiveClassAndContent(category, color); // Samo postavi aktivnu klasu bez učitavanja
             }
         });

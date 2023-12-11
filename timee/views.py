@@ -68,6 +68,7 @@ def index(request):
 
     context = {
         'latest_news': latest_news,
+        'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "index.html", context)
@@ -622,22 +623,22 @@ def najnovije_vijesti(request):
 
     context = {
         'latest_news': latest_news,
-         'naslov_stranice': 'Vijesti - Time.ba',
+        'naslov_stranice': 'Najnovije vijesti - Time.ba',
     }
 
     return render(request, "najnovije_vijesti.html", context)
 
 def izvori(request):
-
-    return render(request, "izvori.html")
+    context = {'naslov_stranice': 'Izvori - Time.ba',}
+    return render(request, "izvori.html", context)
 
 def firme(request):
-
-    return render(request, "firme.html")
+    context = {'naslov_stranice': 'Firme - Time.ba',}
+    return render(request, "firme.html", context)
 
 def vremenska_prognoza(request):
-
-    return render(request, 'vremenska_prognoza.html')
+    context = {'naslov_stranice': 'Prognoza - Time.ba',}
+    return render(request, 'vremenska_prognoza.html', context)
 
 
 def fetch_news():
@@ -671,7 +672,7 @@ def fetch_news():
 
                 content = entry.content[0].value if 'content' in entry else ''
                 soup = BeautifulSoup(content, 'html.parser')
-                images = soup.find_all('img')
+                images = soup.find_all('img') + soup.find_all('image')
 
                 image_urls = [img['src'] for img in images]
 
@@ -739,7 +740,8 @@ def categorize_news(url):
 
 
 def contact(request):
-    return render(request, 'kontakt.html')
+    context = {'naslov_stranice': 'Izvori - Time.ba',}
+    return render(request, 'kontakt.html', context)
 
 
 

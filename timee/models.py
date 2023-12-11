@@ -2,7 +2,7 @@ from django.db import models
 
 class Headlines(models.Model):
     title = models.CharField(max_length=200)
-    link = models.URLField()
+    link = models.URLField(max_length=5000)
     description = models.TextField()
     published_date = models.DateTimeField()
     category = models.CharField(max_length=200, null=True, blank=True)
