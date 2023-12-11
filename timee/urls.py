@@ -29,6 +29,7 @@ urlpatterns = [
     path('izvori/', views.izvori, name="izvori"),
     path('film/', views.film, name="film"),
     path('info/contact/', views.contact, name='contact'),
+    path('info/week/', views.news_archive, name='week'),
  
 
 ]

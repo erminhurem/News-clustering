@@ -735,3 +735,25 @@ def categorize_news(url):
 def contact(request):
     return render(request, 'kontakt.html')
 
+
+
+def news_archive(request):
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+
+    if date_from and date_to:
+        news_items = Headlines.objects.filter(published_date__range=[date_from, date_to])
+    else:
+        news_items = Headlines.objects.all()
+
+    paginator = Paginator(news_items, 10)  # 10 vijesti po stranici
+    page = request.GET.get('page')
+
+    try:
+        news = paginator.page(page)
+    except PageNotAnInteger:
+        news = paginator.page(1)
+    except EmptyPage:
+        news = paginator.page(paginator.num_pages)
+
+    return render(request, 'week.html', {'news': news})
