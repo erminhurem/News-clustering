@@ -732,5 +732,6 @@ def categorize_news(url):
         return 'Vijesti'
 
 
-
+def contact(request):
+    return render(request, 'kontakt.html')
 
