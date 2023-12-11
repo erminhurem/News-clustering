@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'timee',
-    'dateutil'
+    'dateutil',
+    
 ]
 
 MIDDLEWARE = [
@@ -101,7 +102,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'timeba',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root',
         'HOST': 'localhost',   # Ili IP adresa vašeg MySQL servera
         'PORT': '3306',        # Defaultni MySQL port
     }
