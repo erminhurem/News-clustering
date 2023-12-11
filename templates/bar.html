@@ -1,7 +1,7 @@
 {% block bar %}
 <div id="bar">
     <div class="lbar">
-      <a href="m/index.html" title="Mobilna verzija"> <span class="icon" id="m1"></span> </a>
+      <a href="{% url 'timee:mobile_index' %}" title="Mobilna verzija"> <span class="icon" id="m1"></span> </a>
       <a href="{% url 'timee:rsspage' %}" title="RSS kanale"> <span class="icon" id="rss"></span> </a>
       <a href="{% url 'timee:widget' %}" title="Widget"> <span class="icon" id="widget"></span> </a>
     </div>
