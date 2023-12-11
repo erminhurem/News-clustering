@@ -9,9 +9,10 @@
                 <input type="hidden" name="new" value="true">
                 <span>Kategorija : </span>
                 <select name="topic" onchange="this.form.submit()">
-                    <option value="all" {% if selected_topic=='all' %}selected{% endif %}>Sve vijesti</option>
+                    <option value="all" {% if selected_topic == 'all' %}selected{% endif %}>Sve vijesti</option>
                     {% for kat in kategorije %}
-                    <option value="{{ kat }}" {% if selected_topic==kat %}selected{% endif %}>{{ kat }}</option>
+                    <option value="{{ kat }}" {% if selected_topic == kat %}selected{% endif %}>{{ kat }}</option>
+
                     {% endfor %}
                 </select>
             </form>
