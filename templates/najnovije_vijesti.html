@@ -4,24 +4,36 @@
 
 <div id="split_pane">
     <div id="news_pane" class="top">
-        <div id="latest_news">
-            
+        <div id="news_pane" class="single_news">
+            <form method="get" action="{% url 'timee:najnovije_vijesti' %}">
+                <span>Kategorija : </span>
+                <select name="topic" onchange="this.form.submit()">
+                    <option value="all" {% if selected_topic == 'all' %}selected{% endif %}>Sve vijesti</option>
+                    {% for kat in kategorije %}
+                        <option value="{{ kat }}" {% if selected_topic == kat %}selected{% endif %}>{{ kat }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
                 {% if news.images %}
                 <div class="article_image">
                     <div class="wait_image">
-                        <div class="image" style="background-image: url('{{ news.images.0 }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                        <div class="image"
+                            style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
                             <div class="image_inner">
-                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                <a href="{{ news.link }}" class="image_link" target="_blank"
+                                    rel="noopener noreferrer"></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 {% endif %}
                 <div class="article_body">
-                    <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                    <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
+                            class="when_now"> {{ news.time_since }}</span></h2>
                     <p>{{ news.description }}</p>
                 </div>
             </div>

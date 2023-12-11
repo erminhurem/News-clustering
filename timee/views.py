@@ -614,17 +614,35 @@ def intima_category(request):
 # kraj koda vezano za rubriku Magazin
 
 def najnovije_vijesti(request):
-    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    kategorije = [
+        'Ekonomija', 'Sport', 'BiH', 'Balkan', 'Sarajevo',
+        'Svijet', 'Hronika', 'Politika', 'Kultura', 'Zabava',
+        'Lifestyle', 'Hrana / Zdravlje', 'Tehnologija',
+        'Intima / Sex', 'Zdravlje', 'Magazin', 'Scena',
+        'Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Automobili / Motori', 'Vijesti'
+    ]
+    topic = request.GET.get('topic', 'all')  # 'all' je default vrijednost
+    if topic not in kategorije:
+        topic = 'all'
+
+    if topic == 'all':
+        latest_news = Headlines.objects.all().order_by('-published_date')[:10]
+    else:
+        latest_news = Headlines.objects.filter(category=topic).order_by('-published_date')[:10]
+    
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
     context = {
         'latest_news': latest_news,
-         'naslov_stranice': 'Vijesti - Time.ba',
+        'naslov_stranice': 'Vijesti - Time.ba',
+        'selected_topic': topic,
+        'kategorije': kategorije,
     }
 
     return render(request, "najnovije_vijesti.html", context)
+
 
 def izvori(request):
 
