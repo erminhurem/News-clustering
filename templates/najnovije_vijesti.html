@@ -7,7 +7,7 @@
     <div id="news_pane" class="top">
         <div id="news_pane" class="single_news">
            
-            <form method="get" action="{% url 'timee:najnovije_vijesti' %}">
+            <form style="position:absolute" method="get" action="{% url 'timee:najnovije_vijesti' %}">
                 <input type="hidden" name="new" value="true">
                 <span>Kategorija : </span>
                 <select name="topic" onchange="this.form.submit()">
