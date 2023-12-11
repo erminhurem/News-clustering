@@ -146,6 +146,7 @@ def balkan_category(request):
 
     context = {
         'news_by_category': {'Balkan': news_page},
+         'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "balkan_category.html", context)
@@ -172,6 +173,7 @@ def svijet_category(request):
 
     context = {
         'news_by_category': {'Svijet': news_page},
+         'naslov_stranice': 'Svijet - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "svijet_category.html", context)
@@ -198,6 +200,7 @@ def sarajevo_category(request):
 
     context = {
         'news_by_category': {'Sarajevo': news_page},
+        'naslov_stranice': 'Sarajevo - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "sarajevo_category.html", context)
@@ -224,6 +227,7 @@ def hronika_category(request):
 
     context = {
         'news_by_category': {'Hronika': news_page},
+          'naslov_stranice': 'Hronika - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "hronika_category.html", context)
@@ -250,6 +254,7 @@ def kultura_category(request):
 
     context = {
         'news_by_category': {'Kultura': news_page},
+        'naslov_stranice': 'Kultura - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "kultura_category.html", context)
@@ -276,6 +281,7 @@ def scena_category(request):
 
     context = {
         'news_by_category': {'Scena': news_page},
+        'naslov_stranice': 'Scena - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "scena_category.html", context)
@@ -300,6 +306,7 @@ def sport(request):
 
     context = {
         'latest_news': latest_news,
+        'naslov_stranice': 'Sport - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "sport.html", context)
@@ -326,6 +333,7 @@ def fudbal_category(request):
 
     context = {
         'news_by_category': {'Fudbal': news_page},
+        'naslov_stranice': 'Fudbal - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "fudbal_category.html", context)
@@ -352,6 +360,7 @@ def kosarka_category(request):
 
     context = {
         'news_by_category': {'Kosarka': news_page},
+        'naslov_stranice': 'Kosaraka - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "kosarka_category.html", context)
@@ -378,6 +387,7 @@ def tenis_category(request):
 
     context = {
         'news_by_category': {'Tenis': news_page},
+        'naslov_stranice': 'Tenis - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "tenis_category.html", context)
@@ -404,6 +414,7 @@ def ostalo_category(request):
 
     context = {
         'news_by_category': {'Ostalo': news_page},
+        'naslov_stranice': 'Ostalo - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "ostalo_category.html", context)
@@ -429,6 +440,7 @@ def magazin(request):
 
     context = {
         'latest_news': latest_news,
+         'naslov_stranice': 'Magazin - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "magazin.html", context)
@@ -455,6 +467,7 @@ def zabava_category(request):
 
     context = {
         'news_by_category': {'Zabava': news_page},
+         'naslov_stranice': 'Zabava - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "zabava_category.html", context)
@@ -481,6 +494,7 @@ def automobili_category(request):
 
     context = {
         'news_by_category': {'Automobili': news_page},
+        'naslov_stranice': 'Automobili - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "automobili_category.html", context)
@@ -495,21 +509,25 @@ def tehnologija_category(request):
     try:
         news_page = paginator.page(page)
     except PageNotAnInteger:
-        
         news_page = paginator.page(1)
     except EmptyPage:
-        
         news_page = paginator.page(paginator.num_pages)
 
     for news in news_page:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    # Dodajte ovdje informacije o aktivnoj glavnoj kategoriji i podkategoriji
     context = {
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
+        'naslov_stranice': 'Tehnologija - Time.ba',
+         'aktivna_kategorija': 'Magazin',
+        'aktivna_podkategorija': 'Tehnologija',
     }
+
     return render(request, "tehnologija_category.html", context)
+
 
 def lifestyle_category(request):
     news_items = Headlines.objects.filter(category='Lifestyle').order_by('-published_date')
@@ -533,6 +551,7 @@ def lifestyle_category(request):
 
     context = {
         'news_by_category': {'Lifestyle': news_page},
+         'naslov_stranice': 'Lifestyle - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "lifestyle_category.html", context)
@@ -559,6 +578,7 @@ def hrana_category(request):
 
     context = {
         'news_by_category': {'Hrana': news_page},
+        'naslov_stranice': 'Hrana - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "hrana_category.html", context)
@@ -585,6 +605,7 @@ def intima_category(request):
 
     context = {
         'news_by_category': {'Intima': news_page},
+         'naslov_stranice': 'Intima - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "intima_category.html", context)
@@ -599,6 +620,7 @@ def najnovije_vijesti(request):
 
     context = {
         'latest_news': latest_news,
+         'naslov_stranice': 'Vijesti - Time.ba',
     }
 
     return render(request, "najnovije_vijesti.html", context)
@@ -711,56 +733,4 @@ def categorize_news(url):
 
 
 
-def get_weather_forecast(api_key):
-    # List of cities in Bosnia
-    cities = ["Sarajevo", "Banja Luka", "Tuzla", "Zenica", "Mostar", "Brčko", "Bijeljina", "Prijedor", "Trebinje", "Doboj", "Cazin", "Sanski Most", "Bihać", "Travnik", "Gradiška", "Goražde", "Živinice", "Zvornik", "Konjic"]
-
-    # Initialize an empty dictionary to store forecasts for each city
-    forecasts = {}
-
-    # Base URL for the OpenWeatherMap API
-    base_url = "https://api.openweathermap.org/data/2.5/weather"
-
-    # Loop through the list of cities and make API requests for each
-    for city in cities:
-        params = {
-            "q": f"{city},BA",
-            "appid": api_key,
-            "units": "metric"  # You can change units to 'imperial' for Fahrenheit
-        }
-
-        # Make the API request
-        response = requests.get(base_url, params=params)
-        data = response.json()
-
-        # Check if the request was successful
-        if response.status_code == 200:
-            # Extract relevant weather information
-            weather_description = data['weather'][0]['description']
-            temperature = data['main']['temp']
-
-            # Store the forecast in the dictionary
-            forecasts[city] = {
-                "Description": weather_description,
-                "Temperature (°C)": temperature
-            }
-        else:
-            # Handle the case where the request was not successful
-            forecasts[city] = {"Error": "Failed to fetch data"}
-
-    return forecasts
-
-# Replace 'your_api_key_here' with your actual OpenWeatherMap API key
-api_key = "your_api_key_here"
-weather_forecasts = get_weather_forecast(api_key)
-
-# Print the weather forecasts for all cities
-for city, forecast in weather_forecasts.items():
-    print(f"Weather in {city}:")
-    if "Error" in forecast:
-        print(f"  Error: {forecast['Error']}")
-    else:
-        print(f"  Description: {forecast['Description']}")
-        print(f"  Temperature: {forecast['Temperature (°C)']}°C")
-    print()
 

@@ -2974,7 +2974,7 @@ h4 {
     margin-left: calc(50% + 530px);
     margin-bottom: 30px;
     z-index: 999999999999;
-    font-size: 30px; /* Postavite željenu veličinu ikone */
+    font-size: 0px;
     opacity: 0;
     transition: opacity .3s ease-in-out;
     text-decoration: none!important;
@@ -2982,9 +2982,9 @@ h4 {
     background-color: #fff;
     cursor: pointer;
     box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
-    text-align: center; 
-    line-height: 60px; /* Ako je potrebno da ikona bude vertikalno centrirana */
-    color: #000; /* ili bilo koja boja koja vam je potrebna za ikonu */
+    background-image: url('../images/btt.png');
+    background-repeat: no-repeat;
+    background-position: center 9px;
 }
 
 

@@ -28,5 +28,6 @@ urlpatterns = [
     path('najnovije_vijesti/',views.najnovije_vijesti, name="najnovije_vijesti"),
     path('izvori/', views.izvori, name="izvori"),
     path('film/', views.film, name="film"),
+ 
 
 ]

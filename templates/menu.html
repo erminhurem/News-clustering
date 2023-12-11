@@ -1,109 +1,122 @@
-
-<style>
-
-
-#step1 .super_btn.active {
-    position: relative;
-    width: 120px;
-    float: left;
-    border-right: 1px solid #fff;
-}
-
-
-</style>
 <div id="menu">
-    <div id="step1"><a class="super_btn" id="super_0" href="/">
+    <div id="step1"><a class="super_btn" href="/">
             <center>Vijesti</center><span></span>
-        </a><a class="super_btn" id="super_1" href="{% url 'timee:sport' %}">
+        </a><a class="super_btn" href="{% url 'timee:sport' %}">
             <center>Sport</center><span></span>
-        </a><a class="super_btn" id="super_2" href="{% url 'timee:magazin' %}">
+        </a><a class="super_btn" href="{% url 'timee:magazin' %}">
             <center>Magazin</center><span></span>
-        </a><a class="extra_btn" id="super_IMDB" href="{% url 'timee:film' %}">
+        </a><a class="extra_btn" href="film/">
             <center>Film</center><span></span>
-        </a><a class="extra_btn" id="super_sources" href="{% url 'timee:izvori' %}">
+        </a><a class="extra_btn" href="s/all">
             <center>Izvori</center><span></span>
-        </a><a class="extra_btn" id="super_newest" href="{% url 'timee:najnovije_vijesti' %}">
-            <center>Najnovije vijesti</center><span></span>
-        </a></div>
-    {% if request.path == '/sport/' %}
-        <div id="step2"><a class="category_btn" id="c1" href="{% url 'timee:fudbal_category' %}">
-            <center>FUDBAL</center>
-        </a><a class="category_btn" id="c2" href="{% url 'timee:kosarka_category' %}">
-            <center>KOSARKA</center>
-        </a><a class="category_btn" id="c3" href="{% url 'timee:tenis_category' %}">
-            <center>TENIS</center>
-        </a><a class="category_btn" id="c4" href="{% url 'timee:ostalo_category' %}">
-            <center>OSTALO</center>
-        </div>
-    {% elif request.path == '/magazin/' %}    
-        <div id="step2"><a class="category_btn" id="c1" href="{% url 'timee:zabava_category' %}">
-            <center>ZABAVA</center>
-        </a><a class="category_btn" id="c2" href="{% url 'timee:automobili_category' %}">
-            <center>AUTOMOBILI / MOTORI</center>
-        </a><a class="category_btn" id="c3" href="{% url 'timee:tehnologija_category' %}">
-            <center>TEHNOLOGIJA</center>
-        </a><a class="category_btn" id="c4" href="{% url 'timee:lifestyle_category' %}">
-            <center>LIFESTYLE</center>
-        
-        </a><a class="category_btn" id="c4" href="{% url 'timee:hrana_category' %}">
-            <center>HRANA / ZDRAVLJE</center>
-        
-        </a><a class="category_btn" id="c4" href="{% url 'timee:intima_category' %}">
-            <center>INTIMA / SEX</center>
-        </div>
-    {% else %}
-        <div id="step2">
-            <a class="category_btn" id="c1" href="{% url 'timee:bih_category' %}">
-                <center>BiH</center>
-            </a><a class="category_btn" id="c2" href="{% url 'timee:ekonomija_category' %}">
-                <center>Ekonomija</center>
-            </a><a class="category_btn" id="c3" href="{% url 'timee:balkan_category' %}">
-                <center>Balkan</center>
-            </a><a class="category_btn" id="c4" href="{% url 'timee:svijet_category'%}">
-                <center>Svijet</center>
-            </a><a class="category_btn" id="c5" href="{% url 'timee:sarajevo_category' %}">
-                <center>Sarajevo</center>
-            </a><a class="category_btn" id="c6" href="{% url 'timee:hronika_category' %}">
-                <center>Hronika</center>
-            </a><a class="category_btn" id="c7" href="{% url 'timee:kultura_category' %}">
-                <center>Kultura</center>
-            </a><a class="category_btn" id="c8" href="{% url 'timee:scena_category' %}">
-                <center>Scena</center>
-            </a>
-        </div>
-    {% endif %}
+        </a><a class="extra_btn" href="n/all">
+            <center>Najnovije vesti</center><span></span>
+        </a>
+    </div>
+    <div id="step2"><a class="category_btn">
+
+    </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var menuLinks = document.querySelectorAll("#menu .super_btn, #menu .extra_btn");
-    var savedActiveLinkId = localStorage.getItem('activeLinkId');
 
-    if (savedActiveLinkId) {
-        var savedActiveLink = document.querySelector("#menu #" + savedActiveLinkId);
-        if (savedActiveLink) {
-            savedActiveLink.classList.add('active');
+    $(document).ready(function () {
+        // Definisanje sadržaja za svaku kategoriju
+        var categoriesContent = {
+            'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a><a class="category_btn" href="st/vesti/ekonomija"><center>Ekonomija</center></a>', // Ovdje dodajte ostale linkove za 'vijesti'
+            'sport': '<a class="category_btn" href="{% url "timee:fudbal_category" %}"><center>Fudbal</center></a><a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Košarka</center></a>', // Ovdje dodajte ostale linkove za 'sport'
+            'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a><a class="category_btn" href="st/magazin/kultura"><center>Kultura</center></a>' // Ovdje dodajte ostale linkove za 'magazin'
+            // i tako dalje za svaku kategoriju koju imate
+        };
+        // Podešavanje početnog prikaza za 'vijesti' ili bilo koju drugu početnu kategoriju
+        $('#step2').html(categoriesContent['vijesti']);
+
+        // Funkcija koja postavlja aktivnu klasu i sadržaj
+        function setActiveClassAndContent(category, color) {
+            // Ukloni aktivnu klasu i stilove sa svih elemenata
+            $('#menu #step1 a').removeClass('active').css('background-color', '');
+            // Dodaj aktivnu klasu na kliknuti element i postavi boju pozadine
+            $('#menu #step1 a').filter(function () {
+                return $(this).text().trim().toLowerCase() === category;
+            }).addClass('active').css('background-color', color);
+            // Prikazuje sadržaj za odabranu kategoriju
+            if (categoriesContent[category]) {
+                $('#step2').html(categoriesContent[category]);
+            }
         }
-    }
 
-    menuLinks.forEach(function(link) {
-        link.addEventListener("click", function() {
-            // Ukloni klasu 'active' sa svih linkova
-            menuLinks.forEach(function(otherLink) {
-                otherLink.classList.remove('active');
-            });
+        function setActiveClassAndLoadContent(category, color) {
+            // Postavi aktivnu klasu i sadržaj
+            setActiveClassAndContent(category, color);
 
-            // Dodaj klasu 'active' na kliknuti link
-            this.classList.add('active');
-            // Spremi ID kliknutog linka u localStorage
-            localStorage.setItem('activeLinkId', this.id);
+            // Učitaj stranicu za odabranu kategoriju
+            // Ovdje pretpostavljamo da je URL definisan u 'href' atributu svake kategorije
+            window.location.href = $('#menu #step1 a').filter(function () {
+                return $(this).text().trim().toLowerCase() === category;
+            }).attr('href');
+        }
 
-            // Ovdje možete dodati logiku za preusmjeravanje ako je potrebno
-            // window.location.href = this.href;
+        // Klik na glavne kategorije
+        $('#menu #step1 a.super_btn').on('click', function (e) {
+            e.preventDefault();
+            var category = $(this).text().trim().toLowerCase();
+            var color = '#6b90da'; // Default boja za 'vijesti'
+            if (category === 'sport') {
+                color = '#079107';
+            } else if (category === 'magazin') {
+                color = '#8a60b3';
+            }
+            setActiveClassAndLoadContent(category, color);
+            setActiveSubcategory(category, color);
+        });
+
+        // Funkcija koja postavlja aktivnu klasu i boju za podkategorije
+        function setActiveSubcategory(subcategory, color) {
+            // Ukloni aktivnu klasu sa podkategorija
+            $('#step2 a').removeClass('active').css('background-color', '');
+            // Dodaj aktivnu klasu i boju na odabranu podkategoriju
+            $('#step2 a').filter(function () {
+                return $(this).text().trim().toLowerCase() === subcategory;
+            }).addClass('active').css('background-color', color);
+
+            // Spremi aktivnu podkategoriju u lokalno skladište
+            localStorage.setItem('activeSubcategory', subcategory);
+        }
+
+      
+
+        // Klik na podkategorije unutar 'sport'
+        $('#step2').on('click', 'a.category_btn', function (e) {
+            e.preventDefault();
+            var subcategory = $(this).text().trim().toLowerCase();
+            var color = '#438988'; // Default boja za podkategorije 'sport'
+            if (subcategory === 'košarka') {
+                color = '#c00'; // Boja za 'košarka'
+            } else if (subcategory === 'fudbal') {
+                color = '#438988'; // Boja za 'fudbal'
+            }
+            setActiveSubcategory(subcategory, color);
+
+            // Dodajte ovu liniju za učitavanje odgovarajuće stranice
+            window.location.href = $(this).attr('href');
+        });
+
+
+        // Ako postoji potreba za inicijalnim postavljanjem aktivne klase
+        // Možete koristiti sljedeći kod da provjerite URL i postavite aktivnu klasu
+        var currentPath = window.location.pathname;
+        $('#menu #step1 a, #step2 a').each(function () {
+            var href = $(this).attr('href');
+            if (currentPath.indexOf(href) !== -1) {
+                var category = $(this).text().trim().toLowerCase();
+                var color = '#6b90da'; // Default boja
+                if (category === 'sport') {
+                    color = '#079107';
+                } else if (category === 'magazin') {
+                    color = '#8a60b3';
+                }
+                setActiveClassAndContent(category, color); // Samo postavi aktivnu klasu bez učitavanja
+            }
         });
     });
-});
-
-
-
 </script>

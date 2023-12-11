@@ -13,13 +13,80 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="images/time.ico" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width" />
-    <title>Time.ba</title>
-    <script type="text/javascript">  if (top.location != location) { top.location.href = document.location.href; } 
+    <title>{{ naslov_stranice }}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-3207439269372059",
+            enable_page_level_ads: true
+        });
     </script>
-     
+    <script>
+        // Funkcija za spremanje odabrane sheme boja u localStorage
+        function save_color_scheme(shade) {
+            localStorage.setItem('color_scheme', shade);
+        }
+
+        // Funkcija za postavljanje sheme boja i ažuriranje linka CSS datoteke
+        function set_color_scheme(shade) {
+            var color_css_link = document.querySelector('link[attr="color_css"]');
+            color_css_link.setAttribute('rel', 'stylesheet');
+            color_css_link.setAttribute('type', 'text/css');
+            color_css_link.setAttribute('href', 'css/' + shade + '.css?ver=44');
+            save_color_scheme(shade);
+        }
+
+        // Provjeravanje korisničkih preferencija i postavljanje sheme boja
+        if ((localStorage.getItem('color_scheme') == 'dark') ||
+            (localStorage.getItem('color_scheme') != 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            set_color_scheme('dark');
+        } else if ((localStorage.getItem('color_scheme') == 'light') ||
+            (localStorage.getItem('color_scheme') != 'dark' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            set_color_scheme('light');
+        }
+
+        // Funkcija za dodavanje event listenera, kompatibilna sa različitim browserima
+        function addEvent(object, type, callback) {
+            if (object == null || typeof (object) == 'undefined') return;
+            if (object.addEventListener) {
+                object.addEventListener(type, callback, false);
+            } else if (object.attachEvent) {
+                object.attachEvent("on" + type, callback);
+            } else {
+                object["on" + type] = callback;
+            }
+        };
+
+        // Funkcija za izračunavanje širine naslova povezanih članaka
+        function calcNaslov() {
+            var relArticles = document.getElementsByClassName("related_article");
+            var relNaslovi = document.getElementsByClassName("rel_title");
+            var relSource = document.getElementsByClassName("r_source");
+            var s = 0;
+            for (var i = window.d; i < relArticles.length; i++) {
+                var p = relArticles[i].offsetWidth;
+                var r = relSource[i].offsetWidth;
+                var w = p - (r + 11);
+                relNaslovi[i].style.maxWidth = w + "px";
+                s = i;
+            }
+            window.d = s;
+        }
+
+        // Funkcija za otvaranje novog popup prozora sa zadanim opcijama
+        function newPopup(url) {
+            var w = screen.width / 2 - 250;
+            var h = screen.height / 3 - 200;
+            popupWindow = window.open(url, "popUpWindow", "height=400,width=500,left=" + w + ",top=" + h + ",resizable=no,scrollbars=no,toolbar=no,menubar=no,location=no,directories=no,status=yes");
+        };
+
+        
+
+    </script>
 </head>
 
-<body id="super_0" class="site_timers" data-new-gr-c-s-check-loaded="14.1143.0">
+<body id="super_1" class="site_timers">
     <div id="wrapper">
         <div id="header">
             {% include "bar.html" %}
@@ -28,57 +95,58 @@
         </div>
         {% block content %}
         {% endblock %}
-        
+
         {% include "footer.html" %}
 
         <center>
             <a onclick="scrollUp();" id='btt'></a>
         </center>
-        
+
     </div>
 
     <script>var a = document.getElementById("page_title"); 33 <= a.getElementsByTagName("p")[0].innerHTML.length && (a.className = "long");</script>
-
+    <script>calcNaslov();</script> 
     <script type="text/javascript">
         var startBTTPos = 600, btt = document.getElementById("btt");
         function pofs() {
             pageYOffset > startBTTPos ? (window.btt.classList.add("scrl")) : (window.btt.classList.remove("scrl"))
         }
-        ;try {
+        ; try {
             scr_branding();
-            window.onscroll = function() {
+            window.onscroll = function () {
                 scr_branding();
                 pofs()
             }
         } catch (err) {
             window.onscroll = pofs
         }
-        ;var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        ; var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
         var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
         function scrollT(a, b, c) {
             var d = a.scrollTop
-              , g = b - d
-              , e = 0
-              , f = function() {
-                e += 20;
-                var b = Math.easeInOutQuad(e, d, g, c);
-                a.scrollTop = b;
-                e < c && setTimeout(f, 20)
-            };
+                , g = b - d
+                , e = 0
+                , f = function () {
+                    e += 20;
+                    var b = Math.easeInOutQuad(e, d, g, c);
+                    a.scrollTop = b;
+                    e < c && setTimeout(f, 20)
+                };
             f()
         }
-        Math.easeInOutQuad = function(a, b, c, d) {
+        Math.easeInOutQuad = function (a, b, c, d) {
             a /= d / 2;
             if (1 > a)
                 return c / 2 * a * a + b;
             a--;
             return -c / 2 * (a * (a - 2) - 1) + b
         }
-        ;
+            ;
         function scrollUp() {
             window.scrollTo(0, 0)
         }
-        ;pofs()
+        ; pofs()
     </script>
+    <script>var a=document.getElementById("page_title");33<=a.getElementsByTagName("p")[0].innerHTML.length&&(a.className="long");</script>
 
 </html>
