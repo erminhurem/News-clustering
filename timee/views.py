@@ -94,6 +94,7 @@ def bih_category(request):
 
     context = {
         'news_by_category': {'BiH': news_page},
+        'naslov_stranice': 'BiH - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "bih_category.html", context)
@@ -120,6 +121,7 @@ def ekonomija_category(request):
 
     context = {
         'news_by_category': {'Ekonomija': news_page},
+        'naslov_stranice': 'Ekonomija - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "ekonomija_category.html", context)
@@ -146,7 +148,7 @@ def balkan_category(request):
 
     context = {
         'news_by_category': {'Balkan': news_page},
-         'naslov_stranice': 'Balkan - Time.ba',
+        'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "balkan_category.html", context)
@@ -522,7 +524,7 @@ def tehnologija_category(request):
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
         'naslov_stranice': 'Tehnologija - Time.ba',
-         'aktivna_kategorija': 'Magazin',
+        'aktivna_kategorija': 'Magazin',
         'aktivna_podkategorija': 'Tehnologija',
     }
 
@@ -629,9 +631,13 @@ def izvori(request):
 
     return render(request, "izvori.html")
 
-def film(request):
+def firme(request):
 
-    return render(request, "film.html")
+    return render(request, "firme.html")
+
+def vremenska_prognoza(request):
+
+    return render(request, 'vremenska_prognoza.html')
 
 
 def fetch_news():

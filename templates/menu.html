@@ -5,12 +5,12 @@
             <center>Sport</center><span></span>
         </a><a class="super_btn" href="{% url 'timee:magazin' %}">
             <center>Magazin</center><span></span>
-        </a><a class="extra_btn" href="film/">
-            <center>Film</center><span></span>
-        </a><a class="extra_btn" href="s/all">
+        </a><a class="extra_btn" href="{% url 'timee:firme' %}">
+            <center>Firme</center><span></span>
+        </a><a class="extra_btn" href="{% url 'timee:izvori' %}">
             <center>Izvori</center><span></span>
-        </a><a class="extra_btn" href="n/all">
-            <center>Najnovije vesti</center><span></span>
+        </a><a class="extra_btn" href="{% url 'timee:najnovije_vijesti' %}">
+            <center>Najnovije vijesti</center><span></span>
         </a>
     </div>
     <div id="step2"><a class="category_btn">
@@ -24,6 +24,7 @@
         // Definisanje sadržaja za svaku kategoriju
         var categoriesContent = {
             'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a>' +
+                '<a class="category_btn" href="{% url "timee:ekonomija" %}"><center>Ekonomija</center></a>' +
                 '<a class="category_btn" href="{% url "timee:balkan_category" %}"><center>Balkan</center></a>' +
                 '<a class="category_btn" href="{% url "timee:svijet_category" %}"><center>Svijet</center></a>' +
                 '<a class="category_btn" href="{% url "timee:sarajevo_category" %}"><center>Sarajevo</center></a>' +
@@ -40,6 +41,7 @@
                 '<a class="category_btn" href="{% url "timee:lifestyle_category" %}"><center>Lifestyle</center></a>' +
                 '<a class="category_btn" href="{% url "timee:hrana_category" %}"><center>Hrana / Zdravlje</center></a>' +
                 '<a class="category_btn" href="{% url "timee:intima_category" %}"><center>Intima / Sex</center></a>',
+            
 
         };
         // Podešavanje početnog prikaza za 'vijesti' ili bilo koju drugu početnu kategoriju
