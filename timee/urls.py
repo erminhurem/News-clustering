@@ -34,6 +34,7 @@ urlpatterns = [
     path('news-archive/', views.news_archive, name='news_archive'),
     path('widget/widgetpage', views.widget, name='widget'),
     path('rss/rsspage', views.rsspage, name='rsspage'),
+    path('m/', views.mobile, name='mobile_index'),
 
     
    

@@ -791,3 +791,9 @@ def rsspage(request):
          'naslov_stranice': 'Rss - Time.ba',
     }
     return render(request, 'rss.html', context)
+
+def mobile(request):
+    context = {
+         'naslov_stranice': 'Mobile - Time.ba',
+    }
+    return render(request, 'mobile/index.html', context)
