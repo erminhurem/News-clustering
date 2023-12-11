@@ -6,15 +6,35 @@
     <div id="news_pane" class="top">
         <div id="news_pane" class="single_news">
             <form method="get" action="{% url 'timee:najnovije_vijesti' %}">
+                <input type="hidden" name="new" value="true">
                 <span>Kategorija : </span>
                 <select name="topic" onchange="this.form.submit()">
-                    <option value="all" {% if selected_topic == 'all' %}selected{% endif %}>Sve vijesti</option>
+                    <option value="all" {% if selected_topic=='all' %}selected{% endif %}>Sve vijesti</option>
                     {% for kat in kategorije %}
-                        <option value="{{ kat }}" {% if selected_topic == kat %}selected{% endif %}>{{ kat }}</option>
+                    <option value="{{ kat }}" {% if selected_topic==kat %}selected{% endif %}>{{ kat }}</option>
                     {% endfor %}
                 </select>
             </form>
-
+            <div class="pagination">
+                {% if latest_news.has_other_pages %}
+                {% if latest_news.has_previous %}
+                <a href="?page=1&topic={{ selected_topic }}">Prva</a>
+                <a href="?page={{ latest_news.previous_page_number }}&topic={{ selected_topic }}">Prethodna</a>
+                {% endif %}
+                {% for i in latest_news.paginator.page_range %}
+                {% if latest_news.number == i %}
+                <span class="current">{{ i }}</span>
+                {% else %}
+                <a href="?page={{ i }}&topic={{ selected_topic }}">{{ i }}</a>
+                {% endif %}
+                {% endfor %}
+                {% if latest_news.has_next %}
+                <a href="?page={{ latest_news.next_page_number }}&topic={{ selected_topic }}">Sljedeća</a>
+                <a href="?page={{ latest_news.paginator.num_pages }}&topic={{ selected_topic }}">Zadnja</a>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="h_rule"></div>
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>

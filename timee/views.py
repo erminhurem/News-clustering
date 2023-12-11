@@ -633,6 +633,15 @@ def najnovije_vijesti(request):
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+    # Paginacija
+    page = request.GET.get('page', 1)
+    paginator = Paginator(latest_news, 5)  # Pretpostavimo da želite 5 vijesti po stranici
+    try:
+        latest_news = paginator.page(page)
+    except PageNotAnInteger:
+        latest_news = paginator.page(1)
+    except EmptyPage:
+        latest_news = paginator.page(paginator.num_pages)
 
     context = {
         'latest_news': latest_news,
