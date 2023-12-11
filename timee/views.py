@@ -630,9 +630,9 @@ def izvori(request):
 
     return render(request, "izvori.html")
 
-def film(request):
-
-    return render(request, "film.html")
+def firme(request):
+    context = {'naslov_stranice': 'Firme - Time.ba',}
+    return render(request, "firme.html", context)
 
 
 def fetch_news():
