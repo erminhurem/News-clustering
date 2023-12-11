@@ -8,6 +8,7 @@ from .models import Headlines
 from bs4 import BeautifulSoup
 import logging
 from django.db.models import Count
+from django.http import JsonResponse
 import datetime
 import requests
 
@@ -757,3 +758,17 @@ def news_archive(request):
         news = paginator.page(paginator.num_pages)
 
     return render(request, 'week.html', {'news': news})
+
+
+def news_archive(request):
+    date = request.GET.get('date')
+    if date:
+        # Pretvaranje stringa datuma u objekat datuma i filtriranje vijesti
+        news_items = Headlines.objects.filter(published_date__date=date)
+    else:
+        news_items = Headlines.objects.all()
+
+    # Pretvaranje vijesti u JSON format
+    news_list = [{'title': news.title, 'description': news.description} for news in news_items]
+
+    return JsonResponse(news_list, safe=False)

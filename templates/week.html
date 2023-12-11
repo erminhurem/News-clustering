@@ -1,35 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
 <div id="split_pane" class="infopage">
-    <!-- ... (ostatak vašeg koda) ... -->
+    <!-- Ostatak vašeg koda -->
 
-    <!-- Forma za odabir datuma -->
-    <form method="get" action="{% url 'timee:week' %}">
-        <input type="date" name="date_from" placeholder="Od datuma">
-        <input type="date" name="date_to" placeholder="Do datuma">
-        <button type="submit">Pretraži</button>
-    </form>
-
-    <!-- Prikaz vijesti -->
-    <div>
-        {% for news_item in news %}
-            <div class="news-item">
-                <h2>{{ news_item.title }}</h2>
-                <p>{{ news_item.description }}</p>
-                <!-- ostali detalji vijesti -->
-            </div>
-        {% endfor %}
+    <!-- Kalendar -->
+    <div id="calendar">
+        <!-- ... Vaš kod kalendara ... -->
     </div>
 
-    <!-- Paginacija -->
-    <div>
-        {% if news.has_previous %}
-            <a href="?page={{ news.previous_page_number }}{% if request.GET.date_from %}&date_from={{ request.GET.date_from }}{% endif %}{% if request.GET.date_to %}&date_to={{ request.GET.date_to }}{% endif %}">Prethodna</a>
-        {% endif %}
-        <span>Stranica {{ news.number }} od {{ news.paginator.num_pages }}</span>
-        {% if news.has_next %}
-            <a href="?page={{ news.next_page_number }}{% if request.GET.date_from %}&date_from={{ request.GET.date_from }}{% endif %}{% if request.GET.date_to %}&date_to={{ request.GET.date_to }}{% endif %}">Sljedeća</a>
-        {% endif %}
+    <!-- Kontejner za prikaz vijesti -->
+    <div id="news-container">
+        <!-- Ovdje će se prikazivati vijesti -->
     </div>
 </div>
+<script>
+    document.querySelectorAll('#calendar a').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Preuzimanje datuma iz data-date atributa
+            var date = this.getAttribute('data-date');
+
+            // AJAX zahtjev na Django backend
+            fetch('/news-archive/?date=' + date)
+    .then(response => response.json())
+    .then(data => {
+        // Pozivanje funkcije za ažuriranje vijesti
+        updateNews(data);
+    })
+    .catch(error => console.error('Error:', error));
+        });
+    });
+
+    function updateNews(newsData) {
+        const container = document.getElementById('news-container');
+        container.innerHTML = ''; // Čišćenje starog sadržaja
+
+        // Dodavanje novih vijesti
+        newsData.forEach(news => {
+            const newsElement = document.createElement('div');
+            newsElement.className = 'news-item';
+            newsElement.innerHTML = `<h2>${news.title}</h2><p>${news.description}</p>`;
+            container.appendChild(newsElement);
+        });
+    }
+</script>
+
+
 {% endblock %}
