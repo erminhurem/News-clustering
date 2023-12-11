@@ -23,10 +23,24 @@
     $(document).ready(function () {
         // Definisanje sadržaja za svaku kategoriju
         var categoriesContent = {
-            'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a><a class="category_btn" href="st/vesti/ekonomija"><center>Ekonomija</center></a>', // Ovdje dodajte ostale linkove za 'vijesti'
-            'sport': '<a class="category_btn" href="{% url "timee:fudbal_category" %}"><center>Fudbal</center></a><a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Košarka</center></a>', // Ovdje dodajte ostale linkove za 'sport'
-            'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a><a class="category_btn" href="st/magazin/kultura"><center>Kultura</center></a>' // Ovdje dodajte ostale linkove za 'magazin'
-            // i tako dalje za svaku kategoriju koju imate
+            'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a>' +
+                '<a class="category_btn" href="{% url "timee:balkan_category" %}"><center>Balkan</center></a>' +
+                '<a class="category_btn" href="{% url "timee:svijet_category" %}"><center>Svijet</center></a>' +
+                '<a class="category_btn" href="{% url "timee:sarajevo_category" %}"><center>Sarajevo</center></a>' +
+                '<a class="category_btn" href="{% url "timee:hronika_category" %}"><center>Hronika</center></a>' +
+                '<a class="category_btn" href="{% url "timee:kultura_category" %}"><center>Kultura</center></a>' +
+                '<a class="category_btn" href="{% url "timee:scena_category" %}"><center>Scena</center></a>',
+            'sport': '<a class="category_btn" href="{% url "timee:fudbal_category" %}"><center>Fudbal</center></a>' +
+                '<a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Košarka</center></a>' +
+                '<a class="category_btn" href="{% url "timee:tenis_category" %}"><center>Tenis</center></a>' +
+                '<a class="category_btn" href="{% url "timee:ostalo_category" %}"><center>Ostalo</center></a>',
+            'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a>' +
+                '<a class="category_btn" href="{% url "timee:automobili_category" %}"><center>Automobili / Motori</center></a>' +
+                '<a class="category_btn" href="{% url "timee:tehnologija_category" %}"><center>Tehnologija / Motori</center></a>' +
+                '<a class="category_btn" href="{% url "timee:lifestyle_category" %}"><center>Lifestyle</center></a>' +
+                '<a class="category_btn" href="{% url "timee:hrana_category" %}"><center>Hrana / Zdravlje</center></a>' +
+                '<a class="category_btn" href="{% url "timee:intima_category" %}"><center>Intima / Sex</center></a>',
+
         };
         // Podešavanje početnog prikaza za 'vijesti' ili bilo koju drugu početnu kategoriju
         $('#step2').html(categoriesContent['vijesti']);
@@ -82,8 +96,6 @@
             // Spremi aktivnu podkategoriju u lokalno skladište
             localStorage.setItem('activeSubcategory', subcategory);
         }
-
-      
 
         // Klik na podkategorije unutar 'sport'
         $('#step2').on('click', 'a.category_btn', function (e) {
