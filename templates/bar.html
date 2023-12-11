@@ -2,24 +2,23 @@
 <div id="bar">
     <div class="lbar">
       <a href="m/index.html" title="Mobilna verzija"> <span class="icon" id="m1"></span> </a>
-      <a href="rss/rsspage.html" title="RSS kanale"> <span class="icon" id="rss"></span> </a>
-      <a href="widget/widgetpage.html" title="Widget"> <span class="icon" id="widget"></span> </a>
+      <a href="{% url 'timee:rsspage' %}" title="RSS kanale"> <span class="icon" id="rss"></span> </a>
+      <a href="{% url 'timee:widget' %}" title="Widget"> <span class="icon" id="widget"></span> </a>
     </div>
     <div class="dbar">
       <!--  <a href="info/marketing"> <span>Marketing</span> </a>      <span class="vr">|</span>-->
       <a href="10h.html"><span>10h</span></a> <a href="17h.html"><span>17h</span></a> <a
         href="23h.html"><span>23h</span></a><span class="vr">|</span>
-      <a href="info/prognoza.html"> <span>Prognoza</span> </a> <span class="vr">|</span>
-      <a href="info/week.html"> <span>Arhiva</span> </a> <span class="vr">|</span>
+      <a href="{% url 'timee:prognoza' %}"> <span>Prognoza</span> </a> <span class="vr">|</span>
+      <a href="{% url 'timee:week' %}"> <span>Arhiva</span> </a> <span class="vr">|</span>
       <a href="{% url 'timee:contact' %}"> <span>Kontakt</span> </a><span class="vr">|</span>
       <span class="new"><b>novo ↳</b></span>
       <a href="neutral.html" title="Standardna verzija"><span style="color:grey ;text-decoration: none;"> ◉
         </span></a>
       <a href="new.html" title="Verzija sa najnovije vesti"><span style="color:green;text-decoration: none;"> ◉
         </span></a>
-      <span class="vr">|</span><a title="Dark/Light mode"
-        onclick="set_color_scheme(localStorage.getItem('color_scheme') == 'dark' ? 'light' : 'dark');return false;"
-        id="color_scheme_toggle"></a>
+      <span class="vr">|</span>
+      <a title="Dark/Light mode" onclick="set_color_scheme(localStorage.getItem('color_scheme') == 'dark' ? 'light' : 'dark');return false;" id="color_scheme_toggle"></a>
 
     </div>
   </div>

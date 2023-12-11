@@ -734,9 +734,16 @@ def categorize_news(url):
 
 
 def contact(request):
-    return render(request, 'kontakt.html')
+    context = {
+         'naslov_stranice': 'Kontakt - Time.ba',
+    }
+    return render(request, 'kontakt.html', context)
 
-
+def prognoza(request):
+    context = {
+         'naslov_stranice': 'Prognoza - Time.ba',
+    }
+    return render(request, 'prognoza.html', context)
 
 def news_archive(request):
     date_from = request.GET.get('date_from')
@@ -772,3 +779,15 @@ def news_archive(request):
     news_list = [{'title': news.title, 'description': news.description} for news in news_items]
 
     return JsonResponse(news_list, safe=False)
+
+def widget(request):
+    context = {
+         'naslov_stranice': 'Widget - Time.ba',
+    }
+    return render(request, 'widget.html', context)
+
+def rsspage(request):
+    context = {
+         'naslov_stranice': 'Rss - Time.ba',
+    }
+    return render(request, 'rss.html', context)

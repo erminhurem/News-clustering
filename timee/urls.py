@@ -30,7 +30,13 @@ urlpatterns = [
     path('film/', views.film, name="film"),
     path('info/contact/', views.contact, name='contact'),
     path('info/week/', views.news_archive, name='week'),
+    path('info/prognoza/', views.prognoza, name='prognoza'),
     path('news-archive/', views.news_archive, name='news_archive'),
+    path('widget/widgetpage', views.widget, name='widget'),
+    path('rss/rsspage', views.rsspage, name='rsspage'),
+
+    
+   
  
 
 ]
