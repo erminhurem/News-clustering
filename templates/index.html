@@ -24,8 +24,19 @@
                     <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                     <p class="snippet">{{ news.description }}</p>
                     <div class="related_article">
-                        
+                        {% if news.related_news %}
+                        <ul>
+                            {% for related in news.related_news %}
+                                <li>
+                                    <a href="{{ related.link }}">{{ related.title }}</a> - 
+                                    <span>{{ related.source_name }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- <p>Broj povezanih vijesti: {{  news.related_news_count }}</p> -->
+                        {% endif %}
                     </div>
+                    
                 </div>
             </div>
             <div class="clear"></div>

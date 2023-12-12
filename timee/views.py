@@ -11,6 +11,13 @@ from django.db.models import Count
 from django.http import JsonResponse
 import datetime
 import requests
+import nltk
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import logging
+nltk.download('punkt')
+
+
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
 def get_friendly_source_name(url):
@@ -51,12 +58,37 @@ def get_relative_time(published_date):
             return "upravo objavljeno"
     return "Nepoznato vrijeme"
 
+
+def extract_keywords(text):
+    words = nltk.word_tokenize(text)
+    keywords = [word for word in words if word.isalnum()]
+    return keywords
+
 # početak koda vezano za rubriku Vijesti
 def index(request):
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    all_news = Headlines.objects.all().order_by('-published_date')
+    vectorizer = TfidfVectorizer()
+    
+    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
+    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
+
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+        # Izračunavanje TF-IDF vektora za trenutnu vijest
+        current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+        cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+        # Dobivanje indeksa povezanih članaka
+        related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
+
+        # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
+        related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
+        news.related_news = related_news
+        # Ovdje postavite ukupan broj povezanih vijesti
+        news.related_news_count = len(related_news)
 
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
@@ -71,7 +103,9 @@ def index(request):
         'latest_news': latest_news,
         'news_by_category': news_by_category,
     }
+
     return render(request, "index.html", context)
+
 
 def bih_category(request):
     news_items = Headlines.objects.filter(category='BiH').order_by('-published_date')
@@ -678,38 +712,66 @@ def fetch_news():
         'https://www.avaz.ba/rss',
         'https://www.oslobodjenje.ba/feed',
         'https://okanal.oslobodjenje.ba/okanal/feed',
+        'https://www.b92.net/feed/',
+        'https://www.sd.rs/rss.xml',
+        'https://www.rts.rs/rss/ci.html',
+        'https://www.alo.rs/rss/live',
+        'https://www.alo.rs/rss/hronika',
+        'https://www.alo.rs/rss/biz',
+        'https://www.alo.rs/rss/vesti',
+        'https://www.espreso.co.rs/rss',
+        'https://www.vecernji.hr/feeds/latest',
+        'https://dnevnik.hr/assets/feed/articles',
+        'https://www.24sata.hr/feeds/najnovije.xml',
+        'https://www.24sata.hr/feeds/news.xml',
+        'https://www.24sata.hr/feeds/sport.xml',
+        'https://www.24sata.hr/feeds/tech.xml',
+
     ]
     logger = logging.getLogger(__name__)
     for feed_url in feeds:
         feed = feedparser.parse(feed_url)
-        for entry in feed.entries:
-            if not Headlines.objects.filter(link=entry.link).exists():
-                published_date = None
-                if entry.published:
-                    try:
-                        published_date = date_parser.parse(entry.published)
-                    except ValueError:
-                        pass
+    for entry in feed.entries:
+        if not Headlines.objects.filter(link=entry.link).exists():
+            published_date = None
+            if entry.published:
+                try:
+                    published_date = date_parser.parse(entry.published)
+                except ValueError:
+                    pass
 
-                content = entry.content[0].value if 'content' in entry else ''
-                soup = BeautifulSoup(content, 'html.parser')
-                images = soup.find_all('img')
+            image_urls = []
+            print(f"Processing entry: {entry.title}")
+            print(f"Image URLs: {image_urls}")
+            # Izvlačenje slika iz <icon> i <image> tagova
+            icon_url = entry.get('icon')
+            image_url = entry.get('image')
+            if icon_url and icon_url not in image_urls:
+                image_urls.append(icon_url)
+            if image_url and image_url not in image_urls:
+                image_urls.append(image_url)
 
-                image_urls = [img['src'] for img in images]
+            # Izvlačenje slika iz <content>
+            content = entry.content[0].value if 'content' in entry else ''
+            soup = BeautifulSoup(content, 'html.parser')
+            images = soup.find_all('img')
+            for img in images:
+                if img['src'] not in image_urls:
+                    image_urls.append(img['src'])
 
-                category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
+            category = categorize_news(entry.link)  # Dodavanje kategorije
 
-                news_item = Headlines(
-                    title=entry.title,
-                    link=entry.link,
-                    description=entry.description,
-                    published_date=published_date,
-                    source=feed_url,
-                    category=category,  # Dodajemo kategoriju u model
-                    image_urls=','.join(image_urls) if image_urls else None
-                )
-                logger.info('Fetching news from %s', feed_url)
-                news_item.save()
+            news_item = Headlines(
+                title=entry.title,
+                link=entry.link,
+                description=entry.description,
+                published_date=published_date,
+                source=feed_url,
+                category=category,
+                image_urls=','.join(image_urls) if image_urls else None
+            )
+            logger.info('Fetching news from %s', feed_url)
+            news_item.save()
 
 def categorize_news(url):
     if 'ekonomija' in url or 'biznis' in url or 'economy' in url:
@@ -824,3 +886,6 @@ def mobile(request):
          'naslov_stranice': 'Mobile - Time.ba',
     }
     return render(request, 'mobile/index.html', context)
+
+
+

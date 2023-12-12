@@ -65,8 +65,13 @@
             // Postavi aktivnu klasu i sadržaj
             setActiveClassAndContent(category, color);
 
+            // Ako je kategorija 'firme', 'izvori' ili 'najnovije vijesti', ne učitavaj podkategorije
+            if (category === 'firme' || category === 'izvori' || category === 'najnovije vijesti') {
+                $('#step2').html(''); // Postavi prazan sadržaj za podkategorije
+                return; // Prekini daljnje izvršavanje funkcije
+            }
+
             // Učitaj stranicu za odabranu kategoriju
-            // Ovdje pretpostavljamo da je URL definisan u 'href' atributu svake kategorije
             window.location.href = $('#menu #step1 a').filter(function () {
                 return $(this).text().trim().toLowerCase() === category;
             }).attr('href');
