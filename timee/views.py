@@ -731,47 +731,34 @@ def fetch_news():
     logger = logging.getLogger(__name__)
     for feed_url in feeds:
         feed = feedparser.parse(feed_url)
-    for entry in feed.entries:
-        if not Headlines.objects.filter(link=entry.link).exists():
-            published_date = None
-            if entry.published:
-                try:
-                    published_date = date_parser.parse(entry.published)
-                except ValueError:
-                    pass
+        for entry in feed.entries:
+            if not Headlines.objects.filter(link=entry.link).exists():
+                published_date = None
+                if entry.published:
+                    try:
+                        published_date = date_parser.parse(entry.published)
+                    except ValueError:
+                        pass
 
-            image_urls = []
-            print(f"Processing entry: {entry.title}")
-            print(f"Image URLs: {image_urls}")
-            # Izvlačenje slika iz <icon> i <image> tagova
-            icon_url = entry.get('icon')
-            image_url = entry.get('image')
-            if icon_url and icon_url not in image_urls:
-                image_urls.append(icon_url)
-            if image_url and image_url not in image_urls:
-                image_urls.append(image_url)
+                content = entry.content[0].value if 'content' in entry else ''
+                soup = BeautifulSoup(content, 'html.parser')
+                images = soup.find_all('img')
 
-            # Izvlačenje slika iz <content>
-            content = entry.content[0].value if 'content' in entry else ''
-            soup = BeautifulSoup(content, 'html.parser')
-            images = soup.find_all('img')
-            for img in images:
-                if img['src'] not in image_urls:
-                    image_urls.append(img['src'])
+                image_urls = [img['src'] for img in images]
 
-            category = categorize_news(entry.link)  # Dodavanje kategorije
+                category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
 
-            news_item = Headlines(
-                title=entry.title,
-                link=entry.link,
-                description=entry.description,
-                published_date=published_date,
-                source=feed_url,
-                category=category,
-                image_urls=','.join(image_urls) if image_urls else None
-            )
-            logger.info('Fetching news from %s', feed_url)
-            news_item.save()
+                news_item = Headlines(
+                    title=entry.title,
+                    link=entry.link,
+                    description=entry.description,
+                    published_date=published_date,
+                    source=feed_url,
+                    category=category,  # Dodajemo kategoriju u model
+                    image_urls=','.join(image_urls) if image_urls else None
+                )
+                logger.info('Fetching news from %s', feed_url)
+                news_item.save()
 
 def categorize_news(url):
     if 'ekonomija' in url or 'biznis' in url or 'economy' in url:
