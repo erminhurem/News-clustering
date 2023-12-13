@@ -90,8 +90,7 @@ def index(request):
         # Ovdje postavite ukupan broj povezanih vijesti
         news.related_news_count = len(related_news)
 
-    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin', 
-                  'Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Zabava', 'Automobili', 'Tehnologija', 'Lifestyle', 'Hrana', 'Intima', 'Vijesti']
+    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -102,7 +101,6 @@ def index(request):
 
     context = {
         'latest_news': latest_news,
-        'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
     }
 
@@ -131,7 +129,6 @@ def bih_category(request):
 
     context = {
         'news_by_category': {'BiH': news_page},
-        'naslov_stranice': 'BiH - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "bih_category.html", context)
@@ -158,7 +155,6 @@ def ekonomija_category(request):
 
     context = {
         'news_by_category': {'Ekonomija': news_page},
-        'naslov_stranice': 'Ekonomija - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "ekonomija_category.html", context)
@@ -185,7 +181,7 @@ def balkan_category(request):
 
     context = {
         'news_by_category': {'Balkan': news_page},
-        'naslov_stranice': 'Balkan - Time.ba',
+         'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "balkan_category.html", context)
@@ -212,7 +208,7 @@ def svijet_category(request):
 
     context = {
         'news_by_category': {'Svijet': news_page},
-        'naslov_stranice': 'Svijet - Time.ba',
+         'naslov_stranice': 'Svijet - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "svijet_category.html", context)
@@ -329,17 +325,12 @@ def scena_category(request):
 
 # početak koda vezano za rubriku Sport
 def sport(request):
-    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
-    for news_s in latest_news_s:
-        news_s.source_name = get_friendly_source_name(news_s.source)
-        news_s.time_since = get_relative_time(news_s.published_date)
-
-    latest_news = Headlines.objects.all().order_by('-published_date')
+    latest_news = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo']
+    categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Vijesti', 'Magazin']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -349,7 +340,6 @@ def sport(request):
         news_by_category[category] = news_items
 
     context = {
-        'latest_news_s': latest_news_s,
         'latest_news': latest_news,
         'naslov_stranice': 'Sport - Time.ba',
         'news_by_category': news_by_category,
@@ -469,16 +459,12 @@ def ostalo_category(request):
 # početak koda vezano za rubriku Magazin
 
 def magazin(request):
-    latest_news_m = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
-    for news_m in latest_news_m:
-        news_m.source_name = get_friendly_source_name(news_m.source)
-        news_m.time_since = get_relative_time(news_m.published_date)
-    latest_news = Headlines.objects.all().order_by('-published_date')
+    latest_news = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-    categories = ['Zabava', 'Automobili', 'Tehnologija', 'Lifestyle', 'Hrana', 'Intima']
+    categories = ['Zabava', 'Automobili / Motori', 'Tehnologija', 'Lifestyle','Hrana / Zdravlje','Intima / Sex', 'VIJESTI','SPORT']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
@@ -488,9 +474,8 @@ def magazin(request):
         news_by_category[category] = news_items
 
     context = {
-        'latest_news_m': latest_news_m,
         'latest_news': latest_news,
-        'naslov_stranice': 'Magazin - Time.ba',
+         'naslov_stranice': 'Magazin - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "magazin.html", context)
@@ -572,7 +557,8 @@ def tehnologija_category(request):
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
         'naslov_stranice': 'Tehnologija - Time.ba',
-        
+         'aktivna_kategorija': 'Magazin',
+        'aktivna_podkategorija': 'Tehnologija',
     }
 
     return render(request, "tehnologija_category.html", context)
@@ -600,7 +586,7 @@ def lifestyle_category(request):
 
     context = {
         'news_by_category': {'Lifestyle': news_page},
-        'naslov_stranice': 'Lifestyle - Time.ba',
+         'naslov_stranice': 'Lifestyle - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "lifestyle_category.html", context)
@@ -654,7 +640,7 @@ def intima_category(request):
 
     context = {
         'news_by_category': {'Intima': news_page},
-        'naslov_stranice': 'Intima - Time.ba',
+         'naslov_stranice': 'Intima - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "intima_category.html", context)
@@ -667,7 +653,7 @@ def najnovije_vijesti(request):
         'Svijet', 'Hronika', 'Politika', 'Kultura', 'Zabava',
         'Lifestyle', 'Hrana / Zdravlje', 'Tehnologija',
         'Intima / Sex', 'Zdravlje', 'Magazin', 'Scena',
-        'Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Automobili / Motori', 'Vijesti'
+        'Fudbal', 'Košarka', 'Tenis', 'Ostalo', 'Automobili / Motori', 'Vijesti'
     ]
     topic = request.GET.get('topic', 'all')  # 'all' je default vrijednost
     if topic not in kategorije:
@@ -683,7 +669,7 @@ def najnovije_vijesti(request):
         news.time_since = get_relative_time(news.published_date)
     # Paginacija
     page = request.GET.get('page', 1)
-    paginator = Paginator(latest_news, 10)  # Pretpostavimo da želite 5 vijesti po stranici
+    paginator = Paginator(latest_news, 5)  # Pretpostavimo da želite 5 vijesti po stranici
     try:
         latest_news = paginator.page(page)
     except PageNotAnInteger:
@@ -702,8 +688,8 @@ def najnovije_vijesti(request):
 
 
 def izvori(request):
-    context = {'naslov_stranice': 'Izvori - Time.ba',}
-    return render(request, "izvori.html", context)
+
+    return render(request, "izvori.html")
 
 def firme(request):
     context = {'naslov_stranice': 'Firme - Time.ba',}
@@ -756,7 +742,7 @@ def fetch_news():
 
                 content = entry.content[0].value if 'content' in entry else ''
                 soup = BeautifulSoup(content, 'html.parser')
-                images = soup.find_all('img') + soup.find_all('images') + soup.find_all('icon') + soup.find_all('url') + soup.find_all('src')
+                images = soup.find_all('img')
 
                 image_urls = [img['src'] for img in images]
 
@@ -768,61 +754,47 @@ def fetch_news():
                     description=entry.description,
                     published_date=published_date,
                     source=feed_url,
-                    category=category,  # Dodajemo kategoriju u model
+                    category=category, 
                     image_urls=','.join(image_urls) if image_urls else None
                 )
                 logger.info('Fetching news from %s', feed_url)
                 news_item.save()
 
 def categorize_news(url):
-    if 'ekonomija' in url or 'biznis' in url or 'economy' in url:
-        return 'Ekonomija'
-    elif 'sport' in url:
-        return 'Sport'
-    elif 'bih' in url or 'bosna-i-hercegovina' in url:
-        return 'BiH'
-    elif 'balkan' in url or 'region' in url:
-        return 'Balkan'
-    elif 'sarajevo' in url:
-        return 'Sarajevo'
-    elif 'svijet' in url or 'svet' in url:
-        return 'Svijet'
-    elif 'hronika' in url or 'crna-hronika' in url:
-        return 'Hronika'
-    elif 'politika' in url:
-        return 'Politika'
-    elif 'kultura' in url:
-        return 'Kultura'
-    elif 'zabava' in url:
-        return 'Zabava'
-    elif 'lifestyle' in url:
-        return 'Lifestyle'
-    elif 'hrana' in url or 'zdravlje' in url:
-        return 'Hrana / Zdravlje'
-    elif 'tehnologija' in url:
-        return 'Tehnologija'
-    elif 'intima' in url or 'sex' in url:
-        return 'Intima / Sex'
-    elif 'zdravlje' in url:
-        return 'Zdravlje'
-    elif 'magazin' in url:
-        return 'Magazin'
-    elif 'scena' in url or 'showbiz' in url:
-        return 'Scena'
-    elif 'fudbal' in url:
-        return 'Fudbal'
-    elif 'košarka' in url or 'kosarka' in url or 'sport/kosarka' in url or 'sport-klub/kosarka' in url:
-        return 'Kosarka'
-    elif 'tenis' in url:
-        return 'Tenis'
-    elif 'plivanje' in url or 'rukomet' in url or 'atletika' in url:
-        return 'Ostalo'
-    elif 'automobili' in url or 'motori' in url:
-        return 'Automobili / Motori'
-    elif 'vijesti' in url or 'vesti' in url:
-        return 'Vijesti'
-    else:
-        return 'Razne vijesti'
+    # Mapiranje ključnih riječi na kategorije
+    kategorije = {
+        'Ekonomija': ['ekonomija', 'biznis', 'economy'],
+        'Fudbal': ['fudbal', 'nogomet'],
+        'Košarka': ['košarka', 'kosarka', 'sport/kosarka', 'sport-klub/kosarka'],
+        'Tenis': ['tenis'],
+        'Ostalo': ['plivanje', 'rukomet', 'atletika'],
+        'Automobili / Motori': ['automobili', 'motori'],
+        'BiH': ['bih', 'bosna-i-hercegovina'],
+        'Balkan': ['balkan', 'region'],
+        'Sarajevo': ['sarajevo'],
+        'Svijet': ['svijet', 'svet'],
+        'Hronika': ['hronika', 'crna-hronika'],
+        'Politika': ['politika'],
+        'Kultura': ['kultura'],
+        'Zabava': ['zabava'],
+        'Lifestyle': ['lifestyle'],
+        'Hrana / Zdravlje': ['hrana', 'zdravlje'],
+        'Tehnologija': ['tehnologija'],
+        'Intima / Sex': ['intima', 'sex'],
+        'Zdravlje': ['zdravlje'],
+        'Magazin': ['magazin'],
+        'Scena': ['scena', 'showbiz'],
+        'Vijesti': ['vijesti', 'vesti']
+    }
+
+    # Provjera svake kategorije
+    for kategorija, kljucne_rijeci in kategorije.items():
+        if any(kljucna_rijec in url for kljucna_rijec in kljucne_rijeci):
+            return kategorija
+
+    # Default kategorija ako se ne pronađe ništa
+    return 'Razne vijesti'
+
 
 
 def contact(request):
