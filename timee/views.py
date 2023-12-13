@@ -809,7 +809,7 @@ def categorize_news(url):
         return 'Magazin'
     elif 'scena' in url or 'showbiz' in url:
         return 'Scena'
-    elif 'fudbal' in url or 'nogomet' in url:
+    elif 'fudbal' in url:
         return 'Fudbal'
     elif 'košarka' in url or 'kosarka' in url or 'sport/kosarka' in url or 'sport-klub/kosarka' in url:
         return 'Kosarka'
