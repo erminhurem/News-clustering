@@ -52,37 +52,287 @@
     </div><!-- END AD 2_1 -->
 </div>
 
-{% for category, headlines in news_by_category.items %}
 
+
+<!-- Prikaz vijesti iz kategorije "Ekonomija" -->
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c{{ forloop.counter }}">
+    <div class="kategorija_naslov" id="c1">
         <h10></h10>
-        <span>{{ category }} »</span>
+        <a href="{% url 'timee:ekonomija' %}" style="color: black;"><span>Ekonomija »</span></a>
     </div>
+    {% for category, news_list in news_by_category.items%}
     <div class="clear"></div>
     <div class="kategorija_clusters">
-        {% for headline in headlines %}
-        {% if headline.image_urls %}
-        <div class="article_image">
-            <div class="image" style="background-image: url('{{ headline.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                <div class="image_inner">
-                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+        {% for news in news_list %}
+            {% if news.category|lower == "ekonomija" %}
+                
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
                 </div>
-            </div>
-        </div>
-        {% endif %}
-        <div class="article">
-            <h2><a href="{{ headline.link }}">{{ headline.title }}</a></h2>
-            <p>{{ headline.description }}</p>
-            <p><a href="{{ headline.link }}" target="_blank">Pročitaj više</a></p>
-            <p>Objavljeno: {{ headline.published_date }}</p>
-            <p>Izvor: {{ headline.source }}</p>
-        </div>
+            {% endif %}
         {% endfor %}
     </div>
+    {% endfor %}
 </div>
 
-{% endfor %}
+<!-- Prikaz vijesti iz kategorije "BiH" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c2">
+        <h10></h10>
+        <a href="{% url 'timee:bih_category' %}" style="color: black;"><span>BiH »</span></a>
+    </div>
+    {% if "BiH" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.BiH %}
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Sarajevo " -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c3">
+        <h10></h10>
+        <a href="{% url 'timee:sarajevo_category' %}" style="color: black;"><span>Sarajevo »</span></a>
+    </div>
+    {% if "Sarajevo" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Sarajevo %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Balkan" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c">
+        <h10></h10>
+        <a href="{% url 'timee:balkan_category' %}" style="color: black;"><span>Balkan »</span></a>
+    </div>
+    {% if "Balkan" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Balkan %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Svijet" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c5">
+        <h10></h10>
+        <a href="{% url 'timee:svijet_category' %}" style="color: black;"><span>Svijet »</span></a>
+    </div>
+    {% if "Svijet" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Svijet %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Hronika" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c6">
+        <h10></h10>
+        <a href="{% url 'timee:hronika_category' %}" style="color: black;"><span>Hronika »</span></a>
+    </div>
+    {% if "Hronika" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Hronika %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Kultura" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c8">
+        <h10></h10>
+        <a href="{% url 'timee:kultura_category' %}" style="color: black;"><span>Kultura »</span></a>
+    </div>
+    {% if "Kultura" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Kultura %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Scena" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c8">
+        <h10></h10>
+        <a href="{% url 'timee:scena_category' %}" style="color: black;"><span>Scena »</span></a>
+    </div>
+    {% if "Scena" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Scena %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
+
 
 <div class="h_clear"></div>
 {% endblock %}
