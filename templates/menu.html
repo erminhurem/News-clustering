@@ -48,22 +48,22 @@
         $('#step2').html(categoriesContent['vijesti']);
 
         // Funkcija koja postavlja aktivnu klasu i sadržaj
-        function setActiveClassAndContent(category, color) {
+        function setActiveClassAndContent(category, color, fontColor) {
             // Ukloni aktivnu klasu i stilove sa svih elemenata
-            $('#menu #step1 a').removeClass('active').css('background-color', '');
+            $('#menu #step1 a').removeClass('active').css({'background-color': "", 'color': ""});
             // Dodaj aktivnu klasu na kliknuti element i postavi boju pozadine
             $('#menu #step1 a').filter(function () {
                 return $(this).text().trim().toLowerCase() === category;
-            }).addClass('active').css('background-color', color);
+            }).addClass('active').css({'background-color': color, 'color': fontColor});
             // Prikazuje sadržaj za odabranu kategoriju
             if (categoriesContent[category]) {
                 $('#step2').html(categoriesContent[category]);
             }
         }
 
-        function setActiveClassAndLoadContent(category, color) {
+        function setActiveClassAndLoadContent(category, color, fontColor) {
             // Postavi aktivnu klasu i sadržaj
-            setActiveClassAndContent(category, color);
+            setActiveClassAndContent(category, color,fontColor);
 
 
             // Učitaj stranicu za odabranu kategoriju
@@ -78,13 +78,14 @@
             e.preventDefault();
             var category = $(this).text().trim().toLowerCase();
             var color = '#6b90da'; // Default boja za 'vijesti'
+            var fontColor = '#ffffff'; // Boja fonta
             if (category === 'sport') {
                 color = '#079107';
             } else if (category === 'magazin') {
                 color = '#8a60b3';
             }
-            setActiveClassAndLoadContent(category, color);
-            setActiveSubcategory(category, color);
+            setActiveClassAndLoadContent(category, color, fontColor);
+            setActiveSubcategory(category, color, fontColor);
         });
 
         // Funkcija koja postavlja aktivnu klasu i boju za podkategorije
@@ -106,9 +107,41 @@
             var subcategory = $(this).text().trim().toLowerCase();
             var color = '#438988'; // Default boja za podkategorije 'sport'
             if (subcategory === 'košarka') {
-                color = '#c00'; // Boja za 'košarka'
+                color = '#c00'; 
             } else if (subcategory === 'fudbal') {
-                color = '#438988'; // Boja za 'fudbal'
+                color = '#438988'; 
+            } else if (subcategory ==='tenis') {
+                color = '#f60';
+            } else if (subcategory ==='ostalo') {
+                color = '#3c3ca4';
+            } else if (subcategory ==='bih') {
+                color = '#438988';
+            } else if (subcategory ==='ekonomija') {
+                color = '#c00';
+            } else if (subcategory ==='balkan') {
+                color = '#f60';
+            } else if (subcategory ==='svijet') {
+                color = '#3c3ca4';
+            } else if (subcategory ==='sarajevo') {
+                color = '#f93';
+            } else if (subcategory ==='hronika') {
+                color = '#696969';
+            } else if (subcategory ==='kultura') {
+                color = '#ffc300';
+            } else if (subcategory ==='scena') {
+                color = '#0086b3';
+            } else if (subcategory ==='zabava') {
+                color = '#438988';
+            } else if (subcategory ==='automobili / motori') {
+                color = '#c00';
+            } else if (subcategory ==='tehnologija') {
+                color = '#f60';
+            } else if (subcategory ==='lifestyle') {
+                color = '#3c3ca4';
+            } else if (subcategory ==='hrana / zdravlje') {
+                color = '#f93';
+            } else if (subcategory ==='intima / sex') {
+                color = '#696969';
             }
             setActiveSubcategory(subcategory, color);
 

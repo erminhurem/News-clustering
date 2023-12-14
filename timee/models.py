@@ -7,7 +7,7 @@ class Headlines(models.Model):
     published_date = models.DateTimeField()
     category = models.CharField(max_length=200, null=True, blank=True)
     source = models.CharField(max_length=100)
-    image_urls= models.URLField(default=None,blank=True, null=True)
+    image_urls= models.URLField(max_length=1000,default=None,blank=True, null=True)
 
     def __str__(self):
         return self.title

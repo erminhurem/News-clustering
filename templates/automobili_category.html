@@ -7,7 +7,9 @@
                 <div class="k_naslov" id="c2"><h10></h10><span>Automobili</span></div>
                 <div class="pagination">
                     {% for i in news_by_category.Automobili.paginator.page_range %}
-                        <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+                        {% if i <= 10 %}
+                            <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+                        {% endif %}
                     {% endfor %}    
                 </div>
                 <div class="h_rule" ></div>

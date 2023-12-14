@@ -566,7 +566,7 @@ body#super_0 #super_0,body#super_0 #step2,body#super_1 #super_1,body#super_1 #st
     line-height: 24px;
     font-size: 22px;
     padding-bottom: 1px;
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 body#super_0 #super_0,body#super_0 #step2 {
@@ -580,7 +580,7 @@ body#super_0 #step2,body#super_0 #footer,#super_0 .pagination span.select,#super
 
 body#super_0 #super_0 span,body#super_1 #super_1 span,body#super_2 #super_2 span,body#super_newest #super_newest span,body#super_twitter #super_TW span,body#super_facebook #super_facebook span,body#super_imdb #super_IMDB span,body#super_google #super_GN span,body#super_nastani #super_nastani span,body#super_sources #super_sources span,body#super_tvemisii #super_tvemisii span {
     display: block;
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 body#super_imdb .k_naslov span a {
@@ -721,7 +721,7 @@ body#super_newest #news_pane form select {
     float: right;
     height: 20px;
     width: 160px;
-    background-image: url('../images/marketing_sprite.png?ver=1');
+    background-image: url('/static/images/marketing_sprite.png?ver=1');
     background-size: 160px;
     background-position: 0px 47px;
     margin-top: -40px
@@ -919,7 +919,7 @@ body .pagination span:hover {
 
 .wait_image {
     border: solid 1px #00c;
-    background-image: url(../images/no_image.png);
+    background-image: url(/static/images/no_image.png);
     background-size: 145px;
     border-radius: 1px
 }
@@ -950,7 +950,7 @@ body .pagination span:hover {
 
 .photo_src {
     background-color: transparent;
-    background-image: url(../images/img_link_grad.png);
+    background-image: url(/static/images/img_link_grad.png);
     background-size: auto;
     background-position: right;
     background-repeat: no-repeat;
@@ -1184,7 +1184,7 @@ body .pagination span:hover {
     overflow: hidden;
     height: 34px;
     width: 10px;
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 .kategorija_clusters {
@@ -1256,7 +1256,7 @@ body .pagination span:hover {
 }
 
 .kategorija_naslov.super {
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 .kategorija_naslov.super span {
@@ -1398,7 +1398,7 @@ body .pagination span:hover {
     border-bottom-left-radius: 4px;
     position: absolute;
     left: 0;
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 .k_naslov span {
@@ -1471,7 +1471,7 @@ body .pagination span:hover {
 #menu #step2 .select {
     position: relative;
     color: #fff;
-    background-image: url('../images/group_empty.png')
+    background-image: url('/static/images/group_empty.png')
 }
 
 #step2 .r {
