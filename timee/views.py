@@ -16,8 +16,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import logging
 from dateutil import parser
-nltk.download('punkt')
 
+
+nltk.download('punkt')
 
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
@@ -42,6 +43,10 @@ def get_friendly_source_name(url):
         return 'Vijesti'
     elif 'okanal.oslobodjenje.ba/okanal' in url:
         return 'Okanal'
+    elif 'oslobodjenje.ba' in url:
+        return 'Oslobođenje'
+    elif 'alo.rs' in url:
+        return 'Alo'
     else:
         return 'Nepoznati izvor'
     
@@ -102,6 +107,7 @@ def index(request):
 
     context = {
         'latest_news': latest_news,
+        'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
     }
 
@@ -130,6 +136,7 @@ def bih_category(request):
 
     context = {
         'news_by_category': {'BiH': news_page},
+        'naslov_stranice': 'BiH - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "bih_category.html", context)
@@ -156,6 +163,7 @@ def ekonomija_category(request):
 
     context = {
         'news_by_category': {'Ekonomija': news_page},
+        'naslov_stranice': 'Ekonomija - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "ekonomija_category.html", context)
@@ -182,7 +190,7 @@ def balkan_category(request):
 
     context = {
         'news_by_category': {'Balkan': news_page},
-         'naslov_stranice': 'Balkan - Time.ba',
+        'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "balkan_category.html", context)
@@ -209,7 +217,7 @@ def svijet_category(request):
 
     context = {
         'news_by_category': {'Svijet': news_page},
-         'naslov_stranice': 'Svijet - Time.ba',
+        'naslov_stranice': 'Svijet - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "svijet_category.html", context)
@@ -263,7 +271,7 @@ def hronika_category(request):
 
     context = {
         'news_by_category': {'Hronika': news_page},
-          'naslov_stranice': 'Hronika - Time.ba',
+        'naslov_stranice': 'Hronika - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "hronika_category.html", context)
@@ -326,7 +334,12 @@ def scena_category(request):
 
 # početak koda vezano za rubriku Sport
 def sport(request):
-    latest_news = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
+    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
+    for news_s in latest_news_s:
+        news_s.source_name = get_friendly_source_name(news_s.source)
+        news_s.time_since = get_relative_time(news_s.published_date)
+
+    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
@@ -341,6 +354,7 @@ def sport(request):
         news_by_category[category] = news_items
 
     context = {
+        'latest_news_s': latest_news_s,
         'latest_news': latest_news,
         'naslov_stranice': 'Sport - Time.ba',
         'news_by_category': news_by_category,
@@ -460,7 +474,12 @@ def ostalo_category(request):
 # početak koda vezano za rubriku Magazin
 
 def magazin(request):
-    latest_news = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
+    latest_news_m = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
+    for news_m in latest_news_m:
+        news_m.source_name = get_friendly_source_name(news_m.source)
+        news_m.time_since = get_relative_time(news_m.published_date)
+
+    latest_news = Headlines.objects.all().order_by("-published_date")[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
@@ -476,7 +495,8 @@ def magazin(request):
 
     context = {
         'latest_news': latest_news,
-         'naslov_stranice': 'Magazin - Time.ba',
+        'latest_news_m': latest_news_m,
+        'naslov_stranice': 'Magazin - Time.ba',
         'news_by_category': news_by_category,
     }
     return render(request, "magazin.html", context)
@@ -503,13 +523,13 @@ def zabava_category(request):
 
     context = {
         'news_by_category': {'Zabava': news_page},
-         'naslov_stranice': 'Zabava - Time.ba',
+        'naslov_stranice': 'Zabava - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "zabava_category.html", context)
 
 def automobili_category(request):
-    news_items = Headlines.objects.filter(category='Automobili / Motori').order_by('-published_date')
+    news_items = Headlines.objects.filter(category='Automobili').order_by('-published_date')
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -558,8 +578,7 @@ def tehnologija_category(request):
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
         'naslov_stranice': 'Tehnologija - Time.ba',
-         'aktivna_kategorija': 'Magazin',
-        'aktivna_podkategorija': 'Tehnologija',
+        
     }
 
     return render(request, "tehnologija_category.html", context)
@@ -587,7 +606,7 @@ def lifestyle_category(request):
 
     context = {
         'news_by_category': {'Lifestyle': news_page},
-         'naslov_stranice': 'Lifestyle - Time.ba',
+        'naslov_stranice': 'Lifestyle - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "lifestyle_category.html", context)
@@ -670,7 +689,7 @@ def najnovije_vijesti(request):
         news.time_since = get_relative_time(news.published_date)
     # Paginacija
     page = request.GET.get('page', 1)
-    paginator = Paginator(latest_news, 5)  # Pretpostavimo da želite 5 vijesti po stranici
+    paginator = Paginator(latest_news, 10)  # Pretpostavimo da želite 5 vijesti po stranici
     try:
         latest_news = paginator.page(page)
     except PageNotAnInteger:
@@ -819,8 +838,8 @@ def categorize_news(url):
         'Fudbal': ['fudbal', 'nogomet'],
         'Košarka': ['košarka', 'kosarka', 'sport/kosarka', 'sport-klub/kosarka'],
         'Tenis': ['tenis'],
-        'Ostalo': ['plivanje', 'rukomet', 'atletika'],
-        'Automobili / Motori': ['automobili', 'motori'],
+        'Ostalo': ['plivanje', 'rukomet', 'atletika', 'skijanje'],
+        'Automobili': ['automobili', 'motori'],
         'BiH': ['bih', 'bosna-i-hercegovina'],
         'Balkan': ['balkan', 'region'],
         'Sarajevo': ['sarajevo'],
@@ -830,9 +849,9 @@ def categorize_news(url):
         'Kultura': ['kultura'],
         'Zabava': ['zabava'],
         'Lifestyle': ['lifestyle'],
-        'Hrana / Zdravlje': ['hrana', 'zdravlje'],
+        'Hrana': ['hrana', 'zdravlje'],
         'Tehnologija': ['tehnologija'],
-        'Intima / Sex': ['intima', 'sex'],
+        'Intima': ['intima', 'sex'],
         'Zdravlje': ['zdravlje'],
         'Magazin': ['magazin'],
         'Scena': ['scena', 'showbiz'],

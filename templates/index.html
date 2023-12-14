@@ -25,7 +25,7 @@
                     <p class="snippet">{{ news.description }}</p>
                     <div class="related_article">
                         {% if news.related_news %}
-                        <ul>
+                        <ul style="list-style-type: none;">
                             {% for related in news.related_news %}
                                 <li>
                                     <a href="{{ related.link }}">{{ related.title }}</a> - 
@@ -299,7 +299,7 @@
 <!-- Prikaz vijesti iz kategorije "Scena" -->
 
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c8">
+    <div class="kategorija_naslov" id="c9">
         <h10></h10>
         <a href="{% url 'timee:scena_category' %}" style="color: black;"><span>Scena »</span></a>
     </div>
@@ -331,7 +331,75 @@
     {% endif %}
 </div>
 
+<!-- Prikaz vijesti iz kategorije "Sport" -->
 
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c10">
+        <h10></h10>
+        <a href="{% url 'timee:sport' %}" style="color: black;"><span>SPORT »</span></a>
+    </div>
+    {% if "Sport" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Sport %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Magazin" -->
+
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c11">
+        <h10></h10>
+        <a href="{% url 'timee:magazin' %}" style="color: black;"><span>MAGAZIN »</span></a>
+    </div>
+    {% if "Magazin" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Magazin %}
+         
+               
+                {% if news.image_urls %}
+                    <div class="article_image">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                            <div class="image_inner">
+                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="article">
+                    <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                    <p>{{ news.description }}</p>
+                    <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+                    <p>Objavljeno: {{ news.published_date }}</p>
+                    <p>Izvor: {{ news.source }}</p>
+                </div>
+            
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 
 
 <div class="h_clear"></div>
