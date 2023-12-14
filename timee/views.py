@@ -719,7 +719,7 @@ def firme(request):
 def extract_images(entry):
     images = []
 
-    # Ekstrakcija iz 'media:content' ako postoji
+     # Ekstrakcija iz 'media:content' ako postoji
     if 'media_content' in entry:
         media_content = entry.media_content
         if media_content:
