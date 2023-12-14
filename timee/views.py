@@ -15,6 +15,7 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import logging
+from dateutil import parser
 nltk.download('punkt')
 
 
@@ -696,6 +697,31 @@ def firme(request):
     return render(request, "firme.html", context)
 
 
+def extract_images(entry):
+    images = []
+
+    # Ekstrakcija iz 'media:content' ako postoji
+    if 'media_content' in entry:
+        media_content = entry.media_content
+        if media_content:
+            images.extend([content['url'] for content in media_content if 'url' in content])
+
+    # Dodatna ekstrakcija iz 'content' ako postoji
+    if 'content' in entry:
+        content = entry.content[0].value
+        soup = BeautifulSoup(content, 'html.parser')
+        images.extend([img['src'] for img in soup.find_all('img')])
+
+    return images
+
+def parse_date(date_str):
+    try:
+        return parser.parse(date_str)
+    except ValueError as e:
+        logger.error(f"Greška prilikom parsiranja datuma: {e}")
+        return None
+
+
 def fetch_news():
     feeds = [
         'https://www.telegraf.rs/rss',
@@ -733,18 +759,9 @@ def fetch_news():
         feed = feedparser.parse(feed_url)
         for entry in feed.entries:
             if not Headlines.objects.filter(link=entry.link).exists():
-                published_date = None
-                if entry.published:
-                    try:
-                        published_date = date_parser.parse(entry.published)
-                    except ValueError:
-                        pass
+                published_date = parse_date(entry.published) if entry.published else None
 
-                content = entry.content[0].value if 'content' in entry else ''
-                soup = BeautifulSoup(content, 'html.parser')
-                images = soup.find_all('img')
-
-                image_urls = [img['src'] for img in images]
+                image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
 
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
 
@@ -759,6 +776,7 @@ def fetch_news():
                 )
                 logger.info('Fetching news from %s', feed_url)
                 news_item.save()
+        
 
 def categorize_news(url):
     # Mapiranje ključnih riječi na kategorije

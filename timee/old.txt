@@ -1,0 +1,63 @@
+def fetch_news():
+    feeds = [
+        'https://www.telegraf.rs/rss',
+        'https://www.kurir.rs/rss',
+        'https://nova.rs/rss',
+        'https://n1info.ba/feed/',
+        'https://www.euronews.rs/rss',
+        'https://informer.rs/rss',
+        'https://n1info.ba/rss',
+        'https://n1info.hr/rss',
+        'https://www.vijesti.ba/rss/svevijesti',
+        'https://balkans.aljazeera.net/rss.xml',
+        'https://www.klix.ba/rss',
+        'https://www.avaz.ba/rss',
+        'https://www.oslobodjenje.ba/feed',
+        'https://okanal.oslobodjenje.ba/okanal/feed',
+        'https://www.b92.net/feed/',
+        'https://www.sd.rs/rss.xml',
+        'https://www.rts.rs/rss/ci.html',
+        'https://www.alo.rs/rss/live',
+        'https://www.alo.rs/rss/hronika',
+        'https://www.alo.rs/rss/biz',
+        'https://www.alo.rs/rss/vesti',
+        'https://www.espreso.co.rs/rss',
+        'https://www.vecernji.hr/feeds/latest',
+        'https://dnevnik.hr/assets/feed/articles',
+        'https://www.24sata.hr/feeds/najnovije.xml',
+        'https://www.24sata.hr/feeds/news.xml',
+        'https://www.24sata.hr/feeds/sport.xml',
+        'https://www.24sata.hr/feeds/tech.xml',
+
+    ]
+    logger = logging.getLogger(__name__)
+    for feed_url in feeds:
+        feed = feedparser.parse(feed_url)
+        for entry in feed.entries:
+            if not Headlines.objects.filter(link=entry.link).exists():
+                published_date = None
+                if entry.published:
+                    try:
+                        published_date = date_parser.parse(entry.published)
+                    except ValueError:
+                        pass
+
+                content = entry.content[0].value if 'content' in entry else ''
+                soup = BeautifulSoup(content, 'html.parser')
+                images = soup.find_all('img')
+
+                image_urls = [img['src'] for img in images]
+
+                category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
+
+                news_item = Headlines(
+                    title=entry.title,
+                    link=entry.link,
+                    description=entry.description,
+                    published_date=published_date,
+                    source=feed_url,
+                    category=category, 
+                    image_urls=','.join(image_urls) if image_urls else None
+                )
+                logger.info('Fetching news from %s', feed_url)
+                news_item.save() 
