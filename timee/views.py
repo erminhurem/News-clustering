@@ -712,7 +712,25 @@ def extract_images(entry):
         soup = BeautifulSoup(content, 'html.parser')
         images.extend([img['src'] for img in soup.find_all('img')])
 
+    # Ekstrakcija iz 'image' ako postoji
+    if 'image' in entry:
+        image = entry.image
+        if image and 'url' in image:
+            images.append(image['url'])
+
+     # Ekstrakcija iz 'enclosure' ako postoji
+    if 'enclosures' in entry:
+        enclosures = entry.enclosures
+        images.extend([enclosure['url'] for enclosure in enclosures if 'url' in enclosure])
+        
+    # Ekstrakcija iz 'description' ako sadrži 'img' tagove
+    if 'description' in entry:
+        description = entry.description
+        soup = BeautifulSoup(description, 'html.parser')
+        images.extend([img['src'] for img in soup.find_all('img')])
+
     return images
+
 
 def parse_date(date_str):
     try:
