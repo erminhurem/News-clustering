@@ -33,6 +33,8 @@ def get_friendly_source_name(url):
         return 'Nova'
     elif 'n1info.ba' in url:
         return 'N1'
+    elif 'n1info.hr' in url:
+        return 'N1'
     elif 'klix.ba' in url:
         return 'Klix'
     elif 'balkans.aljazeera.net' in url:
@@ -47,6 +49,14 @@ def get_friendly_source_name(url):
         return 'Oslobođenje'
     elif 'alo.rs' in url:
         return 'Alo'
+    elif '24sata.hr' in url:
+        return '24sata'
+    elif 'vecernji.hr' in url:
+        return 'Vecernji'
+    elif 'sd.rs' in url:
+        return 'SD'
+    elif 'blic.rs' in url:
+        return 'Blic'
     else:
         return 'Nepoznati izvor'
     
@@ -95,6 +105,9 @@ def index(request):
         news.related_news = related_news
         # Ovdje postavite ukupan broj povezanih vijesti
         news.related_news_count = len(related_news)
+        for news in related_news:
+            news.source_name = get_friendly_source_name(news.source)
+            news.time_since = get_relative_time(news.published_date)
 
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
@@ -116,6 +129,26 @@ def index(request):
 
 def bih_category(request):
     news_items = Headlines.objects.filter(category='BiH').order_by('-published_date')
+    all_news = Headlines.objects.all().order_by('-published_date')
+    vectorizer = TfidfVectorizer()
+    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
+    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
+
+     # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+     # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
+
+    # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
+    related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:2]
+    news.related_news = related_news
+    # Ovdje postavite ukupan broj povezanih vijesti
+    news.related_news_count = len(related_news)
+    for news in related_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -334,13 +367,34 @@ def scena_category(request):
 
 # početak koda vezano za rubriku Sport
 def sport(request):
-    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
+    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]    
     for news_s in latest_news_s:
         news_s.source_name = get_friendly_source_name(news_s.source)
         news_s.time_since = get_relative_time(news_s.published_date)
 
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
     for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)    
+    
+    all_news = Headlines.objects.all().order_by('-published_date')
+    vectorizer = TfidfVectorizer()
+    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
+    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
+
+     # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+     # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
+
+    # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
+    related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
+    news.related_news = related_news
+    # Ovdje postavite ukupan broj povezanih vijesti
+    news.related_news_count = len(related_news)
+    for news in related_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 

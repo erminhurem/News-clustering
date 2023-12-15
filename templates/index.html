@@ -8,7 +8,7 @@
             
             {% for news in latest_news %}
             <div class="cluster">
-                <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>
                 {% if news.image_urls %}
                 <div class="article_image">
                     <div class="wait_image">
@@ -22,22 +22,17 @@
                 {% endif %}
                 <div class="article_body">
                     <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                    <p class="snippet">{{ news.description }}</p>
-                    <div class="related_article">
-                        {% if news.related_news %}
-                        <ul style="list-style-type: none;">
+                    <p class="snippet">{{ news.description }}</p>                    
+                        {% if news.related_news %}                        
                             {% for related in news.related_news %}
-                                <li>
-                                    <a href="{{ related.link }}">{{ related.title }}</a> - 
-                                    <span>{{ related.source_name }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        <!-- <p>Broj povezanih vijesti: {{  news.related_news_count }}</p> -->
-                        {% endif %}
-                    </div>
-                    
+                                <div class="related_article">
+                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                </div>
+                            {% endfor %}                       
+                        {% endif %}                
                 </div>
+                <div class="clear"></div>
             </div>
             <div class="clear"></div>
             {% endfor %}
@@ -79,7 +74,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             {% endif %}
         {% endfor %}
@@ -112,7 +107,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -148,7 +143,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -183,7 +178,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -218,7 +213,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -253,7 +248,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -288,7 +283,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -323,7 +318,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -358,7 +353,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
@@ -393,7 +388,7 @@
                     <p>{{ news.description }}</p>
                     <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                     <p>Objavljeno: {{ news.published_date }}</p>
-                    <p>Izvor: {{ news.source }}</p>
+                    <p>Izvor: {{ news.source_name }}</p>
                 </div>
             
         {% endfor %}
