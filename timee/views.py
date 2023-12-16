@@ -20,12 +20,71 @@ from .company_directory import create_company_directory_adjusted
 from django.conf import settings
 import pandas as pd
 from django.utils.timezone import now
+from collections import defaultdict
+from datetime import datetime, time
 
+def news_at_10(request):
+    today = datetime.now().date()
+    start_time = datetime.combine(today, time(10, 0))  # 10:00 ujutro
+    end_time = datetime.combine(today, time(10, 59))   # 10:59 ujutro
+
+    # Filtriramo vijesti objavljene između 10:00 i 10:59
+    news_at_10 = Headlines.objects.filter(published_date__gte=start_time, published_date__lte=end_time).order_by('-published_date')[:3]
+
+    for news in news_at_10:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
+    all_news = Headlines.objects.all().order_by('-published_date')
+    vectorizer = TfidfVectorizer()
+    
+    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
+    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
+
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+        # Izračunavanje TF-IDF vektora za trenutnu vijest
+        current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+        cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+        # Dobivanje indeksa povezanih članaka
+        related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
+
+        # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
+        related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
+        news.related_news = related_news
+        # Ovdje postavite ukupan broj povezanih vijesti
+        news.related_news_count = len(related_news)
+        for news in related_news:
+            news.source_name = get_friendly_source_name(news.source)
+            news.time_since = get_relative_time(news.published_date)
+
+    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
+    news_by_category = {}
+    for category in categories:
+        news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
+        for item in news_items:
+            item.source_name = get_friendly_source_name(item.source)
+            item.time_since = get_relative_time(item.published_date)
+        news_by_category[category] = news_items
+
+    context = {
+        'latest_news': latest_news,
+        'news_at_10': news_at_10,
+        'naslov_stranice': 'Vijesti - Time.ba',
+        'news_by_category': news_by_category,
+    }
+
+    return render(request, "10h.html", context)
 
 
 
 
 nltk.download('punkt')
+
 
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
@@ -178,11 +237,7 @@ def ekonomija_category(request):
     except EmptyPage:
         
         news_page = paginator.page(paginator.num_pages)
-
-    for news in news_page:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-
+    
     
     context = {
         'news_by_category': {'Ekonomija': news_page},
