@@ -1015,16 +1015,18 @@ def city_companies(request, city_name):
     return render(request, 'city_companies.html', context)
 
 def search_news(request):
-    query = request.GET.get('q', '')  # dobija upit iz forme
-    if query:
-        news_results = Headlines.objects.filter(title__icontains=query)  # filtrira vijesti
-    else:
-        news_results = Headlines.objects.all()  # vraca sve vijesti ako nema upita
+    query = request.GET.get('q', '')
+    news_results = Headlines.objects.filter(title__icontains=query) if query else Headlines.objects.all()
+    last_updated = Headlines.objects.latest('published_date').published_date
 
-    last_updated = Headlines.objects.latest('published_date').published_date  # dobija datum zadnje objavljene vijesti
+    # Paginacija
+    paginator = Paginator(news_results, 10)  # 10 vijesti po stranici, prilagodite prema potrebi
+    page = request.GET.get('page', 1)
+    news_page = paginator.get_page(page)
 
     context = {
-        'news_results': news_results,
+        'news_results': news_page,
         'last_updated': last_updated,
+        'total_results': paginator.count,
     }
     return render(request, 'pretraga_rezultat.html', context)

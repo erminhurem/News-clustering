@@ -6,7 +6,12 @@
          <div id="latest_news">
              <!-- Ovdje počinje prikaz rezultata pretrage -->
              {% if news_results %}
-             <div class="k_naslov" id="c1"><h10></h10><span>Rezultati Pretrage</span></div>
+             <div class="k_naslov" id="c1"><h10></h10><span>Rezultati Pretrage: {{ total_results }} vijesti</span></div>
+             <div class="pagination">
+                {% for i in news_results.paginator.page_range %}
+                    <a href="?q={{ query }}&page={{ i }}"><span class="select"><center>{{ i }}</center></span></a>
+                {% endfor %}
+            </div>
              {% for news in news_results %}
              <div class="h_rule"></div>
              <div class="cluster">
@@ -26,6 +31,7 @@
                  </div>
              </div>
              {% endfor %}
+             
              {% else %}
              <p>Nema rezultata za vašu pretragu.</p>
              {% endif %}
