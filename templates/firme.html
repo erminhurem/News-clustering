@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="news_pane" class="sources">
-    {% for city, count in companies_count_by_city.items %}
-    <div>
-        <h5>{{ city }} ({{ count }} firmi)</h5>
-        <a href="{% url 'timee:city_companies' city %}">Prikaži firme</a>
+<div id="news_pane">
 
+
+    <div id="imdb_sort">
+        <h2>Gradovi/Opštine</h2>
+    </div>
+    <div class="h_rule"></div>
+    {% for city, count in companies_count_by_city.items %}
+    <div class="imdb_results">
+        <div>
+            <div class="info">
+            <h3>{{ city }} ({{ count }} firmi)</h3>
+
+            <a href="{% url 'timee:city_companies' city %}">Prikaži firme</a>
+        </div>
+        </div>
 
     </div>
     {% endfor %}
+
 </div>
 {% endblock %}

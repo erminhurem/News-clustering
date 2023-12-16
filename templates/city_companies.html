@@ -1,10 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .company-list {
+        list-style-type: none; /* Uklanja tačke iz liste */
+        padding: 0;
+    }
+    .company-item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc; /* Linija između stavki */
+        margin-bottom: 10px; /* Razmak između stavki */
+    }
+    .company-item:last-child {
+        border-bottom: none;
+    }
+    .company-name {
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .company-details {
+        font-size: 0.9em;
+        color: #555;
+    }
+    .company-jib {
+        font-style: italic;
+        color: #888;
+    }
+</style>
+
 <h2>Firme u opštini {{ city_name }}</h2>
-<ul>
+<ul class="company-list">
     {% for company in companies %}
-    <li>{{ company.Naziv_kompanije }}</li> <!-- Ovdje koristimo dot notation -->
+    <li class="company-item">
+        <div class="company-name">{{ company.Naziv_kompanije }}</div>
+        <div class="company-details">
+            Adresa: {{ company.Adresa }}<br>
+            Šifra Djelatnosti: {{ company.Sifra_Dj }}
+        </div>
+        <div class="company-jib">JIB: {{ company.JIB }}</div>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
