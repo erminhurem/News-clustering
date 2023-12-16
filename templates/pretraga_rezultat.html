@@ -1,0 +1,38 @@
+ {% extends 'base.html' %}
+
+ {% block content %}
+ <div id="split_pane">
+     <div id="news_pane" class="top">
+         <div id="latest_news">
+             <!-- Ovdje počinje prikaz rezultata pretrage -->
+             {% if news_results %}
+             <div class="k_naslov" id="c1"><h10></h10><span>Rezultati Pretrage</span></div>
+             {% for news in news_results %}
+             <div class="h_rule"></div>
+             <div class="cluster">
+                 <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
+                 {% if news.image_urls %}
+                 <div class="article_image">
+                    <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                        <div class="image_inner">
+                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                        </div>
+                    </div>
+                 </div>
+                 {% endif %}
+                 <div class="article_body">
+                     <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                     <p>{{ news.description }}</p>
+                 </div>
+             </div>
+             {% endfor %}
+             {% else %}
+             <p>Nema rezultata za vašu pretragu.</p>
+             {% endif %}
+             <!-- Ovdje završava prikaz rezultata pretrage -->
+         </div>
+     </div>
+     <!-- Vaš kod za reklame -->
+ </div>
+ {% endblock %}
+ 

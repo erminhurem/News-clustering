@@ -19,6 +19,7 @@ from dateutil import parser
 from .company_directory import create_company_directory_adjusted
 from django.conf import settings
 import pandas as pd
+from django.utils.timezone import now
 
 
 
@@ -1012,3 +1013,18 @@ def city_companies(request, city_name):
     }
     
     return render(request, 'city_companies.html', context)
+
+def search_news(request):
+    query = request.GET.get('q', '')  # dobija upit iz forme
+    if query:
+        news_results = Headlines.objects.filter(title__icontains=query)  # filtrira vijesti
+    else:
+        news_results = Headlines.objects.all()  # vraca sve vijesti ako nema upita
+
+    last_updated = Headlines.objects.latest('published_date').published_date  # dobija datum zadnje objavljene vijesti
+
+    context = {
+        'news_results': news_results,
+        'last_updated': last_updated,
+    }
+    return render(request, 'pretraga_rezultat.html', context)
