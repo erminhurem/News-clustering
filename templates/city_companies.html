@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Firme u opštini {{ city_name }}</h2>
+<ul>
+    {% for company in companies %}
+    <li>{{ company.Naziv_kompanije }}</li> <!-- Ovdje koristimo dot notation -->
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -18,6 +18,8 @@ import logging
 from dateutil import parser
 from .company_directory import create_company_directory_adjusted
 from django.conf import settings
+import pandas as pd
+
 
 
 
@@ -1013,8 +1015,41 @@ def company_directory(request):
     }
     return render(request, 'firme.html', context)
 
-
 def city_companies(request, city_name):
-    # Logika za dobijanje firmi za odabranu opštinu
-    # ...
+    # Pretpostavljamo da city_name dolazi iz URL-a i koristit ćemo ga za filtriranje podataka
+    file_paths = [
+        settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2001.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2005.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2006.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2007.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
+    ]
+    all_data = pd.DataFrame()
+    
+ 
+    for fp in file_paths:
+        # Ovdje pretpostavljamo da fajl sadrži kolonu 'Opština' koja sadrži nazive opština
+        data = pd.read_excel(fp)
+        # Ako su nazivi kolona validni, nema potrebe za dodatnim preimenovanjem
+        all_data = pd.concat([all_data, data], ignore_index=True)
+    
+    # Ako 'city_name' nije u ispravnom formatu, pretvorite ga u string
+    city_name_str = str(city_name).strip()
+    
+    # Filtriranje podataka za odabranu opštinu
+    city_companies_data = all_data[all_data['Opština'].str.contains(city_name_str, na=False)]
+    
+    companies_list = []
+    for company in city_companies_data.to_dict('records'):
+        company_dict = {key.replace(' ', '_'): value for key, value in company.items()}
+        companies_list.append(company_dict)
+
+    context = {
+        'companies': companies_list,
+        'city_name': city_name,
+    }
+    
     return render(request, 'city_companies.html', context)
