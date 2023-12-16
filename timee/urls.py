@@ -27,7 +27,6 @@ urlpatterns = [
     path('magazin/intima', views.intima_category, name="intima_category"),
     path('najnovije_vijesti/',views.najnovije_vijesti, name="najnovije_vijesti"),
     path('izvori/', views.izvori, name="izvori"),
-    path('firme/', views.firme, name="firme"),
     path('info/contact/', views.contact, name='contact'),
     path('info/week/', views.news_archive, name='week'),
     path('info/prognoza/', views.prognoza, name='prognoza'),
@@ -35,6 +34,7 @@ urlpatterns = [
     path('widget/widgetpage', views.widget, name='widget'),
     path('rss/rsspage', views.rsspage, name='rsspage'),
     path('m/', views.mobile, name='mobile_index'),
+    path('firme/', views.company_directory, name='firme'),
 
     
    

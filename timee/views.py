@@ -16,6 +16,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import logging
 from dateutil import parser
+from .company_directory import create_company_directory_adjusted
+from django.conf import settings
+
+
 
 
 nltk.download('punkt')
@@ -988,4 +992,24 @@ def mobile(request):
     return render(request, 'mobile/index.html', context)
 
 
+def company_directory(request):
+    letter = request.GET.get('letter', 'A')  # Defaultno slovo može biti 'A'
+    file_paths = [
+        settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2001.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2005.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2006.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2007.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
+        settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
+    ]
+
+    companies = create_company_directory_adjusted(file_paths, letter)
+    context = {
+        'companies': companies,
+        'selected_letter': letter,
+        'naslov_stranice': 'Firme - Time.ba',
+    }
+    return render(request, 'firme.html', context)
 
