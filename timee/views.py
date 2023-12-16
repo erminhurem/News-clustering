@@ -64,6 +64,8 @@ def get_friendly_source_name(url):
         return 'SD'
     elif 'blic.rs' in url:
         return 'Blic'
+    elif 'mondo.ba' in url:
+        return 'Mondo'
     else:
         return 'Nepoznati izvor'
     
@@ -181,6 +183,7 @@ def ekonomija_category(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    
     context = {
         'news_by_category': {'Ekonomija': news_page},
         'naslov_stranice': 'Ekonomija - Time.ba',
