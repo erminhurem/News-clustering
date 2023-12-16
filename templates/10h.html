@@ -68,7 +68,7 @@
         {% for category, news_list in news_by_category.items %}    
         <div class="kategorija_clusters">        
             <div class="cluster">
-                {% for news in news_at_10 %}            
+                          
                 {% for news in news_list %}                
                     {% if news.category|lower == "ekonomija" %}      
                         <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
@@ -97,7 +97,7 @@
                         </div>
                     {% endif %}                
                 {% endfor %}
-                {% endfor %}
+                
             </div>        
         </div>
         {% endfor %}
