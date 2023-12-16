@@ -135,27 +135,7 @@ def index(request):
 
 def bih_category(request):
     news_items = Headlines.objects.filter(category='BiH').order_by('-published_date')
-    all_news = Headlines.objects.all().order_by('-published_date')
-    vectorizer = TfidfVectorizer()
-    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
-    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
-
-     # Izračunavanje TF-IDF vektora za trenutnu vijest
-    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
-    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
-
-     # Dobivanje indeksa povezanih članaka
-    related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
-
-    # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
-    related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:2]
-    news.related_news = related_news
-    # Ovdje postavite ukupan broj povezanih vijesti
-    news.related_news_count = len(related_news)
-    for news in related_news:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-    
+        
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
     page = request.GET.get("page")
@@ -383,27 +363,6 @@ def sport(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)    
     
-    all_news = Headlines.objects.all().order_by('-published_date')
-    vectorizer = TfidfVectorizer()
-    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
-    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
-
-     # Izračunavanje TF-IDF vektora za trenutnu vijest
-    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
-    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
-
-     # Dobivanje indeksa povezanih članaka
-    related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
-
-    # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
-    related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
-    news.related_news = related_news
-    # Ovdje postavite ukupan broj povezanih vijesti
-    news.related_news_count = len(related_news)
-    for news in related_news:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-
     categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Vijesti', 'Magazin']
     news_by_category = {}
     for category in categories:
@@ -749,7 +708,7 @@ def najnovije_vijesti(request):
         news.time_since = get_relative_time(news.published_date)
     # Paginacija
     page = request.GET.get('page', 1)
-    paginator = Paginator(latest_news, 10)  # Pretpostavimo da želite 5 vijesti po stranici
+    paginator = Paginator(latest_news, 10) 
     try:
         latest_news = paginator.page(page)
     except PageNotAnInteger:
