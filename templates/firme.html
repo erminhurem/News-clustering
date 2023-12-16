@@ -1,34 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="companies_pane" class="sources">
-    <!-- Blok za grad S1 (npr. Tuzla) -->
-    <h5>S1 - Tuzla</h5>
-    <div class="h_rule"></div>
-    <ul>
-        {% for company in companies_tuzla %}
-        <li><a href="{% url 'company_detail' company.id %}">{{ company.Naziv_kompanije }}</a></li>
-        {% endfor %}
-    </ul>
+<div id="news_pane" class="sources">
+    {% for city, count in companies_count_by_city.items %}
+    <div>
+        <h5>{{ city }} ({{ count }} firmi)</h5>
+        <a href="{% url 'timee:city_companies' city %}">Prikaži firme</a>
 
-    <!-- Blok za grad S2 (npr. Sarajevo) -->
-    <h5>S2 - Sarajevo</h5>
-    <div class="h_rule"></div>
-    <ul>
-        {% for company in companies_sarajevo %}
-        <li><a href="{% url 'company_detail' company.id %}">{{ company.Naziv_kompanije }}</a></li>
-        {% endfor %}
-    </ul>
-    <h5>S2 - Zepce</h5>
-    <div class="h_rule"></div>
-    <ul>
-        {% for company in companies_zepce %}
-        <li><a href="{% url 'company_detail' company.id %}">{{ company.Naziv_kompanije }}</a></li>
-        {% endfor %}
-    </ul>
-    <!-- Dodajte blokove za dodatne gradove -->
+
+    </div>
+    {% endfor %}
 </div>
-
-
-
 {% endblock %}

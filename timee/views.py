@@ -992,8 +992,9 @@ def mobile(request):
     return render(request, 'mobile/index.html', context)
 
 
+
+
 def company_directory(request):
-    letter = request.GET.get('letter', 'A')  # Defaultno slovo može biti 'A'
     file_paths = [
         settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
         settings.BASE_DIR / 'static' / 'Baza 2001.xlsx',
@@ -1004,12 +1005,16 @@ def company_directory(request):
         settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
         settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
     ]
+    # Dobijanje broja firmi po opštinama
+    companies_count_by_city = create_company_directory_adjusted(file_paths)  # Ispravljeno ime varijable
 
-    companies = create_company_directory_adjusted(file_paths, letter)
     context = {
-        'companies': companies,
-        'selected_letter': letter,
-        'naslov_stranice': 'Firme - Time.ba',
+        'companies_count_by_city': companies_count_by_city,  # Ispravljeno ime ključa u kontekstu
     }
     return render(request, 'firme.html', context)
 
+
+def city_companies(request, city_name):
+    # Logika za dobijanje firmi za odabranu opštinu
+    # ...
+    return render(request, 'city_companies.html', context)

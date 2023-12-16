@@ -35,6 +35,7 @@ urlpatterns = [
     path('rss/rsspage', views.rsspage, name='rsspage'),
     path('m/', views.mobile, name='mobile_index'),
     path('firme/', views.company_directory, name='firme'),
+    path('opstine/<str:city_name>/', views.city_companies, name='city_companies'),
 
     
    
