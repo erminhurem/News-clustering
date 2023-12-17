@@ -7,6 +7,7 @@ from django.utils.timezone import make_aware, now
 from .models import Headlines
 from bs4 import BeautifulSoup
 import logging
+from datetime import datetime, timedelta 
 from django.db.models import Count
 from django.http import JsonResponse
 import datetime
