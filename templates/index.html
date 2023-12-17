@@ -44,25 +44,25 @@
                             class="when_now"> {{ news.time_since }}</span></h2>
                     <p class="snippet">{{ news.description }}</p>
                     {% if news.related_news.all %}
-                      {% for related in news.related_news.all %}
-                    <div class="related_article">
-                        <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank"
-                                rel="noopener noreferrer">{{ related.title }}</a></p> -
-                        <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                    </div>
-                    {% endfor %}
+                        {% for related in news.related_news.all|slice:":3" %}
+                            <div class="related_article">
+                                <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank"
+                                        rel="noopener noreferrer">{{ related.title }}</a></p> -
+                                <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                            </div>
+                        {% endfor %}
                     
                         {% if news.other_sources.all %}
-                        <p class="other_sources">
-                            {% for source in news.other_sources.all %}
-                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                            {% endfor %}
-                        </p>
-                    {% endif %}
-                    <div class="related_article">
-                       
-                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
-                    </div>
+                            <p class="other_sources">
+                                {% for source in news.other_sources.all %}
+                                    <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        <div class="related_article">
+                        
+                            <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                        </div>
                     {% endif %}
                 </div>
                 <div class="clear"></div>
@@ -90,81 +90,88 @@
         </div>
     </a>
     <div class="clear"></div>
-    {% for category, news_list in news_by_category.items %}    
-    <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "ekonomija" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="wait_image">
-                                <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                    <div class="image_inner">
-                                        <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "ekonomija" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
                             </div>
+                            <div class="clear"></div>
                         </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                           {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
     </div>
-    {% endfor %}
 </div>
-<div class="h_clear"></div>
+
 <!-- Prikaz vijesti iz kategorije "BiH" -->
 
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c2">
-        <h10></h10>
-        <a href="{% url 'timee:bih_category' %}" style="color: black;"><span>BiH »</span></a>
-    </div>
-    {% for category, news_list in news_by_category.items%}
-      <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "bih" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                <div class="image_inner">
-                                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+    <a href="{% url 'timee:bih_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c2">
+            <h10></h10>
+            <span>BiH »</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "bih" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
                             </div>
+                            <div class="clear"></div>
                         </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                              {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
     </div>
-    {% endfor %}
 </div>
 
 <div class="clear"></div>
@@ -177,334 +184,381 @@
     </center>
 </div>
 <script>calcNaslov();</script>
+
 <!-- Prikaz vijesti iz kategorije "Sarajevo " -->
 
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c3">
-        <h10></h10>
-        <a href="{% url 'timee:sarajevo_category' %}" style="color: black;"><span>Sarajevo »</span></a>
-    </div>
-    {% for category, news_list in news_by_category.items%}
-      <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "sarajevo" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                <div class="image_inner">
-                                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+    <a href="{% url 'timee:sarajevo_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c3">
+            <h10></h10>
+            <span>Sarajevo »</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "sarajevo" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
                             </div>
+                            <div class="clear"></div>
                         </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                            {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
     </div>
-    {% endfor %}
 </div>
 
-
+<!-- Prikaz vijesti iz kategorije "Balkan" -->
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c">
-        <h10></h10>
-        <a href="{% url 'timee:balkan_category' %}" style="color: black;"><span>Balkan »</span></a>
-    </div>
-    {% if "Balkan" in news_by_category %}
+    <a href="{% url 'timee:balkan_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c4">
+            <h10></h10>
+            <span>Balkan »</span>
+        </div>
+    </a>
     <div class="clear"></div>
-    <div class="kategorija_clusters">
-        {% for news in news_by_category.Balkan %}
-
-        {% if news.image_urls %}
-        <div class="article_image">
-            <div class="image"
-                style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                <div class="image_inner">
-                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        <div class="article_body">
-            <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
-            <p>{{ news.description }}</p>
-            <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
-            <p>Objavljeno: {{ news.published_date }}</p>
-            <p>Izvor: {{ news.source_name }}</p>
-        </div>
-
-        {% endfor %}
-    </div>        
-    {% endif %}
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "balkan" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
+    </div>
 </div>
 <div class="clear"></div>
 <!-- Prikaz vijesti iz kategorije "Svijet" -->
 
 <div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c5">
-        <h10></h10>
-        <a href="{% url 'timee:svijet_category' %}" style="color: black;"><span>Svijet »</span></a>
-    </div>
-    {% for category, news_list in news_by_category.items%}
-      <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "svijet" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                <div class="image_inner">
-                                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+    <a href="{% url 'timee:svijet_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c5">
+            <h10></h10>
+            <span>Svijet »</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "svijet" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
                             </div>
+                            <div class="clear"></div>
                         </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                           {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
     </div>
-    {% endfor %}
 </div>
 
 <!-- Prikaz vijesti iz kategorije "Scena" -->
 
 <div class="kategorija_wrap">
+    <a href="{% url 'timee:scena_category' %}" style="color: black;">
         <div class="kategorija_naslov" id="c6">
             <h10></h10>
-            <a href="{% url 'timee:scena_category' %}" style="color: black;"><span>Scena»</span></a>
+            <span>Scena »</span>
         </div>
-        {% for category, news_list in news_by_category.items%}
-          <div class="kategorija_clusters">        
-            <div class="cluster">            
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
                 {% for news in news_list %}                
-                    {% if news.category|lower == "scena" %}      
-                        <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                        {% if news.image_urls %}
-                            <div class="article_image">
-                                <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                    <div class="image_inner">
-                                        <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        <div class="article_body">
-                            <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                            <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news.all %}
-                                 {% for related in news.related_news.all %}
-                                    <div class="related_article">
-                                        <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                        <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                    </div>
-                                {% endfor %}                       
-                            {% endif %}                        
-                        </div>
-                    {% endif %}                
-                {% endfor %}
-            </div>        
-        </div>
-        {% endfor %}
-    </div>
-<div class="clear"></div>
-
-
-<div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c7">
-        <h10></h10>
-        <a href="{% url 'timee:hronika_category' %}" style="color: black;"><span>Hronika »</span></a>
-    </div>
-    {% for category, news_list in news_by_category.items%}
-      <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "hronika" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                <div class="image_inner">
-                                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                               {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
-    </div>
-    {% endfor %}
-</div>
-
-<div class="kategorija_wrap">
-    <div class="kategorija_naslov" id="c8">
-        <h10></h10>
-        <a href="{% url 'timee:kultura_category' %}" style="color: black;"><span>Kultura »</span></a>
-    </div>
-    {% for category, news_list in news_by_category.items%}
-      <div class="kategorija_clusters">        
-        <div class="cluster">            
-            {% for news in news_list %}                
-                {% if news.category|lower == "kultura" %}      
-                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                    {% if news.image_urls %}
-                        <div class="article_image">
-                            <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                <div class="image_inner">
-                                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news.all %}
-                        {% for related in news.related_news.all %}
-                                <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                </div>
-                            {% endfor %}                       
-                        {% endif %}                        
-                    </div>
-                {% endif %}                
-            {% endfor %}
-        </div>        
-    </div>
-    {% endfor %}
-</div>
-    <!-- Prikaz vijesti iz kategorije "Sport" -->
-
-<div class="kategorija_wrap">
-        <a href="{% url 'timee:sport' %}" style="color: black;">
-            <div class="kategorija_naslov" id="c9">
-                <h10></h10>
-                <span>SPORT »</span>
-            </div>
-        </a>
-        <div class="clear"></div>
-        {% for category, news_list in news_by_category.items %}    
-        <div class="kategorija_clusters">        
-            <div class="cluster">            
-                {% for news in news_list %}                
-                    {% if news.category|lower == "sport" %}      
-                        <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                        {% if news.image_urls %}
-                            <div class="article_image">
-                                <div class="wait_image">
-                                    <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                        <div class="image_inner">
-                                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                    {% if news.category|lower == "scena" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                        <div class="article_body">
-                            <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                            <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news.all %}
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
                                 {% for related in news.related_news.all %}
-                                    <div class="related_article">
-                                        <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                        <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                    </div>
-                                {% endfor %}                       
-                            {% endif %}                        
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
+                            </div>
+                            <div class="clear"></div>
                         </div>
                     {% endif %}                
-                {% endfor %}
-            </div>        
-        </div>
-    {% endfor %}
+                {% endfor %}                
+            {% endfor %}        
+    </div>
 </div>
+<div class="clear"></div>
+<div class="h_rule"></div>
 
-    <!-- Prikaz vijesti iz kategorije "Magazin" -->
-
-    <div class="kategorija_wrap">
-        <a href="{% url 'timee:magazin' %}" style="color: black;">
-            <div class="kategorija_naslov" id="c10">
-                <h10></h10>
-                <span>MAGAZIN »</span>
-            </div>
-        </a>
-        <div class="clear"></div>
-        {% for category, news_list in news_by_category.items %}    
-        <div class="kategorija_clusters">        
-            <div class="cluster">            
+<!-- Prikaz vijesti iz kategorije "Hronika" -->
+<div class="kategorija_wrap">
+    <a href="{% url 'timee:hronika_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c7">
+            <h10></h10>
+            <span>Hronika »</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
                 {% for news in news_list %}                
-                    {% if news.category|lower == "magazin" %}      
-                        <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
-                        {% if news.image_urls %}
-                            <div class="article_image">
-                                <div class="wait_image">
-                                    <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                                        <div class="image_inner">
-                                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                    {% if news.category|lower == "hronika" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
                             </div>
-                        {% endif %}
-                        <div class="article_body">
-                            <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                            <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news.all %}
-                               {% for related in news.related_news.all %}
-                                    <div class="related_article">
-                                        <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                        <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
-                                    </div>
-                                {% endfor %}                       
-                            {% endif %}                        
+                            <div class="clear"></div>
                         </div>
                     {% endif %}                
-                {% endfor %}
-            </div>        
-        </div>
-    {% endfor %}
+                {% endfor %}                
+            {% endfor %}        
+    </div>
 </div>
-<div class="h_clear"></div>
+
+<!-- Prikaz vijesti iz kategorije "Kultura" -->
+
+<div class="kategorija_wrap">
+    <a href="{% url 'timee:kultura_category' %}" style="color: black;">
+        <div class="kategorija_naslov" id="c8">
+            <h10></h10>
+            <span>Kultura »</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "kultura" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
+    </div>
+</div>
+<div class="clear"></div>
+<!-- Prikaz vijesti iz kategorije "Sport" -->
+
+<div class="kategorija_wrap">
+    <a href="{% url 'timee:sport' %}" style="color: black;">
+        <div class="kategorija_naslov super left">
+            <span><span>«</span>SPORT</span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "sport" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
+    </div>
+</div>
+
+<!-- Prikaz vijesti iz kategorije "Magazin" -->
+
+<div class="kategorija_wrap">
+    <a href="{% url 'timee:magazin' %}" style="color: black;">
+        <div class="kategorija_naslov super right">            
+            <span>MAGAZIN<span>»</span></span>
+        </div>
+    </a>
+    <div class="clear"></div>
+    <div class="kategorija_clusters">         
+            {% for category, news_list in news_by_category.items %}                    
+                {% for news in news_list %}                
+                    {% if news.category|lower == "magazin" %}
+                        <div class="cluster">       
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            {% if news.image_urls %}
+                                <div class="article_image">
+                                    <div class="wait_image">
+                                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                                            <div class="image_inner">
+                                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="article_body">
+                                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
+                                <p class="snippet">{{ news.description }}</p>
+                                {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
+                                        <div class="related_article">
+                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                        </div>
+                                    {% endfor %}                       
+                                {% endif %}                        
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    {% endif %}                
+                {% endfor %}                
+            {% endfor %}        
+    </div>
+</div>
+<div class="h_rule"></div>
 </div>
 
 {% endblock %}

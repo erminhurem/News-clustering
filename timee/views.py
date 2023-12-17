@@ -189,23 +189,23 @@ def index(request):
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
-        # Izračunavanje TF-IDF vektora za trenutnu vijest
-        current_tfidf = vectorizer.transform(
-            [' '.join(extract_keywords(news.description))]
-        )
-        cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
 
-        # Dobivanje indeksa povezanih članaka
-        related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
 
 
-        # Dohvaćanje povezanih vijesti iz baze podataka
-        related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id][:3]
-        news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
 
-        #psotavljanje dobijenih izvora
-        sources = get_or_create_sources_for_news(news)
-        news.other_sources.set(sources)
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
@@ -855,6 +855,7 @@ def extract_images(entry):
         description = entry.description
         soup = BeautifulSoup(description, 'html.parser')
         images.extend([img['src'] for img in soup.find_all('img')])
+
 
     # Ekstrakcija direktnog URL-a iz 'image' ako postoji
     if 'image' in entry:
