@@ -1,5 +1,139 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div id="split_pane">
+    <div id="news_pane" class="sources">
+        <h5>S1</h5>
+        <div class="h_rule"></div>
+        <a href="{% url 'timee:prikaz_izvora' 'blic' %}">Blic</a>
+        <a href="{% url 'timee:prikaz_izvora' 'kurir' %}">Kurir</a>
+        <a href="{% url 'timee:prikaz_izvora' 'b92' %}">B92</a>
+        <a href="{% url 'timee:prikaz_izvora' 'telegraf' %}">Telegraf</a>
+        <a href="{% url 'timee:prikaz_izvora' 'srbijadanas' %}">Srbija Danas</a>
+        <a href="{% url 'timee:prikaz_izvora' 'novosti' %}">Novosti</a>
+        <a href="{% url 'timee:prikaz_izvora' 'espreso' %}">Espreso</a>
+        <a href="{% url 'timee:prikaz_izvora' 'alo' %}">ALO</a>
+        <a href="{% url 'timee:prikaz_izvora' 'mondo' %}">Mondo</a>
+        <a href="{% url 'timee:prikaz_izvora' 'informer' %}">Informer</a>
+        <a href="{% url 'timee:prikaz_izvora' 'pink' %}">Pink</a>
+        <a href="{% url 'timee:prikaz_izvora' 'rts' %}">RTS</a>
+        <a href="{% url 'timee:prikaz_izvora' 'beta' %}">Beta</a>
+        <a href="{% url 'timee:prikaz_izvora' 'nova' %}">Nova</a>
+        <a href="{% url 'timee:prikaz_izvora' 'euronews' %}">Euronews</a>
+        <!-- Dodajte ostale linkove za S1 ovdje -->
 
+        <h5>S2</h5>
+        <div class="h_rule"></div>
+        <a href="{% url 'timee:prikaz_izvora' 'n1' %}">N1</a>
+        <a href="{% url 'timee:prikaz_izvora' 'rsevropa' %}">R.S.Evropa</a>
+        <a href="{% url 'timee:prikaz_izvora' 'aljazeera' %}">Al Jazeera</a>
+        <a href="{% url 'timee:prikaz_izvora' 'dw' %}">DW</a>
+        <a href="{% url 'timee:prikaz_izvora' 'bbc' %}">BBC</a>
+        <a href="{% url 'timee:prikaz_izvora' 'rtv' %}">RTV</a>
+        <a href="{% url 'timee:prikaz_izvora' 'republika' %}">Republika</a>
+        <a href="{% url 'timee:prikaz_izvora' 'politika' %}">Politika</a>
+        <a href="{% url 'timee:prikaz_izvora' 'tanjug' %}">Tanjug</a>
+        <a href="{% url 'timee:prikaz_izvora' 'pravda' %}">Pravda</a>
+        <a href="{% url 'timee:prikaz_izvora' 'svet' %}">Svet-Scandal</a>
+        <a href="{% url 'timee:prikaz_izvora' 'aljazeera' %}">Al Jazeera</a>
+        <a href="{% url 'timee:prikaz_izvora' 'dw' %}">DW</a>
+        <a href="{% url 'timee:prikaz_izvora' 'bbc' %}">BBC</a>
+        <a href="{% url 'timee:prikaz_izvora' 'republika' %}">Republika</a>
+        <a href="{% url 'timee:prikaz_izvora' 'politika' %}">Politika</a>
+        <a href="{% url 'timee:prikaz_izvora' 'tanjug' %}">Tanjug</a>
+        <a href="{% url 'timee:prikaz_izvora' 'pravda' %}">Pravda</a>
+        <a href="{% url 'timee:prikaz_izvora' 'svet' %}">Svet-Scandal</a>
+        <a href="{% url 'timee:prikaz_izvora'  'danas' %}">Danas</a>
+        <!-- Dodajte ostale linkove za S2 ovdje -->
+
+        <h5>S3</h5>
+        <div class="h_rule"></div>
+        <a href="{% url 'timee:prikaz_izvora' 'rtcg' %}">RTCG</a>
+        <a href="{% url 'timee:prikaz_izvora' 'vijestime' %}">Vijesti.me</a>
+        <a href="{% url 'timee:prikaz_izvora' 'vijestiba' %}">Vijesti.ba</a>
+        <a href="{% url 'timee:prikaz_izvora' 'radiosarajevo' %}">Radio Sarajevo</a>
+        <a href="{% url 'timee:prikaz_izvora' 'avaz' %}">Avaz</a>
+        <a href="{% url 'timee:prikaz_izvora'  'dnevnikba' %}">Dnevnik.ba</a>
+        <a href="{% url 'timee:prikaz_izvora' 'buka' %}">6yka</a>
+        <a href="{% url 'timee:prikaz_izvora' 'indexhr' %}">Index.hr</a>
+        <a href="{% url 'timee:prikaz_izvora'  '24satahr' %}">24sata.hr</a>
+        <a href="{% url 'timee:prikaz_izvora' 'dnevnikhr' %}">Dnevnik.hr</a>
+        <a href="{% url 'timee:prikaz_izvora'  'vecernjihr' %}">Vecernji.hr</a> 
+        <!-- Dodajte ostale linkove za S3 ovdje -->
+
+        <h5>Ostali</h5>
+        <div class="h_rule"></div>
+        <a href="{% url 'timee:prikaz_izvora' 'benchmark' %}">Benchmark</a>
+        <a href="{% url 'timee:prikaz_izvora' 'bizlife' %}">BizLife</a>
+        <a href="{% url 'timee:prikaz_izvora' 'dnevno' %}">Dnevno</a>
+        <a href="{% url 'timee:prikaz_izvora' 'indeksonline' %}">IndeksOnline</a>
+        <a href="{% url 'timee:prikaz_izvora' 'informacija' %}">Informacija</a>
+        <a href="{% url 'timee:prikaz_izvora' 'juznevesti' %}">Južne Vesti</a>
+        <a href="{% url 'timee:prikaz_izvora' 'lepota' %}">Lepota i Zdravlje</a>
+        <a href="{% url 'timee:prikaz_izvora' 'novimagazin' %}">Novi Magazin</a>
+        <a href="{% url 'timee:prikaz_izvora' 'pcpress' %}">PC press</a>
+        <a href="{% url 'timee:prikaz_izvora' 'pulsonline' %}">Puls online</a>
+        <a href="{% url 'timee:prikaz_izvora' 'sportskenet' %}">Sportske.net</a>
+        <a href="{% url 'timee:prikaz_izvora' 'svetplus' %}">Svet Plus</a>
+        <a href="{% url 'timee:prikaz_izvora' 'toxictv' %}">Toxic</a>
+        <a href="{% url 'timee:prikaz_izvora'  'vestionline' %}">Vesti Online</a> 
+        <!-- Dodajte ostale linkove za Ostale ovdje -->
+    </div>
+  
+    <div id="ads_pane"><!-- START AD 2_1 -->
+        <div id="adpos2_1" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 600px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_1+2_2 DIRECT NONE test_ads">
+            <script async=""
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012"
+                crossorigin="anonymous" data-checked-head="true"></script>
+            <!-- 300x600 -->
+            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+                data-ad-client="ca-pub-2916650652703012" data-ad-slot="3183422336" data-adsbygoogle-status="done"
+                data-ad-status="filled">
+                <div id="aswift_1_host" tabindex="0" title="Advertisement" aria-label="Advertisement"
+                    style="border: none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;">
+                    <iframe id="aswift_1" name="aswift_1" browsingtopics="true"
+                        style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+                        width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+                        allowtransparency="true" scrolling="no" allow="attribution-reporting"
+                        src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=600&amp;slotname=3183422336&amp;adk=2104535354&amp;adf=1640154160&amp;pi=t.ma~as.3183422336&amp;w=300&amp;lmt=1702830494&amp;format=300x600&amp;url=https%3A%2F%2Ftime.rs%2Fs%2Fall&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTIwLjAuNjA5OS4xMDkiLG51bGwsMCxudWxsLCI2NCIsW1siTm90X0EgQnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjEyMC4wLjYwOTkuMTA5Il0sWyJHb29nbGUgQ2hyb21lIiwiMTIwLjAuNjA5OS4xMDkiXV0sMF0.&amp;dt=1702830494739&amp;bpp=1&amp;bdt=112&amp;idt=60&amp;shv=r20231207&amp;mjsv=m202312070101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3Deefa8fc8ce214955%3AT%3D1702789445%3ART%3D1702830491%3AS%3DALNI_MYPA3AN9bep1ceMOgOfzMJLUcEIMw&amp;gpic=UID%3D00000d1deccb51a8%3AT%3D1702789445%3ART%3D1702830491%3AS%3DALNI_MbJUosy0ctN0utc33SuOaMR2VD33g&amp;prev_fmts=0x0&amp;nras=1&amp;correlator=6340358694201&amp;frm=20&amp;pv=1&amp;ga_vid=455809031.1702789446&amp;ga_sid=1702830495&amp;ga_hid=318901548&amp;ga_fc=1&amp;u_tz=60&amp;u_his=10&amp;u_h=1080&amp;u_w=2560&amp;u_ah=1040&amp;u_aw=2560&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=1466&amp;ady=163&amp;biw=2543&amp;bih=919&amp;scr_x=0&amp;scr_y=0&amp;eid=44759876%2C44759927%2C44759837%2C31079980%2C42531705%2C95320884%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=1969744078372709&amp;tmod=2058656086&amp;uas=0&amp;nvt=3&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fmagazin&amp;fc=1920&amp;brdim=0%2C0%2C0%2C0%2C2560%2C0%2C2560%2C1040%2C2560%2C919&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;bz=1&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=2&amp;uci=a!2&amp;fsb=1&amp;dtd=65"
+                        data-google-container-id="a!2" data-google-query-id="CJaUmvbxloMDFRSApwodTYQPeQ"
+                        data-load-complete="true"></iframe>
+                </div>
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div><!-- END AD 2_1 -->
+        <div style="width:302px;height:5px;"></div><!-- START AD 2_2 -->
+        <div id="adpos2_2" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 250px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_2 DIRECT NONE test_pos_2">
+            <script async=""
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012"
+                crossorigin="anonymous" data-checked-head="true"></script>
+            <!-- 300x250 -->
+            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px"
+                data-ad-client="ca-pub-2916650652703012" data-ad-slot="6709558206" data-adsbygoogle-status="done"
+                data-ad-status="filled">
+                <div id="aswift_2_host" tabindex="0" title="Advertisement" aria-label="Advertisement"
+                    style="border: none; height: 250px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;">
+                    <iframe id="aswift_2" name="aswift_2" browsingtopics="true"
+                        style="left:0;position:absolute;top:0;border:0;width:300px;height:250px;"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+                        width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+                        allowtransparency="true" scrolling="no" allow="attribution-reporting"
+                        src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=250&amp;slotname=6709558206&amp;adk=1917824830&amp;adf=3358429789&amp;pi=t.ma~as.6709558206&amp;w=300&amp;lmt=1702830494&amp;format=300x250&amp;url=https%3A%2F%2Ftime.rs%2Fs%2Fall&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTIwLjAuNjA5OS4xMDkiLG51bGwsMCxudWxsLCI2NCIsW1siTm90X0EgQnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjEyMC4wLjYwOTkuMTA5Il0sWyJHb29nbGUgQ2hyb21lIiwiMTIwLjAuNjA5OS4xMDkiXV0sMF0.&amp;dt=1702830494739&amp;bpp=1&amp;bdt=113&amp;idt=74&amp;shv=r20231207&amp;mjsv=m202312070101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3Deefa8fc8ce214955%3AT%3D1702789445%3ART%3D1702830491%3AS%3DALNI_MYPA3AN9bep1ceMOgOfzMJLUcEIMw&amp;gpic=UID%3D00000d1deccb51a8%3AT%3D1702789445%3ART%3D1702830491%3AS%3DALNI_MbJUosy0ctN0utc33SuOaMR2VD33g&amp;prev_fmts=0x0%2C300x600&amp;nras=1&amp;correlator=6340358694201&amp;frm=20&amp;pv=1&amp;ga_vid=455809031.1702789446&amp;ga_sid=1702830495&amp;ga_hid=318901548&amp;ga_fc=1&amp;u_tz=60&amp;u_his=10&amp;u_h=1080&amp;u_w=2560&amp;u_ah=1040&amp;u_aw=2560&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=1466&amp;ady=780&amp;biw=2543&amp;bih=919&amp;scr_x=0&amp;scr_y=0&amp;eid=44759876%2C44759927%2C44759837%2C31079980%2C42531705%2C95320884%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=1969744078372709&amp;tmod=2058656086&amp;uas=0&amp;nvt=3&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fmagazin&amp;fc=1920&amp;brdim=0%2C0%2C0%2C0%2C2560%2C0%2C2560%2C1040%2C2560%2C919&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;bz=1&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=3&amp;uci=a!3&amp;fsb=1&amp;dtd=77"
+                        data-google-container-id="a!3" data-google-query-id="CPv8mvbxloMDFWe2fwQd09ECkA"
+                        data-load-complete="true"></iframe>
+                </div>
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div><!-- END AD 2_2 -->
+    </div>
+</div>
 {% endblock %}

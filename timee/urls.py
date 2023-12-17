@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import izvori
 
 app_name = "timee"
 
@@ -40,6 +41,13 @@ urlpatterns = [
     path('10h/', views.news_at_10, name="10h"),
     path('17h/', views.news_last_17_hours, name="17h"),
     path('c/<int:pk>/related/', views.related_news_view, name='related_news'),
+
+    #rute vezane za izvore samo 
+    path('s/svi', izvori.svi_izvori, name='svi_izvori'),
+   
+    path('s/<str:naziv_izvora>/', izvori.prikaz_izvora, name='prikaz_izvora'),
+    
+     
 
 
     

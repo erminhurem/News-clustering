@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
-from .models import Headlines
+from .models import Headlines, Source
 from bs4 import BeautifulSoup
 import logging
 from datetime import datetime, timedelta 
@@ -25,6 +25,24 @@ from collections import defaultdict
 from datetime import datetime, time
 from django.shortcuts import get_object_or_404, render
 
+def get_or_create_sources_for_news(news):
+    # Ovdje definirajte logiku za identificiranje izvora za određenu vijest
+    # Na primjer, možete koristiti ključne riječi iz opisa vijesti
+
+    # Pretpostavimo da imate listu ključnih riječi koje odgovaraju različitim izvorima
+    keywords_to_sources = {
+        'ključna riječ 1': 'Izvor 1',
+        'ključna riječ 2': 'Izvor 2',
+        # Dodajte ostale parove ključna riječ - izvor
+    }
+
+    sources = []
+    for keyword, source_name in keywords_to_sources.items():
+        if keyword in news.description:
+            source, created = Source.objects.get_or_create(name=source_name, link='URL za izvor')
+            sources.append(source)
+
+    return sources
 
 
 def related_news_view(request, pk):
@@ -202,6 +220,10 @@ def index(request):
         # Dohvaćanje povezanih vijesti iz baze podataka
         related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
         news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+        #psotavljanje dobijenih izvora
+        sources = get_or_create_sources_for_news(news)
+        news.other_sources.set(sources)
 
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
