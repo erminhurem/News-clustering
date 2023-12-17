@@ -8,6 +8,8 @@ class Headlines(models.Model):
     category = models.CharField(max_length=200, null=True, blank=True)
     source = models.CharField(max_length=100)
     image_urls= models.URLField(max_length=1000,default=None,blank=True, null=True)
+    related_news = models.ManyToManyField('self', symmetrical=False, related_name='related_by', blank=True)
+
 
     def __str__(self):
         return self.title

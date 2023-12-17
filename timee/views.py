@@ -23,6 +23,14 @@ import pandas as pd
 from django.utils.timezone import now
 from collections import defaultdict
 from datetime import datetime, time
+from django.shortcuts import get_object_or_404, render
+
+
+
+def related_news_view(request, pk):
+    news = get_object_or_404(Headlines, pk=pk)
+    related_news = news.related_news.all()
+    return render(request, 'povezane_vijesti.html', {'related_news': related_news})
 
 def news_at_10(request):
     today = datetime.now().date()
@@ -172,28 +180,28 @@ def index(request):
     all_news = Headlines.objects.all().order_by('-published_date')
     vectorizer = TfidfVectorizer()
     
-    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
-    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in all_news]
+    )
 
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
         # Izračunavanje TF-IDF vektora za trenutnu vijest
-        current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+        current_tfidf = vectorizer.transform(
+            [' '.join(extract_keywords(news.description))]
+        )
         cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
 
         # Dobivanje indeksa povezanih članaka
-        related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
+        related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
 
-        # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
-        related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
-        news.related_news = related_news
-        # Ovdje postavite ukupan broj povezanih vijesti
-        news.related_news_count = len(related_news)
-        for news in related_news:
-            news.source_name = get_friendly_source_name(news.source)
-            news.time_since = get_relative_time(news.published_date)
+
+        # Dohvaćanje povezanih vijesti iz baze podataka
+        related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
+        news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
 
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}

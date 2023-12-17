@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .other_sources span {
+    /* Dodajte stilove ovdje */
+    display: inline-block;
+    margin-right: 5px;
+    background-color: green; /* Primjer boje pozadine */
+    color: white; /* Primjer boje teksta */
+    padding: 5px; /* Primjer paddinga */
+}
+
+.other_sources a {
+    /* Dodajte stilove za linkove ovdje */
+    color: white; /* Boja teksta linkova */
+}
+
+</style>
+
 
 <div id="split_pane">
     <div id="news_pane" class="top">
@@ -26,14 +43,23 @@
                     <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
                             class="when_now"> {{ news.time_since }}</span></h2>
                     <p class="snippet">{{ news.description }}</p>
-                    {% if news.related_news %}
-                    {% for related in news.related_news %}
+                    {% if news.related_news.all %}
+                      {% for related in news.related_news.all %}
                     <div class="related_article">
                         <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank"
                                 rel="noopener noreferrer">{{ related.title }}</a></p> -
                         <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
                     </div>
                     {% endfor %}
+                    <p class="other_sources">
+                        {% for source in news.other_sources %}
+                            <span><a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
+                        {% endfor %}
+                    </p>
+                    <div class="related_article">
+                       
+                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                    </div>
                     {% endif %}
                 </div>
                 <div class="clear"></div>
@@ -81,8 +107,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                           {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -122,8 +148,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                              {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -173,8 +199,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                            {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -248,8 +274,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                           {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -289,8 +315,8 @@
                         <div class="article_body">
                             <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                             <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news %}                        
-                                {% for related in news.related_news %}
+                            {% if news.related_news.all %}
+                                 {% for related in news.related_news.all %}
                                     <div class="related_article">
                                         <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                         <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -330,8 +356,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                               {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -369,8 +395,8 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                        {% if news.related_news %}                        
-                            {% for related in news.related_news %}
+                        {% if news.related_news.all %}
+                              {% for related in news.related_news.all %}
                                 <div class="related_article">
                                     <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -414,8 +440,8 @@
                         <div class="article_body">
                             <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                             <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news %}                        
-                                {% for related in news.related_news %}
+                            {% if news.related_news.all %}
+                                {% for related in news.related_news.all %}
                                     <div class="related_article">
                                         <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                         <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -460,8 +486,8 @@
                         <div class="article_body">
                             <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                             <p class="snippet">{{ news.description }}</p>
-                            {% if news.related_news %}                        
-                                {% for related in news.related_news %}
+                            {% if news.related_news.all %}
+                               {% for related in news.related_news.all %}
                                     <div class="related_article">
                                         <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                         <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
