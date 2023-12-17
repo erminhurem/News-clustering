@@ -37,7 +37,8 @@ urlpatterns = [
     path('firme/', views.company_directory, name='firme'),
     path('opstine/<str:city_name>/', views.city_companies, name='city_companies'),
     path('pretraga/', views.search_news, name='search_news'),
-    path('10h/', views.news_at_10, name="10h")
+    path('10h/', views.news_at_10, name="10h"),
+    path('17h/', views.news_last_17_hours, name="17h")
 
     
    

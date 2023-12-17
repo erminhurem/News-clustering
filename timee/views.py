@@ -81,7 +81,24 @@ def news_at_10(request):
     return render(request, "10h.html", context)
 
 
+def news_last_17_hours(request):
+    # Trenutno vrijeme minus 17 sati
+    time_threshold = datetime.now() - timedelta(hours=17)
 
+    # Filtriramo vijesti objavljene u proteklih 17 sati
+    recent_news = Headlines.objects.filter(published_date__gte=time_threshold).order_by('-published_date')
+
+    for news in recent_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    # Dodajte ostale potrebne elemente u kontekst ako je potrebno
+    context = {
+        'recent_news': recent_news,
+        'naslov_stranice': 'Nedavne Vijesti - Time.ba',
+    }
+
+    return render(request, "17h.html", context)
 
 nltk.download('punkt')
 

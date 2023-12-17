@@ -190,39 +190,37 @@
 </div>
 
 
-    <div class="kategorija_wrap">
-        <div class="kategorija_naslov" id="c">
-            <h10></h10>
-            <a href="{% url 'timee:balkan_category' %}" style="color: black;"><span>Balkan »</span></a>
-        </div>
-        {% if "Balkan" in news_by_category %}
-        <div class="clear"></div>
-        <div class="kategorija_clusters">
-            {% for news in news_by_category.Balkan %}
+<div class="kategorija_wrap">
+    <div class="kategorija_naslov" id="c">
+        <h10></h10>
+        <a href="{% url 'timee:balkan_category' %}" style="color: black;"><span>Balkan »</span></a>
+    </div>
+    {% if "Balkan" in news_by_category %}
+    <div class="clear"></div>
+    <div class="kategorija_clusters">
+        {% for news in news_by_category.Balkan %}
 
-
-            {% if news.image_urls %}
-            <div class="article_image">
-                <div class="image"
-                    style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                    <div class="image_inner">
-                        <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                    </div>
+        {% if news.image_urls %}
+        <div class="article_image">
+            <div class="image"
+                style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                <div class="image_inner">
+                    <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                 </div>
             </div>
-            {% endif %}
-            <div class="article_body">
-                <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
-                <p>{{ news.description }}</p>
-                <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
-                <p>Objavljeno: {{ news.published_date }}</p>
-                <p>Izvor: {{ news.source_name }}</p>
-            </div>
+        </div>
+        {% endif %}
+        <div class="article_body">
+            <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+            <p>{{ news.description }}</p>
+            <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
+            <p>Objavljeno: {{ news.published_date }}</p>
+            <p>Izvor: {{ news.source_name }}</p>
+        </div>
 
-            {% endfor %}
-        </div>        
-    </div>
-    {% endfor %}
+        {% endfor %}
+    </div>        
+    {% endif %}
 </div>
 <div class="clear"></div>
 <!-- Prikaz vijesti iz kategorije "Svijet" -->
@@ -478,5 +476,6 @@
     {% endfor %}
 </div>
 <div class="h_clear"></div>
+</div>
 
 {% endblock %}
