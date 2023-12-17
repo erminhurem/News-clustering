@@ -43,9 +43,8 @@ urlpatterns = [
     path('c/<int:pk>/related/', views.related_news_view, name='related_news'),
 
     #rute vezane za izvore samo 
-    path('s/svi', izvori.svi_izvori, name='svi_izvori'),
-   
-    path('s/<str:naziv_izvora>/', izvori.prikaz_izvora, name='prikaz_izvora'),
+    path('s/svi', izvori.svi_izvori, name='svi_izvori'), 
+    path('s/<str:kljucna_rijec>/', izvori.prikaz_izvora, name='prikaz_izvora'),
     
      
 

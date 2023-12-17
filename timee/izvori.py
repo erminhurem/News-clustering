@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from .models import Headlines
 
-def prikaz_izvora(request, naziv_izvora):
-    vijesti = Headlines.objects.filter(source=naziv_izvora).order_by('-published_date')
+def prikaz_izvora(request, kljucna_rijec):
+    vijesti = Headlines.objects.filter(source__icontains=kljucna_rijec).order_by('-published_date')
     context = {
-        'naslov_stranice': f'{naziv_izvora.capitalize()} - Time.ba',
+        'naslov_stranice': f'{kljucna_rijec.capitalize()} - Time.ba',
         'vijesti': vijesti,
     }
-    return render(request, 'izvori.html', context)
+    return render(request, 'prikaz_izvora.html', context)
+
 
 def svi_izvori(request):
     context = {

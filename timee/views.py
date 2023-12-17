@@ -52,43 +52,23 @@ def related_news_view(request, pk):
 
 def news_at_10(request):
     today = datetime.now().date()
+
+    # Postavljanje vremena na 10:00 ujutro
     start_time = datetime.combine(today, time(10, 0))  # 10:00 ujutro
-    end_time = datetime.combine(today, time(10, 59))   # 10:59 ujutro
+
+    # Postavljanje vremena na 10:59 ujutro
+    end_time = datetime.combine(today, time(10, 59))  # 10:59 ujutro
 
     # Filtriramo vijesti objavljene između 10:00 i 10:59
-    news_at_10 = Headlines.objects.filter(published_date__gte=start_time, published_date__lte=end_time).order_by('-published_date')[:3]
+    news_at_10 = Headlines.objects.filter(published_date__gte=start_time, published_date__lte=end_time).order_by('-published_date')
 
+    # Dodavanje dodatnih informacija vijestima
     for news in news_at_10:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+        news.related_news_list = list(news.related_news.all())
 
-    latest_news = Headlines.objects.all().order_by('-published_date')[:3]
-    all_news = Headlines.objects.all().order_by('-published_date')
-    vectorizer = TfidfVectorizer()
-    
-    # Koristimo 'description' polje za izračunavanje TF-IDF vektora
-    tfidf_matrix = vectorizer.fit_transform([' '.join(extract_keywords(news.description)) for news in all_news])
-
-    for news in latest_news:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-
-        # Izračunavanje TF-IDF vektora za trenutnu vijest
-        current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
-        cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
-
-        # Dobivanje indeksa povezanih članaka
-        related_articles_indices = cosine_similarities[0].argsort()[:-6:-1]
-
-        # Preuzmite povezane vijesti i izračunajte njihov ukupan broj
-        related_news = [all_news[i.item()] for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
-        news.related_news = related_news
-        # Ovdje postavite ukupan broj povezanih vijesti
-        news.related_news_count = len(related_news)
-        for news in related_news:
-            news.source_name = get_friendly_source_name(news.source)
-            news.time_since = get_relative_time(news.published_date)
-
+    # Dohvat vijesti po kategorijama
     categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
     news_by_category = {}
     for category in categories:
@@ -98,10 +78,10 @@ def news_at_10(request):
             item.time_since = get_relative_time(item.published_date)
         news_by_category[category] = news_items
 
+    # Postavljanje konteksta za template
     context = {
-        'latest_news': latest_news,
         'news_at_10': news_at_10,
-        'naslov_stranice': 'Vijesti - Time.ba',
+        'naslov_stranice': 'Vijesti u 10 Sati - Time.ba',
         'news_by_category': news_by_category,
     }
 
@@ -218,7 +198,7 @@ def index(request):
 
 
         # Dohvaćanje povezanih vijesti iz baze podataka
-        related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id][:5]
+        related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id][:3]
         news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
 
         #psotavljanje dobijenih izvora
@@ -903,6 +883,12 @@ def parse_date(date_str):
 
 def fetch_news():
     feeds = [
+        'https://www.sd.rs/rss.xml',
+        'https://www.blic.rs/rss/danasnje-vesti',
+        'https://www.blic.rs/rss/Vesti/Politika',
+        'https://www.blic.rs/rss/Vesti/Hronika',
+        'https://www.blic.rs/rss/Slobodno-vreme/Zanimljivosti',
+        'https://www.blic.rs/rss/IT',
         'https://www.telegraf.rs/rss',
         'https://www.kurir.rs/rss',
         'https://nova.rs/rss',
@@ -915,11 +901,23 @@ def fetch_news():
         'https://balkans.aljazeera.net/rss.xml',
         'https://www.klix.ba/rss',
         'https://www.avaz.ba/rss',
+        'https://beta.rs/rss',
         'https://www.oslobodjenje.ba/feed',
         'https://okanal.oslobodjenje.ba/okanal/feed',
         'https://www.b92.net/feed/',
+        'https://radiosarajevo.ba/rss',
+        'https://www.dnevnik.ba/feed',
+        'https://namaz.ba/feed/',
+        'https://www.nkp.ba/feed/',
+        'https://ntv.ba/feed/',
+        'https://www.rtvslon.ba/feed/',
         'https://www.sd.rs/rss.xml',
         'https://www.rts.rs/rss/ci.html',
+        'https://nova.rs/feed',
+        'https://svet-scandal.rs/feed/',
+        'https://www.euronews.rs/rss/sport',
+        'https://www.euronews.rs/rss/srbija',
+        'https://www.euronews.rs/rss/evropa',
         'https://www.alo.rs/rss/live',
         'https://www.alo.rs/rss/hronika',
         'https://www.alo.rs/rss/biz',
@@ -931,6 +929,7 @@ def fetch_news():
         'https://www.24sata.hr/feeds/news.xml',
         'https://www.24sata.hr/feeds/sport.xml',
         'https://www.24sata.hr/feeds/tech.xml',
+        'https://mondo.rs/rss/629/Naslovna',
 
     ]
     logger = logging.getLogger(__name__)
@@ -939,7 +938,7 @@ def fetch_news():
         for entry in feed.entries:
             if not Headlines.objects.filter(link=entry.link).exists():
                 published_date = parse_date(entry.published) if entry.published else None
-
+           
                 image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
 
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju

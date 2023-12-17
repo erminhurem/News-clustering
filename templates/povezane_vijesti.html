@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}  
 <!-- Stranica za prikaz povezanih vijesti -->
 {% for news in related_news %}
     <!-- Prikaz povezane vijesti -->
@@ -6,3 +8,5 @@
         <!-- Ostatak koda za prikaz vijesti -->
     </div>
 {% endfor %}
+{% endblock %}
+ 
