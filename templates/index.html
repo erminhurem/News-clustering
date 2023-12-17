@@ -160,7 +160,7 @@
         <div class="kategorija_clusters">
             {% for news in news_by_category.Sarajevo %}
 
-
+            <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
             {% if news.image_urls %}
             <div class="article_image">
                 <div class="image"
@@ -172,7 +172,9 @@
             </div>
             {% endif %}
             <div class="article_body">
-                <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
+                    class="when_now"> {{ news.time_since }}</span></h2>
+                
                 <p>{{ news.description }}</p>
                 <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                 <p>Objavljeno: {{ news.published_date }}</p>
@@ -196,7 +198,7 @@
         <div class="kategorija_clusters">
             {% for news in news_by_category.Balkan %}
 
-
+            <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
             {% if news.image_urls %}
             <div class="article_image">
                 <div class="image"
@@ -208,7 +210,9 @@
             </div>
             {% endif %}
             <div class="article_body">
-                <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
+                
+                <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
+                    class="when_now"> {{ news.time_since }}</span></h2>
                 <p>{{ news.description }}</p>
                 <p><a href="{{ news.link }}" target="_blank">Pročitaj više</a></p>
                 <p>Objavljeno: {{ news.published_date }}</p>
