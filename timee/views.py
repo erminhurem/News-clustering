@@ -870,6 +870,10 @@ def extract_images(entry):
         elif icon and 'url' in icon:
             images.append(icon['url'])
 
+    if 'vijesti.ba' in entry.link:
+        if 'image' in entry and isinstance(entry.image, str):
+            images.append(entry.image)
+
     return images
 
 
