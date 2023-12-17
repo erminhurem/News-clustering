@@ -132,7 +132,7 @@ def get_friendly_source_name(url):
     elif 'avaz.ba' in url:
         return 'Dnevni avaz'
     elif 'vijesti.ba' in url:
-        return 'Vijesti'
+        return 'Vijesti.ba'
     elif 'okanal.oslobodjenje.ba/okanal' in url:
         return 'Okanal'
     elif 'oslobodjenje.ba' in url:
@@ -149,6 +149,8 @@ def get_friendly_source_name(url):
         return 'Blic'
     elif 'mondo.ba' in url:
         return 'Mondo'
+    elif 'b92.net' in url:
+        return 'B92'
     else:
         return 'Nepoznati izvor'
     
