@@ -158,6 +158,7 @@
 
         // Sačuvaj izabranu kategoriju u localStorage
         localStorage.setItem('selectedCategory', category);
+        window.location.href = $(this).attr('href');
     });
 
     // Klik na podkategorije unutar 'sport' i drugih kategorija
@@ -178,6 +179,17 @@
         // Sakrij #step2
         $('#step2').css('display', 'none');
     });
+
+    var currentPath = window.location.pathname;
+            var isExtraCategory = $('#menu #step1 a.extra_btn').filter(function () {
+                var href = $(this).attr('href');
+                return currentPath.indexOf(href) !== -1;
+            }).length > 0;
+
+            // Ako je trenutna stranica jedna od 'extra_btn' kategorija, sakrij #step2
+            if (isExtraCategory) {
+                $('#step2').css('display', 'none');
+            }
 });
 
 </script>
