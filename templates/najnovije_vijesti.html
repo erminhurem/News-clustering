@@ -28,7 +28,7 @@
             {% for news in latest_news %}
             <div class="cluster">
                 <h2><a href="{{ news.link }}">{{ news.title }}</a></h2>
-                {% if news.images %}
+                {% if news.image_urls %}
                 <div class="article_image">
                     <div class="wait_image">
                         <div class="image"
