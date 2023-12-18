@@ -5,8 +5,7 @@
 
 <div id="split_pane">
     <div id="news_pane" class="top">
-        <div id="news_pane" class="single_news">
-           
+        <div id="news_pane" class="single_news">           
             <form style="position:absolute; top:157px;" method="get" action="{% url 'timee:najnovije_vijesti' %}">
                 <input type="hidden" name="new" value="true">
                 <span>Kategorija : </span>
@@ -17,23 +16,14 @@
 
                     {% endfor %}
                 </select>
-            </form>
- 
-     
-            <div class="pagination">
-                {% if latest_news.has_other_pages %}
-                    <!-- Prikaz samo brojeva stranica -->
+            </form>            
+                <div class="pagination">
                     {% for i in latest_news.paginator.page_range %}
-                        {% if latest_news.number == i %}
-                            <span class="current">{{ i }}</span>
-                        {% else %}
-                            <a href="?page={{ i }}&topic={{ selected_topic }}">
-                                <span><center>{{ i }}</center></span></a>
+                        {% if i <= 10 %}
+                            <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-       
+                    {% endfor %}    
+                </div>             
             <div class="h_rule"></div>
             {% for news in latest_news %}
             <div class="cluster">
@@ -62,7 +52,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="h_clear"></div>
 {% endblock %}

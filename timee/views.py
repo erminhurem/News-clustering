@@ -48,6 +48,11 @@ def get_or_create_sources_for_news(news):
 def related_news_view(request, pk):
     news = get_object_or_404(Headlines, pk=pk)
     related_news = news.related_news.all()
+
+    for news in related_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
     return render(request, 'povezane_vijesti.html', {'related_news': related_news})
 
 def news_at_10(request):
@@ -267,6 +272,7 @@ def ekonomija_category(request):
     except EmptyPage:
         
         news_page = paginator.page(paginator.num_pages)
+    
     
     
     context = {
@@ -776,6 +782,7 @@ def intima_category(request):
 # kraj koda vezano za rubriku Magazin
 
 def najnovije_vijesti(request):
+    latest_news = Headlines.objects.all().order_by('-published_date')[:10]
     kategorije = [
         'Ekonomija', 'Sport', 'BiH', 'Balkan', 'Sarajevo',
         'Svijet', 'Hronika', 'Politika', 'Kultura', 'Zabava',
@@ -792,18 +799,21 @@ def najnovije_vijesti(request):
     else:
         latest_news = Headlines.objects.filter(category=topic).order_by('-published_date')[:10]
     
-    for news in latest_news:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
+    
     # Paginacija
-    page = request.GET.get('page', 1)
-    paginator = Paginator(latest_news, 10) 
+    items_per_page = 10
+    paginator = Paginator(latest_news, items_per_page)
+    page = request.GET.get("page")
     try:
         latest_news = paginator.page(page)
     except PageNotAnInteger:
         latest_news = paginator.page(1)
     except EmptyPage:
         latest_news = paginator.page(paginator.num_pages)
+    
+    for news in latest_news:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
 
     context = {
         'latest_news': latest_news,
@@ -1084,6 +1094,7 @@ def company_directory(request):
 
     context = {
         'companies_count_by_city': companies_count_by_city,  # Ispravljeno ime ključa u kontekstu
+        
     }
     return render(request, 'firme.html', context)
 
@@ -1118,10 +1129,11 @@ def city_companies(request, city_name):
     for company in city_companies_data.to_dict('records'):
         company_dict = {key.replace(' ', '_'): value for key, value in company.items()}
         companies_list.append(company_dict)
-
+    
     context = {
         'companies': companies_list,
         'city_name': city_name,
+        
     }
     
     return render(request, 'city_companies.html', context)

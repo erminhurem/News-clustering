@@ -1,12 +1,11 @@
-<!-- prikaz_izvora.html -->
 {% extends "base.html" %}
 {% block content %}
-<!-- Prikaz vijesti -->
-{% for vijest in vijesti %}
-  <div>
-    <h2>{{ vijest.title }}</h2>
-    <p>{{ vijest.description }}</p>
-    <!-- Ostali detalji vijesti -->
-  </div>
-{% endfor %}
+
+  {% for vijest in vijesti %}
+    <div>
+      <h2>{{ vijest.title }}</h2>
+      <p>{{ vijest.description }}</p>
+      <!-- Ostali detalji vijesti -->
+    </div>
+  {% endfor %}
 {% endblock %}

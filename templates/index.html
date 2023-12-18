@@ -22,7 +22,6 @@
 <div id="split_pane">
     <div id="news_pane" class="top">
         <div id="latest_news">
-
             {% for news in latest_news %}
             <div class="cluster">
                 <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>
@@ -119,11 +118,12 @@
                                     {% endfor %}                       
                                 {% endif %}                        
                             </div>
+                            
                             <div class="clear"></div>
                         </div>
                     {% endif %}                
                 {% endfor %}                
-            {% endfor %}        
+            {% endfor %} 
     </div>
 </div>
 

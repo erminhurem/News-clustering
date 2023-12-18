@@ -6,7 +6,15 @@
 
     <div id="imdb_sort">
         <h2>Gradovi/Opštine</h2>
+        <div class="pagination">
+            {% for i in latest_news.paginator.page_range %}
+                {% if i <= 10 %}
+                    <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+                {% endif %}
+            {% endfor %}    
+        </div> 
     </div>
+     
     <div class="h_rule"></div>
     {% for city, count in companies_count_by_city.items %}
     <div class="imdb_results">
