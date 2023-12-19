@@ -234,7 +234,8 @@ def index(request):
 
 def bih_category(request):
     news_items = Headlines.objects.filter(category='BiH').order_by('-published_date')
-        
+    vectorizer = TfidfVectorizer()
+    
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
     page = request.GET.get("page")
@@ -246,11 +247,35 @@ def bih_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'BiH': news_page},
@@ -261,6 +286,7 @@ def bih_category(request):
 
 def ekonomija_category(request):
     news_items = Headlines.objects.filter(category='Ekonomija').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -273,9 +299,36 @@ def ekonomija_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
     
     
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
+
+    for news in news_items:
+        news.source_name = get_friendly_source_name(news.source)
+        news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
+
     
     context = {
         'news_by_category': {'Ekonomija': news_page},
@@ -287,6 +340,8 @@ def ekonomija_category(request):
 def balkan_category(request):
     news_items = Headlines.objects.filter(category='Balkan').order_by('-published_date')
 
+    vectorizer = TfidfVectorizer()
+    
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
     page = request.GET.get("page")
@@ -297,12 +352,36 @@ def balkan_category(request):
         
         news_page = paginator.page(1)
     except EmptyPage:
-       
-        news_page = paginator.page(paginator.num_pages)
+        
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Balkan': news_page},
@@ -313,6 +392,7 @@ def balkan_category(request):
 
 def svijet_category(request):
     news_items = Headlines.objects.filter(category='Svijet').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -321,15 +401,39 @@ def svijet_category(request):
     try:
         news_page = paginator.page(page)
     except PageNotAnInteger:
-       
+        
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Svijet': news_page},
@@ -340,6 +444,7 @@ def svijet_category(request):
 
 def sarajevo_category(request):
     news_items = Headlines.objects.filter(category='Sarajevo').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -352,11 +457,35 @@ def sarajevo_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Sarajevo': news_page},
@@ -367,6 +496,7 @@ def sarajevo_category(request):
 
 def hronika_category(request):
     news_items = Headlines.objects.filter(category='Hronika').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -379,11 +509,35 @@ def hronika_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Hronika': news_page},
@@ -394,6 +548,7 @@ def hronika_category(request):
 
 def kultura_category(request):
     news_items = Headlines.objects.filter(category='Kultura').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -406,11 +561,35 @@ def kultura_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Kultura': news_page},
@@ -421,6 +600,7 @@ def kultura_category(request):
 
 def scena_category(request):
     news_items = Headlines.objects.filter(category='Scena').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -433,11 +613,35 @@ def scena_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Scena': news_page},
