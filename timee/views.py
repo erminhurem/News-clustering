@@ -154,6 +154,8 @@ def get_friendly_source_name(url):
         return 'Blic'
     elif 'mondo.ba' in url:
         return 'Mondo'
+    elif 'namaz.ba' in url:
+        return 'Namaz'
     elif 'b92.net' in url:
         return 'B92'
     else:
@@ -910,7 +912,6 @@ def fetch_news():
         'https://www.kurir.rs/rss',
         'https://nova.rs/rss',
         'https://n1info.ba/feed/',
-        'https://www.euronews.rs/rss',
         'https://informer.rs/rss',
         'https://n1info.ba/rss',
         'https://n1info.hr/rss',
@@ -922,16 +923,13 @@ def fetch_news():
         'https://www.oslobodjenje.ba/feed',
         'https://okanal.oslobodjenje.ba/okanal/feed',
         'https://www.b92.net/feed/',
-        'https://radiosarajevo.ba/rss',
         'https://www.dnevnik.ba/feed',
         'https://namaz.ba/feed/',
         'https://www.nkp.ba/feed/',
-        'https://ntv.ba/feed/',
         'https://www.rtvslon.ba/feed/',
         'https://www.sd.rs/rss.xml',
         'https://www.rts.rs/rss/ci.html',
         'https://nova.rs/feed',
-        'https://svet-scandal.rs/feed/',
         'https://www.euronews.rs/rss/sport',
         'https://www.euronews.rs/rss/srbija',
         'https://www.euronews.rs/rss/evropa',
