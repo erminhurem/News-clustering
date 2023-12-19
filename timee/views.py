@@ -185,9 +185,13 @@ def clean_description(description):
     # Uklanjanje HTML tagova koristeći BeautifulSoup
     soup = BeautifulSoup(decoded_html, 'html.parser')
     
-    # Uklanjanje svih tagova
-    for tag in soup.findAll(True):
-        tag.decompose()
+       # Uklanjanje <img> tagova
+    for img_tag in soup.find_all('img'):
+        img_tag.decompose()
+
+      # Uklanjanje samo <p> tagova, ali zadržavanje teksta unutar
+    for p_tag in soup.find_all('p'):
+        p_tag.unwrap()
     
     # Dobijanje čistog teksta
     cleaned_text = soup.get_text(separator=' ')
