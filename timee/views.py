@@ -8,6 +8,7 @@ from .models import Headlines, Source
 from bs4 import BeautifulSoup
 import logging
 from datetime import datetime, timedelta 
+from dateutil.parser import parse as parse_date
 from django.db.models import Count
 from django.http import JsonResponse
 import datetime
@@ -23,7 +24,9 @@ import pandas as pd
 from django.utils.timezone import now
 from collections import defaultdict
 from datetime import datetime, time
+import html
 from django.shortcuts import get_object_or_404, render
+nltk.download('punkt')
 
 def get_or_create_sources_for_news(news):
     # Ovdje definirajte logiku za identificiranje izvora za određenu vijest
@@ -112,7 +115,7 @@ def news_last_17_hours(request):
 
     return render(request, "17h.html", context)
 
-nltk.download('punkt')
+
 
 
 
@@ -156,6 +159,8 @@ def get_friendly_source_name(url):
         return 'Namaz'
     elif 'b92.net' in url:
         return 'B92'
+    elif 'espreso.co.rs' in url:
+        return 'espreso.co.rs'
     else:
         return 'Nepoznati izvor'
     
@@ -173,11 +178,28 @@ def get_relative_time(published_date):
             return "upravo objavljeno"
     return "Nepoznato vrijeme"
 
+def clean_description(description):
+    # Dekodiranje HTML entiteta
+    decoded_html = html.unescape(description)
+    
+    # Uklanjanje HTML tagova koristeći BeautifulSoup
+    soup = BeautifulSoup(decoded_html, 'html.parser')
+    
+    # Uklanjanje svih tagova
+    for tag in soup.findAll(True):
+        tag.decompose()
+    
+    # Dobijanje čistog teksta
+    cleaned_text = soup.get_text(separator=' ')
+    
+    return cleaned_text
 
 def extract_keywords(text):
     words = nltk.word_tokenize(text)
     keywords = [word for word in words if word.isalnum()]
     return keywords
+
+
 
 # početak koda vezano za rubriku Vijesti
 def index(request):
@@ -187,8 +209,8 @@ def index(request):
     
     # Izračunavanje TF-IDF vektora za 'description' polje
     tfidf_matrix = vectorizer.fit_transform(
-        [' '.join(extract_keywords(news.description)) for news in all_news]
-    )
+    [' '.join(extract_keywords(clean_description(news.description))) for news in all_news]
+  )
 
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
@@ -196,7 +218,7 @@ def index(request):
 
     # Izračunavanje TF-IDF vektora za trenutnu vijest
     current_tfidf = vectorizer.transform(
-        [' '.join(extract_keywords(news.description))]
+        [' '.join(extract_keywords(clean_description(news.description)))]
     )
     cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
 
@@ -1157,13 +1179,13 @@ def fetch_news():
                 published_date = parse_date(entry.published) if entry.published else None
            
                 image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
-
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
+                description = clean_description(entry.description)  # Čišćenje opisa
 
                 news_item = Headlines(
                     title=entry.title,
                     link=entry.link,
-                    description=entry.description,
+                    description=description,
                     published_date=published_date,
                     source=feed_url,
                     category=category, 
@@ -1294,6 +1316,7 @@ def company_directory(request):
 
     context = {
         'companies_count_by_city': companies_count_by_city,  # Ispravljeno ime ključa u kontekstu
+        
         
     }
     return render(request, 'firme.html', context)
