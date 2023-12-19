@@ -1,55 +1,104 @@
 {% extends 'base.html' %}
 
-{% block content %}  
-    <div id="split_pane">
-        <div id="news_pane" class="top">
-            <div id="latest_news">
-                <div class="k_naslov" id="c3"><h10></h10><span>Tenis</span></div>
-                <div class="pagination">
-                    {% for i in news_by_category.Tenis.paginator.page_range %}
-                        {% if i <= 10 %}
-                            <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+{% block content %}
+<div id="split_pane">
+    <div id="news_pane" class="top">
+        <div id="latest_news">
+            <div class="k_naslov" id="c3">
+                <h10></h10><span>Tenis</span>
+            </div>
+            <div class="pagination">
+                {% for i in news_by_category.Tenis.paginator.page_range %}
+                {% if i <= 10 %} <a href="?page={{ i }}"><span class="select">
+                        <center>{{ i }}</center></a>
                         {% endif %}
-                    {% endfor %}    
-                </div>
-                <div class="h_rule" ></div>
-                {% for news in latest_news %}
-                <div class="cluster">
-                    <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
-                    {% if news.image_urls %}
-                    <div class="article_image">
-                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
-                            <div class="image_inner">
-                                <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
-                            </div>
+                        {% endfor %}
+            </div>
+            <div class="h_rule"></div>
+            {% for news in latest_news %}
+            <div class="cluster">
+                <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>
+                {% if news.image_urls %}
+                <div class="article_image">
+                    <div class="image"
+                        style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                        <div class="image_inner">
+                            <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                         </div>
                     </div>
-                    {% endif %}
-                    <div class="article_body">
-                        <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p>{{ news.description }}</p>
-                    </div>
+                </div>
+                {% endif %}
+                <div class="article_body">
+                    <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
+                            class="when_now"> {{ news.time_since }}</span></h2>
+                    <p class="snippet">{{ news.description }}</p>
+                    
                 </div>
                 <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+            {% endfor %}
+            <div class="h_rule"></div>
+            <div class="pagination">
+                {% for i in news_by_category.Tenis.paginator.page_range %}
+                <a href="?page={{ i }}"><span class="select">
+                        <center>{{ i }}</center></a>
                 {% endfor %}
-                <div class="h_rule" ></div>
-                <div class="pagination">
-                    {% for i in news_by_category.Tenis.paginator.page_range %}
-                        <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
-                    {% endfor %}    
-                </div>
             </div>
         </div>
-        <div id="ads_pane"><!-- START AD 2_1 --><div id="adpos2_1" class="advert_pos" style="border: solid 1px #c3c3c3; width: 300px; height: 600px;margin: 0; padding: 0; position:relative;z-index:2;" ad_name="pos2_1+2_2 DIRECT NONE test_ads"><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012" crossorigin="anonymous" data-checked-head="true"></script>
-            <!-- 300x600 -->
-            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-2916650652703012" data-ad-slot="3183422336" data-adsbygoogle-status="done" data-ad-status="filled"><div id="aswift_1_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_1" name="aswift_1" browsingtopics="true" style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=600&amp;slotname=3183422336&amp;adk=2834635042&amp;adf=1051163061&amp;pi=t.ma~as.3183422336&amp;w=300&amp;lmt=1702121333&amp;format=300x600&amp;url=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fsrbija&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTE5LjAuNjA0NS4yMDAiLG51bGwsMCxudWxsLCI2NCIsW1siR29vZ2xlIENocm9tZSIsIjExOS4wLjYwNDUuMjAwIl0sWyJDaHJvbWl1bSIsIjExOS4wLjYwNDUuMjAwIl0sWyJOb3Q_QV9CcmFuZCIsIjI0LjAuMC4wIl1dLDBd&amp;dt=1702121333138&amp;bpp=3&amp;bdt=218&amp;idt=798&amp;shv=r20231206&amp;mjsv=m202312050101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D561370ee44453c50%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_MY9Nnyi6aZHtE6tlTE890CHVRof1Q&amp;gpic=UID%3D00000ce2ea1fd3c0%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_Mbldoh6f_W37GSLmJ_QdoQYENN_RA&amp;prev_fmts=0x0&amp;nras=1&amp;correlator=8056669193587&amp;frm=20&amp;pv=1&amp;ga_vid=744027995.1701706496&amp;ga_sid=1702121334&amp;ga_hid=1637077322&amp;ga_fc=1&amp;u_tz=60&amp;u_his=22&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=843&amp;ady=186&amp;biw=1298&amp;bih=931&amp;scr_x=0&amp;scr_y=0&amp;eid=44759875%2C44759926%2C44759837%2C44795921%2C44809005%2C95320868%2C95320885%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=4487766018066373&amp;tmod=1325214271&amp;uas=0&amp;nvt=1&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fekonomija&amp;fc=1920&amp;brdim=-1919%2C-215%2C-1919%2C-215%2C1920%2C-216%2C1918%2C1038%2C1315%2C931&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=2&amp;uci=a!2&amp;fsb=1&amp;dtd=811" data-google-container-id="a!2" data-google-query-id="CInk74uggoMDFSk1RAgdz2cOew" data-load-complete="true"></iframe></div></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script></div><!-- END AD 2_1 --><div style="width:302px;height:5px;"></div><!-- START AD 2_2 --><div id="adpos2_2" class="advert_pos" style="border: solid 1px #c3c3c3; width: 300px; height: 250px;margin: 0; padding: 0; position:relative;z-index:2;" ad_name="pos2_2 DIRECT NONE test_pos_2"><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012" crossorigin="anonymous" data-checked-head="true"></script>
-            <!-- 300x250 -->
-            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-2916650652703012" data-ad-slot="6709558206" data-adsbygoogle-status="done" data-ad-status="filled"><div id="aswift_2_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 250px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_2" name="aswift_2" browsingtopics="true" style="left:0;position:absolute;top:0;border:0;width:300px;height:250px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=250&amp;slotname=6709558206&amp;adk=3136667957&amp;adf=2924806075&amp;pi=t.ma~as.6709558206&amp;w=300&amp;lmt=1702121333&amp;format=300x250&amp;url=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fsrbija&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTE5LjAuNjA0NS4yMDAiLG51bGwsMCxudWxsLCI2NCIsW1siR29vZ2xlIENocm9tZSIsIjExOS4wLjYwNDUuMjAwIl0sWyJDaHJvbWl1bSIsIjExOS4wLjYwNDUuMjAwIl0sWyJOb3Q_QV9CcmFuZCIsIjI0LjAuMC4wIl1dLDBd&amp;dt=1702121333141&amp;bpp=1&amp;bdt=222&amp;idt=822&amp;shv=r20231206&amp;mjsv=m202312050101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D561370ee44453c50%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_MY9Nnyi6aZHtE6tlTE890CHVRof1Q&amp;gpic=UID%3D00000ce2ea1fd3c0%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_Mbldoh6f_W37GSLmJ_QdoQYENN_RA&amp;prev_fmts=0x0%2C300x600&amp;nras=1&amp;correlator=8056669193587&amp;frm=20&amp;pv=1&amp;ga_vid=744027995.1701706496&amp;ga_sid=1702121334&amp;ga_hid=1637077322&amp;ga_fc=1&amp;u_tz=60&amp;u_his=22&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=843&amp;ady=803&amp;biw=1298&amp;bih=931&amp;scr_x=0&amp;scr_y=0&amp;eid=44759875%2C44759926%2C44759837%2C44795921%2C44809005%2C95320868%2C95320885%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=4487766018066373&amp;tmod=1325214271&amp;uas=0&amp;nvt=1&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fekonomija&amp;fc=1920&amp;brdim=-1919%2C-215%2C-1919%2C-215%2C1920%2C-216%2C1918%2C1038%2C1315%2C931&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=3&amp;uci=a!3&amp;fsb=1&amp;dtd=829" data-google-container-id="a!3" data-google-query-id="CIHO8IuggoMDFS2P7gEdjkIN2g" data-load-complete="true"></iframe></div></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script></div><!-- END AD 2_2 --></div>
     </div>
+    <div id="ads_pane"><!-- START AD 2_1 -->
+        <div id="adpos2_1" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 600px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_1+2_2 DIRECT NONE test_ads">
+            <script async=""
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012"
+                crossorigin="anonymous" data-checked-head="true"></script>
+            <!-- 300x600 -->
+            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+                data-ad-client="ca-pub-2916650652703012" data-ad-slot="3183422336" data-adsbygoogle-status="done"
+                data-ad-status="filled">
+                <div id="aswift_1_host" tabindex="0" title="Advertisement" aria-label="Advertisement"
+                    style="border: none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;">
+                    <iframe id="aswift_1" name="aswift_1" browsingtopics="true"
+                        style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+                        width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+                        allowtransparency="true" scrolling="no" allow="attribution-reporting"
+                        src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=600&amp;slotname=3183422336&amp;adk=2834635042&amp;adf=1051163061&amp;pi=t.ma~as.3183422336&amp;w=300&amp;lmt=1702121333&amp;format=300x600&amp;url=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fsrbija&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTE5LjAuNjA0NS4yMDAiLG51bGwsMCxudWxsLCI2NCIsW1siR29vZ2xlIENocm9tZSIsIjExOS4wLjYwNDUuMjAwIl0sWyJDaHJvbWl1bSIsIjExOS4wLjYwNDUuMjAwIl0sWyJOb3Q_QV9CcmFuZCIsIjI0LjAuMC4wIl1dLDBd&amp;dt=1702121333138&amp;bpp=3&amp;bdt=218&amp;idt=798&amp;shv=r20231206&amp;mjsv=m202312050101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D561370ee44453c50%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_MY9Nnyi6aZHtE6tlTE890CHVRof1Q&amp;gpic=UID%3D00000ce2ea1fd3c0%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_Mbldoh6f_W37GSLmJ_QdoQYENN_RA&amp;prev_fmts=0x0&amp;nras=1&amp;correlator=8056669193587&amp;frm=20&amp;pv=1&amp;ga_vid=744027995.1701706496&amp;ga_sid=1702121334&amp;ga_hid=1637077322&amp;ga_fc=1&amp;u_tz=60&amp;u_his=22&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=843&amp;ady=186&amp;biw=1298&amp;bih=931&amp;scr_x=0&amp;scr_y=0&amp;eid=44759875%2C44759926%2C44759837%2C44795921%2C44809005%2C95320868%2C95320885%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=4487766018066373&amp;tmod=1325214271&amp;uas=0&amp;nvt=1&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fekonomija&amp;fc=1920&amp;brdim=-1919%2C-215%2C-1919%2C-215%2C1920%2C-216%2C1918%2C1038%2C1315%2C931&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=2&amp;uci=a!2&amp;fsb=1&amp;dtd=811"
+                        data-google-container-id="a!2" data-google-query-id="CInk74uggoMDFSk1RAgdz2cOew"
+                        data-load-complete="true"></iframe></div>
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div><!-- END AD 2_1 -->
+        <div style="width:302px;height:5px;"></div><!-- START AD 2_2 -->
+        <div id="adpos2_2" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 250px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_2 DIRECT NONE test_pos_2">
+            <script async=""
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2916650652703012"
+                crossorigin="anonymous" data-checked-head="true"></script>
+            <!-- 300x250 -->
+            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px"
+                data-ad-client="ca-pub-2916650652703012" data-ad-slot="6709558206" data-adsbygoogle-status="done"
+                data-ad-status="filled">
+                <div id="aswift_2_host" tabindex="0" title="Advertisement" aria-label="Advertisement"
+                    style="border: none; height: 250px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;">
+                    <iframe id="aswift_2" name="aswift_2" browsingtopics="true"
+                        style="left:0;position:absolute;top:0;border:0;width:300px;height:250px;"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+                        width="300" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0"
+                        allowtransparency="true" scrolling="no" allow="attribution-reporting"
+                        src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2916650652703012&amp;output=html&amp;h=250&amp;slotname=6709558206&amp;adk=3136667957&amp;adf=2924806075&amp;pi=t.ma~as.6709558206&amp;w=300&amp;lmt=1702121333&amp;format=300x250&amp;url=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fsrbija&amp;ea=0&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTE5LjAuNjA0NS4yMDAiLG51bGwsMCxudWxsLCI2NCIsW1siR29vZ2xlIENocm9tZSIsIjExOS4wLjYwNDUuMjAwIl0sWyJDaHJvbWl1bSIsIjExOS4wLjYwNDUuMjAwIl0sWyJOb3Q_QV9CcmFuZCIsIjI0LjAuMC4wIl1dLDBd&amp;dt=1702121333141&amp;bpp=1&amp;bdt=222&amp;idt=822&amp;shv=r20231206&amp;mjsv=m202312050101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D561370ee44453c50%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_MY9Nnyi6aZHtE6tlTE890CHVRof1Q&amp;gpic=UID%3D00000ce2ea1fd3c0%3AT%3D1701706497%3ART%3D1702121331%3AS%3DALNI_Mbldoh6f_W37GSLmJ_QdoQYENN_RA&amp;prev_fmts=0x0%2C300x600&amp;nras=1&amp;correlator=8056669193587&amp;frm=20&amp;pv=1&amp;ga_vid=744027995.1701706496&amp;ga_sid=1702121334&amp;ga_hid=1637077322&amp;ga_fc=1&amp;u_tz=60&amp;u_his=22&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=843&amp;ady=803&amp;biw=1298&amp;bih=931&amp;scr_x=0&amp;scr_y=0&amp;eid=44759875%2C44759926%2C44759837%2C44795921%2C44809005%2C95320868%2C95320885%2C31078663%2C31078665%2C31078668%2C31078670&amp;oid=2&amp;pvsid=4487766018066373&amp;tmod=1325214271&amp;uas=0&amp;nvt=1&amp;ref=https%3A%2F%2Ftime.rs%2Fst%2Fvesti%2Fekonomija&amp;fc=1920&amp;brdim=-1919%2C-215%2C-1919%2C-215%2C1920%2C-216%2C1918%2C1038%2C1315%2C931&amp;vis=1&amp;rsz=o%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;td=1&amp;psd=W251bGwsbnVsbCxudWxsLDNd&amp;nt=1&amp;ifi=3&amp;uci=a!3&amp;fsb=1&amp;dtd=829"
+                        data-google-container-id="a!3" data-google-query-id="CIHO8IuggoMDFS2P7gEdjkIN2g"
+                        data-load-complete="true"></iframe></div>
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div><!-- END AD 2_2 -->
+    </div>
+</div>
 {% endblock %}
