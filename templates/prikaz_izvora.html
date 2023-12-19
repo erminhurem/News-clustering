@@ -1,11 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
 
-  {% for vijest in vijesti %}
-    <div>
-      <h2>{{ vijest.title }}</h2>
-      <p>{{ vijest.description }}</p>
-      <!-- Ostali detalji vijesti -->
+<div id="split_pane">
+
+  <div id="news_pane" class="single_news">
+    <div class="k_naslov" id="c0">
+      <h10></h10>
+      <span>Kurir</span>
     </div>
-  {% endfor %}
+    <div class="pagination">
+      <!-- Linkovi za paginaciju -->
+    </div>
+    <div class="h_rule"></div>
+    {% for vijest in vijesti %}
+    <div class="cluster">
+
+      <h1><a href="" target="_blank" rel="noopener noreferrer">{{ vijest.title }}</a></h1>
+      {% if vijest.image_urls %}
+      <div class="article_image">
+        <div class="wait_image">
+          <div class="image"
+            style="background-image:url('images/thumb/e4765d9a75.jpg');-ms-behavior:url(dizajn/script/backgroundsize.min.htc);">
+            <div class="image_inner"><a href="r/b1c46583fa/e4765d9a75/" class="image_link" target="_blank"
+                rel="noopener noreferrer"><!--[if lt IE 8]><center><img src="images/thumb/e4765d9a75.jpg"></center><![endif]--></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="article_body">
+        <h2><a href="{{ vijest.source_name }}" class="source">{{ vijest.source_name }}</a> - <span class="when_now"> {{
+            vijest.time_since }}</span></h2>
+        <p>{{ vijest.description }}</p>
+        <a href="#" class="other_articles">{{ vijest.related_news.count }} povezane vijesti »</a>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    {% endfor %}
+    <!-- Ostali članci -->
+  </div>
+  <div id="ads_pane">
+    <!-- Reklame -->
+  </div>
+</div>
 {% endblock %}

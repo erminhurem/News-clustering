@@ -231,7 +231,7 @@
                 {% for news in news_list %}                
                     {% if news.category|lower == "sarajevo" %}
                         <div class="cluster">       
-                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
+                            <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>          
                             {% if news.image_urls %}
                                 <div class="article_image">
                                     <div class="wait_image">

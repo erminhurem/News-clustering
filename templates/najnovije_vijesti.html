@@ -44,8 +44,10 @@
                 <div class="article_body">
                     <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
                             class="when_now"> {{ news.time_since }}</span></h2>
-                    <p>{{ news.description }}</p>
+                    <p class="snippet">{{ news.description }}</p>
+                    <a href="" class="other_articles">{{ news.related_news.count }} povezanih vijesti »</a>
                 </div>
+                <div class="clear"></div>
             </div>
             <div class="clear"></div>
             {% endfor %}

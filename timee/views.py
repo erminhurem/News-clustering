@@ -136,8 +136,6 @@ def get_friendly_source_name(url):
         return 'Aljazeera'
     elif 'avaz.ba' in url:
         return 'Dnevni avaz'
-    elif 'vijesti.ba' in url:
-        return 'Vijesti.ba'
     elif 'okanal.oslobodjenje.ba/okanal' in url:
         return 'Okanal'
     elif 'oslobodjenje.ba' in url:
