@@ -39,8 +39,8 @@
                 </div>
                 {% endif %}
                 <div class="article_body">
-                    <h1><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
-                            class="when_now"> {{ news.time_since }}</span></h1>
+                    <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span
+                            class="when_now"> {{ news.time_since }}</span></h2>
                     <p class="snippet">{{ news.description }}</p>
                     {% if news.related_news.all %}
                         {% for related in news.related_news.all|slice:":3" %}
@@ -65,8 +65,7 @@
                     {% endif %}
                 </div>
                 <div class="clear"></div>
-            </div>
-    
+            </div>    
             {% endfor %}
         </div>
     </div>
