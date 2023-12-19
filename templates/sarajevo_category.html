@@ -15,10 +15,10 @@
                 <div class="h_rule" ></div>
                 {% for news in latest_news %}
                 <div class="cluster">
-                    <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>
-                    {% if news.images %}
+                    <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>
+                    {% if news.image_urls %}
                     <div class="article_image">
-                        <div class="image" style="background-image: url('{{ news.images.0 }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url(/static/script/backgroundsize.min.htc);">
                             <div class="image_inner">
                                 <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                             </div>
@@ -27,8 +27,9 @@
                     {% endif %}
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
-                        <p>{{ news.description }}</p>
+                        <p class="snippet">{{ news.description }}</p>
                     </div>
+                    <div class="clear"></div>
                 </div>
                 <div class="clear"></div>
                 {% endfor %}
