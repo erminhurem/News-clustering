@@ -35,8 +35,10 @@
                 {% endfor %}
                 <div class="h_rule" ></div>
                 <div class="pagination">
-                    {% for i in news_by_category.Scena.paginator.page_range %}
-                        <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+                    {% for i in news_by_category.Automobili.paginator.page_range %}
+                        {% if i <= 10 %}
+                            <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+                        {% endif %}
                     {% endfor %}    
                 </div>
             </div>
