@@ -1219,7 +1219,7 @@ body .pagination span:hover {
 }
 
 .kategorija_clusters .rel_title {
-    max-width: 240px;
+    max-width: 240px!important;
     margin-left: 0px
 }
 

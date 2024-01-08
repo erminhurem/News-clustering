@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
+from sklearn import logger
 from .models import Headlines, Source
 from bs4 import BeautifulSoup
 import logging
@@ -16,7 +17,6 @@ import requests
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import logging
 from dateutil import parser
 from .company_directory import create_company_directory_adjusted
 from django.conf import settings
@@ -26,7 +26,32 @@ from collections import defaultdict
 from datetime import datetime, time
 import html
 from django.shortcuts import get_object_or_404, render
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+from nltk.stem import SnowballStemmer
+import string
+
+
+
 nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+
+# Definisanje funkcije za čišćenje i obradu teksta
+def clean_and_process(text):
+    # Uklanjanje interpunkcijskih znakova
+    text = "".join([char for char in text if char not in string.punctuation])
+    # Pretvaranje teksta u mala slova
+    text = text.lower()
+    # Tokenizacija i uklanjanje stop-riječi
+    words = text.split()
+    stop_words = set(stopwords.words('bosnian'))  # Ažurirajte jezički set ako je potrebno
+    words = [word for word in words if word not in stop_words]
+    # Lematizacija
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_words = [lemmatizer.lemmatize(word) for word in words]
+    return " ".join(lemmatized_words)
+
 
 def get_or_create_sources_for_news(news):
     # Ovdje definirajte logiku za identificiranje izvora za određenu vijest
@@ -1138,6 +1163,7 @@ def parse_date(date_str):
 
 
 def fetch_news():
+    logger = logging.getLogger(__name__)
     feeds = [
         'https://www.sd.rs/rss.xml',
         'https://www.blic.rs/rss/danasnje-vesti',

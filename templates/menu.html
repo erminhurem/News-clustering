@@ -121,17 +121,21 @@
         function setActiveFromLocalStorage() {
             var savedCategory = localStorage.getItem('selectedCategory');
             var savedSubcategory = localStorage.getItem('activeSubcategory');
+            var defaultCategory = 'vijesti';
 
-            if (savedCategory) {
-                var color = getCategoryColor(savedCategory);
-                var fontColor = '#ffffff';
-                setActiveClassAndContent(savedCategory, color, fontColor);
-                applyStep2CategoryStyle(savedCategory);
-                if (savedSubcategory) {
-                    setActiveSubcategory(savedSubcategory, color);
-                }
+            // Ako nema ništa sačuvano, postavi 'Vijesti' kao zadano
+            var category = savedCategory ? savedCategory : defaultCategory;
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+            setActiveClassAndContent(category, color, fontColor);
+            applyStep2CategoryStyle(category);
+            if (savedSubcategory) {
+                setActiveSubcategory(savedSubcategory, color);
+            } else if (category === defaultCategory) {
+                $('#step2').show(); // Prikazuje podmeni za 'Vijesti'
             }
         }
+
 
         setActiveFromLocalStorage(); // Pozivanje funkcije prilikom učitavanja stranice
 
@@ -147,8 +151,28 @@
             }
         }
 
+        // Ako je korisnik na početnoj stranici, postavi 'Vijesti' kao aktivnu kategoriju i učitaj pod-menij
+        if (currentPath === '/') {
+            var category = 'vijesti';
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+
+            // Postavljanje 'Vijesti' kao aktivne kategorije i učitavanje pod-menija
+            setActiveClassAndContent(category, color, fontColor);
+            applyStep2CategoryStyle(category);
+            $('#step2').show(); // Prikaz podkategorija
+            localStorage.setItem('selectedCategory', category);
+
+            // Dodaj aktivnu klasu na 'Vijesti' link
+            $('#menu #step1 a').filter(function () {
+                return $(this).text().trim().toLowerCase() === category;
+            }).addClass('active').css({ 'background-color': color, 'color': fontColor });
+        }
 
 
+
+
+        // Klik na glavne kategorije
         // Klik na glavne kategorije
         $('#menu #step1 a').on('click', function (e) {
             e.preventDefault();
@@ -158,29 +182,26 @@
             $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
             $('#step2').hide(); // Sakrij podkategorije
 
-            if ($(this).attr('href') === '/') {
-            resetActiveClasses();
-            }
-            if (window.location.pathname === '/') {
-        resetActiveClasses();
-      }
-            // Provjera da li je kategorija 'home' ili jedna od 'extra_btn' kategorija
-            if ($(this).hasClass('extra_btn') || category === 'vijesti') {
-                $(this).addClass('active').css({ 'background-color': '#6b90da', 'color': fontColor });
-                // Sačuvaj izabranu kategoriju u localStorage ako je potrebno
-                localStorage.setItem('selectedCategory', category);
-            } else {
-                // Za sve ostale kategorije, postavi aktivnu klasu i sadržaj
-                var color = getCategoryColor(category);
-                var fontColor = '#ffffff';
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+
+            // Ako je kategorija 'vijesti' i nalazimo se na početnoj stranici
+            if (category === 'vijesti' && window.location.pathname === '/') {
                 setActiveClassAndContent(category, color, fontColor);
                 applyStep2CategoryStyle(category);
                 $('#step2').show(); // Prikaz podkategorija
-                // Sačuvaj izabranu kategoriju u localStorage
                 localStorage.setItem('selectedCategory', category);
+            } else {
+                // Za sve ostale kategorije, postavi aktivnu klasu i sadržaj
+                setActiveClassAndContent(category, color, fontColor);
+                applyStep2CategoryStyle(category);
+                $('#step2').show(); // Prikaz podkategorija
+                localStorage.setItem('selectedCategory', category);
+                window.location.href = $(this).attr('href'); // Preusmjeravanje samo za ostale kategorije
             }
-            window.location.href = $(this).attr('href');
         });
+
+
 
         // Klik na podkategorije unutar 'sport' i drugih kategorija
         $('#step2').on('click', 'a.category_btn', function (e) {
@@ -197,9 +218,9 @@
 
         // Funkcija za resetovanje svih aktivnih klasa
         function resetActiveClasses() {
-        $('#menu #step1 a').removeClass('active').css({'background-color': '', 'color': ''});
-        $('#step2').hide();
-       }
+            $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
+            $('#step2').hide();
+        }
 
 
         // Klik na linkove koji imaju klasu 'extra_btn'
@@ -220,15 +241,16 @@
         }
 
         function resetActiveClassesOnHomepage() {
-        var pathname = window.location.pathname;
-        if(pathname === '/') { // Provjerava da li je URL početna stranica
-            $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
-            $('#step2').hide();
-            localStorage.removeItem('selectedCategory');
-            localStorage.removeItem('activeSubcategory');
+            var pathname = window.location.pathname;
+            var selectedCategory = localStorage.getItem('selectedCategory');
+            if (pathname === '/' && selectedCategory !== 'vijesti') {
+                $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
+                $('#step2').hide();
+                localStorage.removeItem('selectedCategory');
+                localStorage.removeItem('activeSubcategory');
+            }
         }
-    }
-    resetActiveClassesOnHomepage();
+        resetActiveClassesOnHomepage();
     });
 
 </script>

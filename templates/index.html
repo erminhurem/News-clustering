@@ -45,7 +45,7 @@
                         {% if news.related_news.all %}
                             {% for related in news.related_news.all|slice:":3" %}
                                 <div class="related_article">
-                                    <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank"
+                                    <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                             rel="noopener noreferrer">{{ related.title }}</a></p> -
                                     <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
                                 </div>
@@ -114,7 +114,7 @@
                                 {% for related in news.related_news.all %}
                                     {% if forloop.counter <= 3 %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 352px;">
+                                            <p class="rel_title">
                                             <a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a>
                                             </p> - 
                                             <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
@@ -128,7 +128,7 @@
                             {% if news.related_news.all %}
                                 {% for related in news.related_news.all|slice:":3" %}
                                     <div class="related_article">
-                                        <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                        <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                 rel="noopener noreferrer">{{ related.title }}</a></p> 
                                     </div>
                                 {% endfor %}
@@ -186,8 +186,8 @@
                                 {% if news.related_news.all %}
                                 {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                        <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
-                                                rel="noopener noreferrer">{{ related.title }}</a></p> 
+                                        <p class="rel_title" style="max-width: 300px;">< href="{{ related.link }}" target="_blank"
+                                                rel="noopener noreferrer">{{ related.title }}<//a></p> 
                                     </div>
                                 {% endfor %}
                             
@@ -256,7 +256,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -314,7 +314,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -373,7 +373,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -432,7 +432,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -492,7 +492,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -551,7 +551,7 @@
                                 {% if news.related_news.all %}
                                     {% for related in news.related_news.all|slice:":3" %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank"
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank"
                                                     rel="noopener noreferrer">{{ related.title }}</a></p> 
                                         </div>
                                     {% endfor %}
@@ -609,7 +609,7 @@
                                 {% if news.related_news.all %}
                                 {% for related in news.related_news.all %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                             <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
                                         </div>
                                     {% endfor %}                       
@@ -655,7 +655,7 @@
                                 {% if news.related_news.all %}
                                 {% for related in news.related_news.all %}
                                         <div class="related_article">
-                                            <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
+                                            <p class="rel_title" style="max-width: 300px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
                                             <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
                                         </div>
                                     {% endfor %}                       
