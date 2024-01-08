@@ -26,7 +26,7 @@ def create_company_directory_adjusted(file_paths):
     for fp in file_paths:
         try:
             # Učitajte samo potrebne kolone, uključujući naziv opštine, ne kod opštine.
-            data = pd.read_excel(fp, usecols=['Naziv kompanije', 'Opština', 'Unnamed: 4'])
+            data = pd.read_excel(fp, usecols=['Naziv kompanije', 'Opština', 'Unnamed: 4'], engine='openpyxl')
             # Preimenovanje kolone 'Unnamed: 4' u 'Naziv opštine' za jasnoću
             data.rename(columns={'Unnamed: 4': 'Naziv opštine'}, inplace=True)
             all_data = pd.concat([all_data, data], ignore_index=True)
@@ -60,4 +60,3 @@ file_paths = [
 
 # Primjer korištenja funkcije
 companies_count_by_city = create_company_directory_adjusted(file_paths)
-print(companies_count_by_city)

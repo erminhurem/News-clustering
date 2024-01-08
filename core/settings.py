@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u2!6bqy*61$l&e59$e09=h08&63)7#jf36k+$nrww^7nd#2+cp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '192.168.222.21',
     '185.50.56.145',
-    '127.0.0.1'
+    '127.0.0.1', '*', '185.99.2.200', 'server.time.ba'
 ]
 
 # Celery settings
@@ -102,7 +102,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'timeba',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root',
         'HOST': 'localhost',   # Ili IP adresa vašeg MySQL servera
         'PORT': '3306',        # Defaultni MySQL port
     }

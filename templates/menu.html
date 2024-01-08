@@ -23,7 +23,7 @@
 
 <script>
     $(document).ready(function () {
-        // Definisanje sadrÅ¾aja za svaku kategoriju
+        // Definisanje sadržaja za svaku kategoriju
         var categoriesContent = {
             'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a>' +
                 '<a class="category_btn" href="{% url "timee:ekonomija" %}"><center>Ekonomija</center></a>' +
@@ -34,7 +34,7 @@
                 '<a class="category_btn" href="{% url "timee:kultura_category" %}"><center>Kultura</center></a>' +
                 '<a class="category_btn" href="{% url "timee:scena_category" %}"><center>Scena</center></a>',
             'sport': '<a class="category_btn" href="{% url "timee:fudbal_category" %}"><center>Fudbal</center></a>' +
-                '<a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>KoÅ¡arka</center></a>' +
+                '<a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Košarka</center></a>' +
                 '<a class="category_btn" href="{% url "timee:tenis_category" %}"><center>Tenis</center></a>' +
                 '<a class="category_btn" href="{% url "timee:ostalo_category" %}"><center>Ostalo</center></a>',
             'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a>' +
@@ -68,7 +68,7 @@
             'tenis': '#f60',
             'ostalo': '#3c3ca4',
             'fudbal': '#438988',
-            'koÅ¡arka': '#c00',
+            'košarka': '#c00',
             'zabava': '#438988',
             'automobili': '#c00',
             'tehnologija': '#f60',
@@ -85,7 +85,7 @@
             'scena': '#0086b3',
         };
 
-        // Funkcija za postavljanje aktivne klase i sadrÅ¾aja
+        // Funkcija za postavljanje aktivne klase i sadržaja
         function setActiveClassAndContent(category, color, fontColor) {
             // Ukloni aktivnu klasu i stilove sa svih elemenata
             $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
@@ -93,7 +93,7 @@
             $('#menu #step1 a').filter(function () {
                 return $(this).text().trim().toLowerCase() === category;
             }).addClass('active').css({ 'background-color': color, 'color': fontColor });
-            // Prikazuje sadrÅ¾aj za odabranu kategoriju
+            // Prikazuje sadržaj za odabranu kategoriju
             $('#step2').html(categoriesContent[category]);
         }
 
@@ -121,21 +121,25 @@
         function setActiveFromLocalStorage() {
             var savedCategory = localStorage.getItem('selectedCategory');
             var savedSubcategory = localStorage.getItem('activeSubcategory');
+            var defaultCategory = 'vijesti';
 
-            if (savedCategory) {
-                var color = getCategoryColor(savedCategory);
-                var fontColor = '#ffffff';
-                setActiveClassAndContent(savedCategory, color, fontColor);
-                applyStep2CategoryStyle(savedCategory);
-                if (savedSubcategory) {
-                    setActiveSubcategory(savedSubcategory, color);
-                }
+            // Ako nema ništa saèuvano, postavi 'Vijesti' kao zadano
+            var category = savedCategory ? savedCategory : defaultCategory;
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+            setActiveClassAndContent(category, color, fontColor);
+            applyStep2CategoryStyle(category);
+            if (savedSubcategory) {
+                setActiveSubcategory(savedSubcategory, color);
+            } else if (category === defaultCategory) {
+                $('#step2').show(); // Prikazuje podmeni za 'Vijesti'
             }
         }
 
-        setActiveFromLocalStorage(); // Pozivanje funkcije prilikom uÄitavanja stranice
 
-        // Funkcija koja vraÄ‡a boju na osnovu kategorije
+        setActiveFromLocalStorage(); // Pozivanje funkcije prilikom uèitavanja stranice
+
+        // Funkcija koja vraæa boju na osnovu kategorije
         function getCategoryColor(category) {
             switch (category) {
                 case 'sport':
@@ -147,8 +151,28 @@
             }
         }
 
+        // Ako je korisnik na poèetnoj stranici, postavi 'Vijesti' kao aktivnu kategoriju i uèitaj pod-menij
+        if (currentPath === '/') {
+            var category = 'vijesti';
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+
+            // Postavljanje 'Vijesti' kao aktivne kategorije i uèitavanje pod-menija
+            setActiveClassAndContent(category, color, fontColor);
+            applyStep2CategoryStyle(category);
+            $('#step2').show(); // Prikaz podkategorija
+            localStorage.setItem('selectedCategory', category);
+
+            // Dodaj aktivnu klasu na 'Vijesti' link
+            $('#menu #step1 a').filter(function () {
+                return $(this).text().trim().toLowerCase() === category;
+            }).addClass('active').css({ 'background-color': color, 'color': fontColor });
+        }
 
 
+
+
+        // Klik na glavne kategorije
         // Klik na glavne kategorije
         $('#menu #step1 a').on('click', function (e) {
             e.preventDefault();
@@ -158,29 +182,26 @@
             $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
             $('#step2').hide(); // Sakrij podkategorije
 
-            if ($(this).attr('href') === '/') {
-            resetActiveClasses();
-            }
-            if (window.location.pathname === '/') {
-        resetActiveClasses();
-      }
-            // Provjera da li je kategorija 'home' ili jedna od 'extra_btn' kategorija
-            if ($(this).hasClass('extra_btn') || category === 'vijesti') {
-                $(this).addClass('active').css({ 'background-color': '#6b90da', 'color': fontColor });
-                // SaÄuvaj izabranu kategoriju u localStorage ako je potrebno
-                localStorage.setItem('selectedCategory', category);
-            } else {
-                // Za sve ostale kategorije, postavi aktivnu klasu i sadrÅ¾aj
-                var color = getCategoryColor(category);
-                var fontColor = '#ffffff';
+            var color = getCategoryColor(category);
+            var fontColor = '#ffffff';
+
+            // Ako je kategorija 'vijesti' i nalazimo se na poèetnoj stranici
+            if (category === 'vijesti' && window.location.pathname === '/') {
                 setActiveClassAndContent(category, color, fontColor);
                 applyStep2CategoryStyle(category);
                 $('#step2').show(); // Prikaz podkategorija
-                // SaÄuvaj izabranu kategoriju u localStorage
                 localStorage.setItem('selectedCategory', category);
+            } else {
+                // Za sve ostale kategorije, postavi aktivnu klasu i sadržaj
+                setActiveClassAndContent(category, color, fontColor);
+                applyStep2CategoryStyle(category);
+                $('#step2').show(); // Prikaz podkategorija
+                localStorage.setItem('selectedCategory', category);
+                window.location.href = $(this).attr('href'); // Preusmjeravanje samo za ostale kategorije
             }
-            window.location.href = $(this).attr('href');
         });
+
+
 
         // Klik na podkategorije unutar 'sport' i drugih kategorija
         $('#step2').on('click', 'a.category_btn', function (e) {
@@ -189,17 +210,17 @@
             var color = getCategoryColor(subcategory); // Ovdje trebate definisati boje za podkategorije
             setActiveSubcategory(subcategory, color);
 
-            // SaÄuvaj aktivnu podkategoriju u localStorage
+            // Saèuvaj aktivnu podkategoriju u localStorage
             localStorage.setItem('activeSubcategory', subcategory);
 
-            window.location.href = $(this).attr('href'); // UÄitavanje odgovarajuÄ‡e stranice
+            window.location.href = $(this).attr('href'); // Uèitavanje odgovarajuæe stranice
         });
 
         // Funkcija za resetovanje svih aktivnih klasa
         function resetActiveClasses() {
-        $('#menu #step1 a').removeClass('active').css({'background-color': '', 'color': ''});
-        $('#step2').hide();
-       }
+            $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
+            $('#step2').hide();
+        }
 
 
         // Klik na linkove koji imaju klasu 'extra_btn'
@@ -220,15 +241,16 @@
         }
 
         function resetActiveClassesOnHomepage() {
-        var pathname = window.location.pathname;
-        if(pathname === '/') { // Provjerava da li je URL poÄetna stranica
-            $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
-            $('#step2').hide();
-            localStorage.removeItem('selectedCategory');
-            localStorage.removeItem('activeSubcategory');
+            var pathname = window.location.pathname;
+            var selectedCategory = localStorage.getItem('selectedCategory');
+            if (pathname === '/' && selectedCategory !== 'vijesti') {
+                $('#menu #step1 a').removeClass('active').css({ 'background-color': '', 'color': '' });
+                $('#step2').hide();
+                localStorage.removeItem('selectedCategory');
+                localStorage.removeItem('activeSubcategory');
+            }
         }
-    }
-    resetActiveClassesOnHomepage();
+        resetActiveClassesOnHomepage();
     });
 
 </script>
