@@ -1,3 +1,6 @@
+from django.test import TestCase
+
+# Create your tests here.
 import feedparser
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
@@ -18,6 +21,7 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from dateutil import parser
+from pathlib import Path
 from .company_directory import create_company_directory_adjusted
 from django.conf import settings
 import pandas as pd
@@ -34,23 +38,7 @@ import string
 
 
 nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
-
-# Definisanje funkcije za čišćenje i obradu teksta
-def clean_and_process(text):
-    # Uklanjanje interpunkcijskih znakova
-    text = "".join([char for char in text if char not in string.punctuation])
-    # Pretvaranje teksta u mala slova
-    text = text.lower()
-    # Tokenizacija i uklanjanje stop-riječi
-    words = text.split()
-    stop_words = set(stopwords.words('bosnian'))  # Ažurirajte jezički set ako je potrebno
-    words = [word for word in words if word not in stop_words]
-    # Lematizacija
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_words = [lemmatizer.lemmatize(word) for word in words]
-    return " ".join(lemmatized_words)
+import traceback
 
 
 def get_or_create_sources_for_news(news):
@@ -59,8 +47,8 @@ def get_or_create_sources_for_news(news):
 
     # Pretpostavimo da imate listu ključnih riječi koje odgovaraju različitim izvorima
     keywords_to_sources = {
-        'ključna riječ 1': 'Izvor 1',
-        'ključna riječ 2': 'Izvor 2',
+        'kljucna rijec 1': 'Izvor 1',
+        'kljucna rijec 2': 'Izvor 2',
         # Dodajte ostale parove ključna riječ - izvor
     }
 
@@ -82,63 +70,6 @@ def related_news_view(request, pk):
         news.time_since = get_relative_time(news.published_date)
 
     return render(request, 'povezane_vijesti.html', {'related_news': related_news})
-
-def news_at_10(request):
-    today = datetime.now().date()
-
-    # Postavljanje vremena na 10:00 ujutro
-    start_time = datetime.combine(today, time(10, 0))  # 10:00 ujutro
-
-    # Postavljanje vremena na 10:59 ujutro
-    end_time = datetime.combine(today, time(10, 59))  # 10:59 ujutro
-
-    # Filtriramo vijesti objavljene između 10:00 i 10:59
-    news_at_10 = Headlines.objects.filter(published_date__gte=start_time, published_date__lte=end_time).order_by('-published_date')
-
-    # Dodavanje dodatnih informacija vijestima
-    for news in news_at_10:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-        news.related_news_list = list(news.related_news.all())
-
-    # Dohvat vijesti po kategorijama
-    categories = ['Ekonomija', 'BiH', 'Balkan', 'Svijet', 'Hronika', 'Sarajevo', 'Kultura', 'Scena', 'Sport', 'Magazin']
-    news_by_category = {}
-    for category in categories:
-        news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
-        for item in news_items:
-            item.source_name = get_friendly_source_name(item.source)
-            item.time_since = get_relative_time(item.published_date)
-        news_by_category[category] = news_items
-
-    # Postavljanje konteksta za template
-    context = {
-        'news_at_10': news_at_10,
-        'naslov_stranice': 'Vijesti u 10 Sati - Time.ba',
-        'news_by_category': news_by_category,
-    }
-
-    return render(request, "10h.html", context)
-
-
-def news_last_17_hours(request):
-    # Trenutno vrijeme minus 17 sati
-    time_threshold = datetime.now() - timedelta(hours=17)
-
-    # Filtriramo vijesti objavljene u proteklih 17 sati
-    recent_news = Headlines.objects.filter(published_date__gte=time_threshold).order_by('-published_date')
-
-    for news in recent_news:
-        news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)
-
-    # Dodajte ostale potrebne elemente u kontekst ako je potrebno
-    context = {
-        'recent_news': recent_news,
-        'naslov_stranice': 'Nedavne Vijesti - Time.ba',
-    }
-
-    return render(request, "17h.html", context)
 
 
 # Pomoćna funkcija za pretvaranje URL-a izvora u prijateljsko ime
@@ -164,7 +95,7 @@ def get_friendly_source_name(url):
     elif 'okanal.oslobodjenje.ba/okanal' in url:
         return 'Okanal'
     elif 'oslobodjenje.ba' in url:
-        return 'Oslobođenje'
+        return 'Oslobodjenje'
     elif 'alo.rs' in url:
         return 'Alo'
     elif '24sata.hr' in url:
@@ -182,7 +113,21 @@ def get_friendly_source_name(url):
     elif 'b92.net' in url:
         return 'B92'
     elif 'espreso.co.rs' in url:
-        return 'espreso.co.rs'
+        return 'Espreso'
+    elif 'vijesti.ba' in url:
+        return 'Vijesti'
+    elif 'informer.rs' in url:
+        return 'Informer'
+    elif 'beta.rs' in url:
+        return 'Beta'
+    elif 'oslobodjenje.ba' in url:
+        return 'Oslobodjenje'    
+    elif 'nkp.ba' in url:
+        return 'NKP'
+    elif 'rtvslon.ba' in url:
+        return 'Slon'
+    elif 'rts.rs' in url:
+        return 'RTS'
     else:
         return 'Nepoznati izvor'
     
@@ -379,7 +324,7 @@ def ekonomija_category(request):
 
 
     # Dohvaćanje povezanih vijesti iz baze podataka
-    related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id]
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
     news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
 
     #psotavljanje dobijenih izvora
@@ -710,8 +655,10 @@ def scena_category(request):
 # kraj koda vezano za rubriku Vijesti
 
 # početak koda vezano za rubriku Sport
+# pocetak koda vezano za rubriku Sport
 def sport(request):
-    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]    
+    latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
+    vectorizer = TfidfVectorizer()    
     for news_s in latest_news_s:
         news_s.source_name = get_friendly_source_name(news_s.source)
         news_s.time_since = get_relative_time(news_s.published_date)
@@ -719,8 +666,28 @@ def sport(request):
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
-        news.time_since = get_relative_time(news.published_date)    
+        news.time_since = get_relative_time(news.published_date)        
     
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+    [' '.join(extract_keywords(clean_description(news.description))) for news in latest_news_s])    
+
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(clean_description(news.description)))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [latest_news_s[i.item()].id for i in related_articles_indices if latest_news_s[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
+
     categories = ['Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Vijesti', 'Magazin']
     news_by_category = {}
     for category in categories:
@@ -728,6 +695,14 @@ def sport(request):
         for item in news_items:
             item.source_name = get_friendly_source_name(item.source)
             item.time_since = get_relative_time(item.published_date)
+
+            current_tfidf = vectorizer.transform(
+                [' '.join(extract_keywords(clean_description(item.description)))]
+            )
+            cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+            related_articles_indices = cosine_similarities[0].argsort()[:-5:-1]
+            related_news_ids = [latest_news_s[i.item()].id for i in related_articles_indices if latest_news_s[i.item()].id != item.id]
+            item.related_news.set(related_news_ids) 
         news_by_category[category] = news_items
 
     context = {
@@ -740,6 +715,7 @@ def sport(request):
 
 def fudbal_category(request):
     news_items = Headlines.objects.filter(category='Fudbal').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -752,11 +728,33 @@ def fudbal_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Fudbal': news_page},
@@ -767,6 +765,7 @@ def fudbal_category(request):
 
 def kosarka_category(request):
     news_items = Headlines.objects.filter(category='Kosarka').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -779,11 +778,32 @@ def kosarka_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items])
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Kosarka': news_page},
@@ -794,6 +814,7 @@ def kosarka_category(request):
 
 def tenis_category(request):
     news_items = Headlines.objects.filter(category='Tenis').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -806,11 +827,32 @@ def tenis_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items])
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform([' '.join(extract_keywords(news.description))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Tenis': news_page},
@@ -821,6 +863,7 @@ def tenis_category(request):
 
 def ostalo_category(request):
     news_items = Headlines.objects.filter(category='Ostalo').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -833,11 +876,35 @@ def ostalo_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih članaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvaćanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Ostalo': news_page},
@@ -851,6 +918,7 @@ def ostalo_category(request):
 # početak koda vezano za rubriku Magazin
 
 def magazin(request):
+    vectorizer = TfidfVectorizer()
     latest_news_m = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
     for news_m in latest_news_m:
         news_m.source_name = get_friendly_source_name(news_m.source)
@@ -860,14 +928,40 @@ def magazin(request):
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+    [' '.join(extract_keywords(clean_description(news.description))) for news in latest_news_m])    
 
-    categories = ['Zabava', 'Automobili / Motori', 'Tehnologija', 'Lifestyle','Hrana / Zdravlje','Intima / Sex', 'VIJESTI','SPORT']
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(clean_description(news.description)))])
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [latest_news_m[i.item()].id for i in related_articles_indices if latest_news_m[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
+
+    categories = ['Zabava', 'Automobili', 'Tehnologija', 'Lifestyle','Hrana','Intima', 'VIJESTI','SPORT']
     news_by_category = {}
     for category in categories:
         news_items = Headlines.objects.filter(category=category).order_by('-published_date')[:3]
         for item in news_items:
             item.source_name = get_friendly_source_name(item.source)
             item.time_since = get_relative_time(item.published_date)
+
+            current_tfidf = vectorizer.transform([' '.join(extract_keywords(clean_description(item.description)))])
+            cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+            related_articles_indices = cosine_similarities[0].argsort()[:-5:-1]
+            related_news_ids = [latest_news_m[i.item()].id for i in related_articles_indices if latest_news_m[i.item()].id != item.id]
+            item.related_news.set(related_news_ids) 
         news_by_category[category] = news_items
 
     context = {
@@ -880,6 +974,7 @@ def magazin(request):
 
 def zabava_category(request):
     news_items = Headlines.objects.filter(category='Zabava').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -892,21 +987,44 @@ def zabava_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
     context = {
         'news_by_category': {'Zabava': news_page},
         'naslov_stranice': 'Zabava - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "zabava_category.html", context)
-
 def automobili_category(request):
     news_items = Headlines.objects.filter(category='Automobili').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -919,12 +1037,35 @@ def automobili_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
     context = {
         'news_by_category': {'Automobili': news_page},
         'naslov_stranice': 'Automobili - Time.ba',
@@ -934,6 +1075,7 @@ def automobili_category(request):
 
 def tehnologija_category(request):
     news_items = Headlines.objects.filter(category='Tehnologija').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -942,13 +1084,39 @@ def tehnologija_category(request):
     try:
         news_page = paginator.page(page)
     except PageNotAnInteger:
+        
         news_page = paginator.page(1)
     except EmptyPage:
-        news_page = paginator.page(paginator.num_pages)
+        
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     # Dodajte ovdje informacije o aktivnoj glavnoj kategoriji i podkategoriji
     context = {
@@ -963,6 +1131,7 @@ def tehnologija_category(request):
 
 def lifestyle_category(request):
     news_items = Headlines.objects.filter(category='Lifestyle').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -975,12 +1144,35 @@ def lifestyle_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
     context = {
         'news_by_category': {'Lifestyle': news_page},
         'naslov_stranice': 'Lifestyle - Time.ba',
@@ -989,7 +1181,8 @@ def lifestyle_category(request):
     return render(request, "lifestyle_category.html", context)
 
 def hrana_category(request):
-    news_items = Headlines.objects.filter(category='Hrana / Zdravlje').order_by('-published_date')
+    news_items = Headlines.objects.filter(category='Hrana').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1002,11 +1195,35 @@ def hrana_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'news_by_category': {'Hrana': news_page},
@@ -1016,7 +1233,8 @@ def hrana_category(request):
     return render(request, "hrana_category.html", context)
 
 def intima_category(request):
-    news_items = Headlines.objects.filter(category='Intima / Sex').order_by('-published_date')
+    news_items = Headlines.objects.filter(category='Intima').order_by('-published_date')
+    vectorizer = TfidfVectorizer()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1029,15 +1247,39 @@ def intima_category(request):
         news_page = paginator.page(1)
     except EmptyPage:
         
-        news_page = paginator.page(paginator.num_pages)
+        news_page = paginator.page(paginator.num_pages)   
+    
+    
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in news_items]
+    )
 
-    for news in news_page:
+    for news in news_items:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
 
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [news_items[i.item()].id for i in related_articles_indices if news_items[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
+
     context = {
         'news_by_category': {'Intima': news_page},
-         'naslov_stranice': 'Intima - Time.ba',
+        'naslov_stranice': 'Intima - Time.ba',
         'latest_news': news_page.object_list,
     }
     return render(request, "intima_category.html", context)
@@ -1046,12 +1288,13 @@ def intima_category(request):
 
 def najnovije_vijesti(request):
     latest_news = Headlines.objects.all().order_by('-published_date')[:10]
+    vectorizer = TfidfVectorizer()
     kategorije = [
         'Ekonomija', 'Sport', 'BiH', 'Balkan', 'Sarajevo',
         'Svijet', 'Hronika', 'Politika', 'Kultura', 'Zabava',
         'Lifestyle', 'Hrana / Zdravlje', 'Tehnologija',
         'Intima / Sex', 'Zdravlje', 'Magazin', 'Scena',
-        'Fudbal', 'Košarka', 'Tenis', 'Ostalo', 'Automobili / Motori', 'Vijesti'
+        'Fudbal', 'Kosarka', 'Tenis', 'Ostalo', 'Automobili / Motori', 'Vijesti'
     ]
     topic = request.GET.get('topic', 'all')  # 'all' je default vrijednost
     if topic not in kategorije:
@@ -1068,15 +1311,38 @@ def najnovije_vijesti(request):
     paginator = Paginator(latest_news, items_per_page)
     page = request.GET.get("page")
     try:
-        latest_news = paginator.page(page)
+        news_page = paginator.page(page)
     except PageNotAnInteger:
-        latest_news = paginator.page(1)
+        news_page = paginator.page(1)
     except EmptyPage:
-        latest_news = paginator.page(paginator.num_pages)
-    
+        news_page = paginator.page(paginator.num_pages)      
+
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izracunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+        [' '.join(extract_keywords(news.description)) for news in latest_news]
+    )
+
+    # Izracunavanje TF-IDF vektora za trenutnu vijest
+    current_tfidf = vectorizer.transform(
+        [' '.join(extract_keywords(news.description))]
+    )
+    cosine_similarities = cosine_similarity(current_tfidf, tfidf_matrix)
+
+    # Dobivanje indeksa povezanih clanaka
+    related_articles_indices = cosine_similarities[0].argsort()[:-11:-1]
+
+
+    # Dohvacanje povezanih vijesti iz baze podataka
+    related_news_ids = [latest_news[i.item()].id for i in related_articles_indices if latest_news[i.item()].id != news.id]
+    news.related_news.set(related_news_ids)  # Ovo ce postaviti povezane vijesti
+
+    #psotavljanje dobijenih izvora
+    sources = get_or_create_sources_for_news(news)
+    news.other_sources.set(sources)
 
     context = {
         'latest_news': latest_news,
@@ -1160,6 +1426,11 @@ def parse_date(date_str):
     except ValueError as e:
         logger.error(f"Greška prilikom parsiranja datuma: {e}")
         return None
+    
+
+
+
+
 
 
 def fetch_news():
@@ -1185,8 +1456,7 @@ def fetch_news():
         'https://beta.rs/rss',
         'https://www.oslobodjenje.ba/feed',
         'https://okanal.oslobodjenje.ba/okanal/feed',
-        'https://www.b92.net/feed/',
-        'https://www.dnevnik.ba/feed',
+        'https://www.b92.net/feed/',        
         'https://namaz.ba/feed/',
         'https://www.nkp.ba/feed/',
         'https://www.rtvslon.ba/feed/',
@@ -1201,8 +1471,7 @@ def fetch_news():
         'https://www.alo.rs/rss/biz',
         'https://www.alo.rs/rss/vesti',
         'https://www.espreso.co.rs/rss',
-        'https://www.vecernji.hr/feeds/latest',
-        'https://dnevnik.hr/assets/feed/articles',
+        'https://www.vecernji.hr/feeds/latest',        
         'https://www.24sata.hr/feeds/najnovije.xml',
         'https://www.24sata.hr/feeds/news.xml',
         'https://www.24sata.hr/feeds/sport.xml',
@@ -1210,7 +1479,10 @@ def fetch_news():
         'https://mondo.rs/rss/629/Naslovna',
 
     ]
-    logger = logging.getLogger(__name__)
+
+    with open('/home/time.ba/last_fetch_time.log', 'w') as f:
+        f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
     for feed_url in feeds:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries:
@@ -1219,7 +1491,7 @@ def fetch_news():
            
                 image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
-                description = clean_description(entry.description)  # Čišćenje opisa
+                description = clean_description(entry.description)  # Ci�cenje opisa
 
                 news_item = Headlines(
                     title=entry.title,
@@ -1231,18 +1503,19 @@ def fetch_news():
                     image_urls=','.join(image_urls) if image_urls else None
                 )
                 logger.info('Fetching news from %s', feed_url)
-                news_item.save()
-        
+                logger.info('Metoda fetch_news je pokrenuta.')
+            
+                news_item.save()        
 
 def categorize_news(url):
     # Mapiranje ključnih riječi na kategorije
     kategorije = {
         'Ekonomija': ['ekonomija', 'biznis', 'economy'],
-        'Fudbal': ['fudbal', 'nogomet'],
-        'Košarka': ['košarka', 'kosarka', 'sport/kosarka', 'sport-klub/kosarka'],
+        'Fudbal': ['fudbal', 'nogomet', 'sport-klub/fudbal'],
+        'Kosarka': ['kosarka', 'sport/kosarka', 'sport-klub/kosarka'],
         'Tenis': ['tenis'],
         'Ostalo': ['plivanje', 'rukomet', 'atletika', 'skijanje'],
-        'Automobili': ['automobili', 'motori'],
+        'Automobili': ['automobili', 'auto', 'motori', 'motocikli'],
         'BiH': ['bih', 'bosna-i-hercegovina'],
         'Balkan': ['balkan', 'region'],
         'Sarajevo': ['sarajevo'],
@@ -1252,13 +1525,14 @@ def categorize_news(url):
         'Kultura': ['kultura'],
         'Zabava': ['zabava'],
         'Lifestyle': ['lifestyle'],
-        'Hrana': ['hrana', 'zdravlje'],
+        'Hrana': ['hrana', 'zdravlje', 'voce', 'povrce'],
         'Tehnologija': ['tehnologija'],
         'Intima': ['intima', 'sex'],
         'Zdravlje': ['zdravlje'],
         'Magazin': ['magazin'],
         'Scena': ['scena', 'showbiz'],
-        'Vijesti': ['vijesti', 'vesti']
+        'Vijesti': ['vijesti', 'vesti'],
+	'Sport': ['sport']
     }
 
     # Provjera svake kategorije
@@ -1338,7 +1612,6 @@ def mobile(request):
 
 
 
-
 def company_directory(request):
     file_paths = [
         settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
@@ -1350,13 +1623,23 @@ def company_directory(request):
         settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
         settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
     ]
-    # Dobijanje broja firmi po opštinama
-    companies_count_by_city = create_company_directory_adjusted(file_paths)  # Ispravljeno ime varijable
+   # Provjeravamo da li fajlovi postoje
+    existing_files = [fp for fp in file_paths if Path(fp).exists()]
+    if not existing_files:
+        # Ako ne postoje fajlovi, vratite odgovarajući kontekst
+        context = {'error': 'Nijedan od navedenih fajlova ne postoji.'}
+        return render(request, 'firme.html', context)
+
+    try:
+        # Pretpostavljamo da funkcija create_company_directory_adjusted pravilno učitava fajlove
+        companies_count_by_city = create_company_directory_adjusted(existing_files)
+    except Exception as e:
+        # Ako dođe do greške prilikom učitavanja, uhvatite je i proslijedite u kontekst
+        context = {'error': f'Došlo je do greške prilikom obrade fajlova: {e}'}
+        return render(request, 'firme.html', context)
 
     context = {
-        'companies_count_by_city': companies_count_by_city,  # Ispravljeno ime ključa u kontekstu
-        
-        
+        'companies_count_by_city': companies_count_by_city,
     }
     return render(request, 'firme.html', context)
 
@@ -1416,3 +1699,17 @@ def search_news(request):
         'total_results': paginator.count,
     }
     return render(request, 'pretraga_rezultat.html', context)
+
+def last_cron_run(request):
+    try:
+        with open('/home/time.ba/last_fetch_time.log', 'r') as f:
+            last_updated_str = f.read().strip()
+            last_updated = datetime.strptime(last_updated_str, '%Y-%m-%d %H:%M:%S')
+    except Exception as e:
+        last_updated = None  # U slu�aju gre�ke postaviti na None ili trenutno vrijeme
+
+    context = {
+        'last_updated': last_updated,
+        # Dodajte ostale kontekst varijable koje su vam potrebne
+    }
+    return render(request, 'header.html', context)

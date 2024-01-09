@@ -5,6 +5,7 @@
     font-weight: 400;
     font-style: normal
 }
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 * {
     margin: 0px;
@@ -20,7 +21,7 @@ a:visited {
 }
 
 body {
-    font-family: arial,sans-serif;
+    font-family: 'Open Sans', arial, sans-serif;
     font-size: 13px;
     background-color: #41464d;
     margin-bottom: 0px;

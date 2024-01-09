@@ -28,14 +28,33 @@
                     <div class="article_body">
                         <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                         <p class="snippet">{{ news.description }}</p>
-                    </div>
-                    <div class="clear"></div>
+                        {% if news.related_news.all %}
+                        {% for related in news.related_news.all|slice:":2" %}
+                            <div class="related_article">
+                                <p class="rel_title" style="max-width: 350px;"><a href="{{ related.link }}" target="_blank"
+                                        rel="noopener noreferrer">{{ related.title }}</a>-</p> 
+                            </div>
+                        {% endfor %}
+                    
+                        {% if news.other_sources.all %}
+                            <p class="other_sources">
+                                {% for source in news.other_sources.all %}
+                                    <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">-{{ source.name }}</a></span>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        <div class="related_article">
+                        
+                            <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                        </div>
+                    {% endif %}                       
+                    </div>                    <div class="clear"></div>
                 </div>
                 <div class="clear"></div>
                 {% endfor %}
                 <div class="h_rule" ></div>
                 <div class="pagination">
-                    {% for i in news_by_category.Automobili.paginator.page_range %}
+                    {% for i in news_by_category.Sarajevo.paginator.page_range %}
                         {% if i <= 10 %}
                             <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
                         {% endif %}
