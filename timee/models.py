@@ -23,3 +23,19 @@ class Source(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+
+class LastFetchTime(models.Model):
+    update_time = models.DateTimeField()
+
+    @classmethod
+    def get_last_update_time(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj.update_time
+    
+    @classmethod
+    def set_last_update_time(cls, new_time):
+        obj, created = cls.objects.get_or_create(pk=1)
+        obj.update_time = new_time
+        obj.save()

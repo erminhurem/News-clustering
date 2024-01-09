@@ -2,38 +2,42 @@ from django.test import TestCase
 
 # Create your tests here.
 import feedparser
+import logging
+import datetime
+import requests
+import requests
+import nltk
+import unicodedata
+import string
+import html
+import pandas as pd
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
 from sklearn import logger
-from .models import Headlines, Source
+from .models import Headlines, Source, LastFetchTime
 from bs4 import BeautifulSoup
-import logging
-from datetime import datetime, timedelta 
-from dateutil.parser import parse as parse_date
-from django.db.models import Count
-from django.http import JsonResponse
-import datetime
-import requests
-import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from dateutil import parser
 from pathlib import Path
 from .company_directory import create_company_directory_adjusted
 from django.conf import settings
-import pandas as pd
 from django.utils.timezone import now
 from collections import defaultdict
 from datetime import datetime, time
-import html
 from django.shortcuts import get_object_or_404, render
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
-import string
+from urllib.parse import unquote
+from datetime import datetime, timedelta 
+from dateutil.parser import parse as parse_date
+from django.db.models import Count
+from django.http import JsonResponse
+
 
 
 
@@ -1645,12 +1649,13 @@ def city_companies(request, city_name):
         data = pd.read_excel(fp)
         all_data = pd.concat([all_data, data], ignore_index=True)
 
-    # Normalizujte tekst u koloni 'Opština' i 'city_name'
-    all_data['Opština'] = all_data['Opština'].str.strip()  # Uklanja vodeće i prateće razmake
-    all_data['Opština'] = all_data['Opština'].str.normalize('NFKC')  # Normalizacija Unicode karaktera
-    all_data['Opština'] = all_data['Opština'].astype(str)  # Osigurava da su sve vrednosti stringovi
+    # Normalizacija Unicode karaktera za kolonu 'Opština'
+    all_data['Opština'] = all_data['Opština'].astype(str).str.strip()
+    all_data['Opština'] = all_data['Opština'].apply(lambda x: unicodedata.normalize('NFKC', x))
 
-    city_name = city_name.strip().normalize('NFKC')
+    # Dekodiranje i normalizacija za 'city_name'
+    city_name = unquote(city_name).strip()
+    city_name = unicodedata.normalize('NFKC', city_name)
     
     # Filtriranje podataka za odabranu opštinu koristeći case insensitive pretragu
     city_companies_data = all_data[all_data['Opština'].str.contains(city_name, case=False, na=False)]
@@ -1687,14 +1692,7 @@ def search_news(request):
     return render(request, 'pretraga_rezultat.html', context)
 
 def last_cron_run(request):
-    try:
-        with open('/home/time.ba/last_fetch_time.log', 'r') as f:
-            last_updated_str = f.read().strip()
-            last_updated = datetime.strptime(last_updated_str, '%Y-%m-%d %H:%M:%S')
-    except Exception as e:
-        last_updated = datetime.now()  # Ako dođe do greške, postavite na trenutno vrijeme
-
-    context = {
-        'last_updated': last_updated,
-    }
+    last_updated = LastFetchTime.get_last_update_time()
+    print(f"Vrijeme posljednjeg ažuriranja: {last_updated}")  # Dodajte ovu liniju
+    context = {'last_updated': last_updated}
     return render(request, 'header.html', context)

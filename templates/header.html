@@ -1,8 +1,8 @@
 {% load static %}
 {% block header %}
 <div id="header_content"><a href="/">
-    <div id="logo" style="
-    width: 195px;
+    <div id="logo" 
+    style="width: 195px;
     height: 85px;
     margin-left: -5px;
     background-image: url({% static 'images/main_logo.PNG' %});
@@ -14,7 +14,7 @@
     <center>
       <p>Vijesti dana</p>
       <span>Obnovljeno: 
-        <span>{{ last_updated|date:"H:i" }}</span>
+        <span>{{ last_updated }}</span>
       </span>
     </center>
   </div>

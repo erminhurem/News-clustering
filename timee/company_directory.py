@@ -42,15 +42,8 @@ def create_company_directory_adjusted(file_paths):
 # Definiranje putanja do fajlova
 BASE_DIR = settings.BASE_DIR
 file_paths = [
-    # BASE_DIR / 'static' / 'Baza 2000.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2001.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2002.xlsx',
+   
     BASE_DIR / 'static' / 'Baza 2003.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2005.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2006.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2007.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2008.xlsx',
-    # BASE_DIR / 'static' / 'Baza 2009.xlsx',
     
 ]
 
