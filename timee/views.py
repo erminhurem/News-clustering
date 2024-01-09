@@ -1691,8 +1691,11 @@ def search_news(request):
     }
     return render(request, 'pretraga_rezultat.html', context)
 
+
+
 def last_cron_run(request):
+    logger = logging.getLogger(__name__)
     last_updated = LastFetchTime.get_last_update_time()
-    print(f"Vrijeme posljednjeg ažuriranja: {last_updated}")  # Dodajte ovu liniju
+    logger.info(f"Vrijeme posljednjeg ažuriranja: {last_updated}")
     context = {'last_updated': last_updated}
     return render(request, 'header.html', context)
