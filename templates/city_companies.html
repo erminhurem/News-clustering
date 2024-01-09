@@ -3,13 +3,13 @@
 {% block content %}
 <style>
     .company-list {
-        list-style-type: none; /* Uklanja tačke iz liste */
+        list-style-type: none;
         padding: 0;
     }
     .company-item {
         padding: 10px;
-        border-bottom: 1px solid #ccc; /* Linija između stavki */
-        margin-bottom: 10px; /* Razmak između stavki */
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
     }
     .company-item:last-child {
         border-bottom: none;
@@ -26,19 +26,53 @@
         font-style: italic;
         color: #888;
     }
+    .pagination {
+        margin: 20px 0;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        color: #337ab7;
+        text-decoration: none;
+    }
+    .pagination a:hover {
+        background-color: #ddd;
+    }
+    .pagination .current {
+        padding: 5px 10px;
+        background-color: #337ab7;
+        color: #fff;
+    }
 </style>
 
 <h2>Firme u opštini {{ city_name }}</h2>
 <ul class="company-list">
-    {% for company in companies %}
+    {% for company in page_obj %}
     <li class="company-item">
         <div class="company-name">{{ company.Naziv_kompanije }}</div>
         <div class="company-details">
             Adresa: {{ company.Adresa }}<br>
-            Šifra Djelatnosti: {{ company.Sifra_Dj }}
+            Šifra Djelatnosti: {{ company.Sifra_Djelatnosti }}
         </div>
         <div class="company-jib">JIB: {{ company.JIB }}</div>
     </li>
+    {% empty %}
+    <li>Trenutno nema firmi za prikaz u ovoj opštini.</li>
     {% endfor %}
 </ul>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">« Prethodna</a>
+    {% endif %}
+    <span class="current">
+        Strana {{ page_obj.number }} od {{ page_obj.paginator.num_pages }}.
+    </span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Sljedeća »</a>
+    {% endif %}
+</div>
+
 {% endblock %}

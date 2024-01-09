@@ -12,9 +12,13 @@
   </a>
   <div id="page_title">
     <center>
-      <p>Vijesti dana</p><span>Obnovljeno : <span>{{ last_updated|date:"H:i" }}</span></span>
+      <p>Vijesti dana</p>
+      <span>Obnovljeno: 
+        <span>{{ last_updated|date:"H:i" }}</span>
+      </span>
     </center>
   </div>
+  
   <script>var a = document.getElementById("page_title"); 33 <= a.getElementsByTagName("p")[0].innerHTML.length && (a.className = "long");</script>
   <div id="search" onMouseOver="this.style.opacity=1">
     <form id="form" method="get" action="{% url 'timee:search_news' %}">

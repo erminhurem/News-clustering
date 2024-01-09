@@ -1614,14 +1614,8 @@ def mobile(request):
 
 def company_directory(request):
     file_paths = [
-        settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2001.xlsx',
+       
         settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2005.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2006.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2007.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
     ]
    # Provjeravamo da li fajlovi postoje
     existing_files = [fp for fp in file_paths if Path(fp).exists()]
@@ -1644,41 +1638,33 @@ def company_directory(request):
     return render(request, 'firme.html', context)
 
 def city_companies(request, city_name):
-    # Pretpostavljamo da city_name dolazi iz URL-a i koristit ćemo ga za filtriranje podataka
-    file_paths = [
-        settings.BASE_DIR / 'static' / 'Baza 2000.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2001.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2005.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2006.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2007.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2008.xlsx',
-        settings.BASE_DIR / 'static' / 'Baza 2009.xlsx',
-    ]
+    file_paths = [settings.BASE_DIR / 'static' / 'Baza 2003.xlsx']
     all_data = pd.DataFrame()
     
- 
     for fp in file_paths:
-        # Ovdje pretpostavljamo da fajl sadrži kolonu 'Opština' koja sadrži nazive opština
         data = pd.read_excel(fp)
-        # Ako su nazivi kolona validni, nema potrebe za dodatnim preimenovanjem
         all_data = pd.concat([all_data, data], ignore_index=True)
+
+    # Normalizujte tekst u koloni 'Opština' i 'city_name'
+    all_data['Opština'] = all_data['Opština'].str.strip()  # Uklanja vodeće i prateće razmake
+    all_data['Opština'] = all_data['Opština'].str.normalize('NFKC')  # Normalizacija Unicode karaktera
+    all_data['Opština'] = all_data['Opština'].astype(str)  # Osigurava da su sve vrednosti stringovi
+
+    city_name = city_name.strip().normalize('NFKC')
     
-    # Ako 'city_name' nije u ispravnom formatu, pretvorite ga u string
-    city_name_str = str(city_name).strip()
+    # Filtriranje podataka za odabranu opštinu koristeći case insensitive pretragu
+    city_companies_data = all_data[all_data['Opština'].str.contains(city_name, case=False, na=False)]
     
-    # Filtriranje podataka za odabranu opštinu
-    city_companies_data = all_data[all_data['Opština'].str.contains(city_name_str, na=False)]
-    
-    companies_list = []
-    for company in city_companies_data.to_dict('records'):
-        company_dict = {key.replace(' ', '_'): value for key, value in company.items()}
-        companies_list.append(company_dict)
-    
+    # Kreiranje liste kompanija za kontekst
+    companies_list = city_companies_data.to_dict('records')
+
+    paginator = Paginator(companies_list, 10)  # Prikaži 10 kompanija po stranici
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'companies': companies_list,
+        'page_obj': page_obj,
         'city_name': city_name,
-        
     }
     
     return render(request, 'city_companies.html', context)
@@ -1706,10 +1692,9 @@ def last_cron_run(request):
             last_updated_str = f.read().strip()
             last_updated = datetime.strptime(last_updated_str, '%Y-%m-%d %H:%M:%S')
     except Exception as e:
-        last_updated = None  # U slu�aju gre�ke postaviti na None ili trenutno vrijeme
+        last_updated = datetime.now()  # Ako dođe do greške, postavite na trenutno vrijeme
 
     context = {
         'last_updated': last_updated,
-        # Dodajte ostale kontekst varijable koje su vam potrebne
     }
     return render(request, 'header.html', context)

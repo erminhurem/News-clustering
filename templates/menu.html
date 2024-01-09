@@ -1,11 +1,11 @@
 <div id="menu">
     <div id="step1"><a class="super_btn" href="/">
             <center>Vijesti</center><span></span>
-        </a><a class="super_btn" href="{% url 'timee:sport' %}">
+        </a><a class="super_btn" id="super_0" href="{% url 'timee:sport' %}">
             <center>Sport</center><span></span>
         </a><a class="super_btn" href="{% url 'timee:magazin' %}">
             <center>Magazin</center><span></span>
-        </a><a class="extra_btn" href="{% url 'timee:firme' %}">
+        </a><a class="extra_btn" id="super_sources" href="{% url 'timee:firme' %}">
             <center>Firme</center><span></span>
         </a><a class="extra_btn" href="{% url 'timee:svi_izvori' %}">
             <center>Izvori</center><span></span>
@@ -23,6 +23,8 @@
 
 <script>
     $(document).ready(function () {
+
+       
         // Definisanje sadr�aja za svaku kategoriju
         var categoriesContent = {
             'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a>' +
@@ -151,8 +153,11 @@
             }
         }
 
+        var currentPath = window.location.pathname; // Dohvaćanje trenutne putanje
+
+    
         // Ako je korisnik na po�etnoj stranici, postavi 'Vijesti' kao aktivnu kategoriju i u�itaj pod-menij
-        if (currentPath === '/') {
+        if (currentPath === '/' || currentPath === '/index.html') { 
             var category = 'vijesti';
             var color = getCategoryColor(category);
             var fontColor = '#ffffff';
@@ -169,10 +174,6 @@
             }).addClass('active').css({ 'background-color': color, 'color': fontColor });
         }
 
-
-
-
-        // Klik na glavne kategorije
         // Klik na glavne kategorije
         $('#menu #step1 a').on('click', function (e) {
             e.preventDefault();
