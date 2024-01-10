@@ -46,33 +46,37 @@
         color: #fff;
     }
 </style>
-
-<h2>Firme u opštini {{ city_name }}</h2>
-<ul class="company-list">
-    {% for company in page_obj %}
-    <li class="company-item">
-        <div class="company-name">{{ company.Naziv_kompanije }}</div>
-        <div class="company-details">
-            Adresa: {{ company.Adresa }}<br>
-            Šifra Djelatnosti: {{ company.Sifra_Djelatnosti }}
-        </div>
-        <div class="company-jib">JIB: {{ company.JIB }}</div>
-    </li>
-    {% empty %}
-    <li>Trenutno nema firmi za prikaz u ovoj opštini.</li>
-    {% endfor %}
-</ul>
-
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">« Prethodna</a>
-    {% endif %}
-    <span class="current">
-        Strana {{ page_obj.number }} od {{ page_obj.paginator.num_pages }}.
-    </span>
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Sljedeća »</a>
-    {% endif %}
+<div id="news_pane">
+    <h2>Firme u opstini {{ opstina }}</h2>
+    <div class="pagination">
+        {% for i in news_page.paginator.page_range %}
+            {% if i <= 10 %}
+                <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+            {% endif %}
+        {% endfor %}    
+    </div>
+    <div class="h_rule"></div>
+    <ul class="company-list">
+        {% for firma in firme %}
+        <li class="company-item">
+            <div class="company-name">{{ firma.naziv_kompanije }}</div>
+            <div class="company-details">
+                Adresa: {{ firma.adresa }}<br>
+                Šifra Djelatnosti: {{ firma.sifra }}
+            </div>
+            <div class="company-jib">JIB: {{ firma.id_broj }}</div>
+        </li>
+        {% empty %}
+        <li>Trenutno nema firmi za prikaz u ovoj opstini.</li>
+        {% endfor %}
+    </ul>
+    <div class="h_rule" ></div>
+    <div class="pagination">
+        {% for i in news_page.paginator.page_range %}
+            {% if i <= 10 %}
+                <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+            {% endif %}
+        {% endfor %}    
+    </div>
 </div>
-
 {% endblock %}

@@ -61,3 +61,71 @@ def fetch_news():
                 )
                 logger.info('Fetching news from %s', feed_url)
                 news_item.save() 
+
+
+def company_directory(request):
+    file_paths = [
+       
+        settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
+    ]
+   # Provjeravamo da li fajlovi postoje
+    existing_files = [fp for fp in file_paths if Path(fp).exists()]
+    if not existing_files:
+        # Ako ne postoje fajlovi, vratite odgovarajući kontekst
+        context = {'error': 'Nijedan od navedenih fajlova ne postoji.'}
+        return render(request, 'firme.html', context)
+
+    try:
+        # Pretpostavljamo da funkcija create_company_directory_adjusted pravilno učitava fajlove
+        companies_count_by_city = create_company_directory_adjusted(existing_files)
+    except Exception as e:
+        # Ako dođe do greške prilikom učitavanja, uhvatite je i proslijedite u kontekst
+        context = {'error': f'Došlo je do greške prilikom obrade fajlova: {e}'}
+        return render(request, 'firme.html', context)
+
+    context = {
+        'companies_count_by_city': companies_count_by_city,
+    }
+    return render(request, 'firme.html', context)
+
+
+    def city_companies(request, city_name):
+    file_paths = [settings.BASE_DIR / 'static' / 'Baza 2003.xlsx']
+    all_data = pd.DataFrame()
+    
+    for fp in file_paths:
+        data = pd.read_excel(fp)
+        all_data = pd.concat([all_data, data], ignore_index=True)
+
+    # Normalizacija Unicode karaktera za kolonu 'Opština'
+    all_data['Opština'] = all_data['Opština'].astype(str).str.strip()
+    all_data['Opština'] = all_data['Opština'].apply(lambda x: unicodedata.normalize('NFKC', x))
+
+    # Dekodiranje i normalizacija za 'city_name'
+    city_name = unquote(city_name).strip()
+    city_name = unicodedata.normalize('NFKC', city_name)
+    
+    # Filtriranje podataka za odabranu opštinu koristeći case insensitive pretragu
+    city_companies_data = all_data[all_data['Opština'].str.contains(city_name, case=False, na=False)]
+    
+    # Kreiranje liste kompanija za kontekst
+    companies_list = city_companies_data.to_dict('records')
+
+    paginator = Paginator(companies_list, 10)  # Prikaži 10 kompanija po stranici
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'city_name': city_name,
+    }
+    
+    return render(request, 'city_companies.html', context)
+
+
+    def last_cron_run(request):
+    logger = logging.getLogger(__name__)
+    last_updated = LastFetchTime.get_last_update_time()
+    logger.info(f"Vrijeme posljednjeg ažuriranja: {last_updated}")
+    context = {'last_updated': last_updated}
+    return render(request, 'header.html', context)

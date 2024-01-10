@@ -2,12 +2,10 @@
 
 {% block content %}
 <div id="news_pane">
-
-
     <div id="imdb_sort">
         <h2>Gradovi/Opštine</h2>
         <div class="pagination">
-            {% for i in latest_news.paginator.page_range %}
+            {% for i in news_page.paginator.page_range %}
                 {% if i <= 10 %}
                     <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
                 {% endif %}
@@ -16,18 +14,25 @@
     </div>
      
     <div class="h_rule"></div>
-    {% for city, count in companies_count_by_city.items %}
+    {% for opstina in opstine %}
     <div class="imdb_results">
         <div>
             <div class="info">
-            <h3>{{ city }} ({{ count }} firmi)</h3>
-
-            <a href="{% url 'timee:city_companies' city %}">Prikaži firme</a>
+                <h3><a href="{% url 'timee:firme' opstina.opstina %}">{{ opstina.opstina }}</a>
+                (Broj firmi: {{ opstina.broj_firmi }})</h3>
         </div>
         </div>
 
     </div>
     {% endfor %}
+    <div class="h_rule" ></div>
+    <div class="pagination">
+        {% for i in news_page.paginator.page_range %}
+            {% if i <= 10 %}
+                <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+            {% endif %}
+        {% endfor %}    
+    </div> 
 
 </div>
 {% endblock %}

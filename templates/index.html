@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block content %}
+
 <style>
     .other_sources span {
     /* Dodajte stilove ovdje */
@@ -45,12 +46,12 @@
                                 <div class="related_article">
                                     <p class="rel_title"><a href="{{ related.link }}" target="_blank"
                                             rel="noopener noreferrer">{{ related.title }}</a></p> -
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                    <a href="{{ related.source_name }}" class="r_source">{{ related.name}}</a>
                                 </div>
                                 {% if news.other_sources.all %}
                                     <p class="other_sources">
                                         {% for source in news.other_sources.all %}
-                                            <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
+                                            <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source_name }}</a></span>
                                         {% endfor %}
                                     </p>
                                 {% endif %}                                

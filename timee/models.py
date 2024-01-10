@@ -39,3 +39,13 @@ class LastFetchTime(models.Model):
         obj, created = cls.objects.get_or_create(pk=1)
         obj.update_time = new_time
         obj.save()
+
+class Firme(models.Model):
+    id_broj = models.CharField(max_length=100,default=None)
+    naziv_kompanije = models.CharField(max_length=100,default=None)
+    adresa = models.CharField(max_length=50,default=None)
+    sifra = models.IntegerField(max_length=50,default=None)
+    opstina = models.CharField(max_length=50,default=None)
+
+    def __str__(self):
+        return self.naziv_kompanije
