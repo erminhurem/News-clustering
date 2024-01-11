@@ -1,19 +1,22 @@
 <div id="footer">     <!-- FOOTER   START -->
     <div id="disclaimer">
-    Izbor i postavljanje vijesti na TIME.BA određuje računarski program.<br>
-    Prikazani datum i vrijeme označavaju kada je članak dodat ili ažuriran u TIME.BA .
+        Izbor i pozicije vijesti na TIME.ba se automatski određuju kompjuterskim programom.<br>
+        Prikazano vrijeme, odnosno datum, odnosi se na trenutak kada je vijest unesena ili ažurirana u TIME.ba <br>
+        TIME.ba ne preuzima nikakvu odgovornost za pouzdanost preuzetih informacija.
     </div>
   
     <center>
     <div class="dbar"><!-- DBAR   START -->
-            <a href="s/all"> <span>Izvori</span></a>
+            <a href="{% url 'timee:svi_izvori' %}"> <span>Izvori</span></a>
             <span class="vr">-</span>
             <a href="info/site"> <span>O sajtu</span> </a>
             <span class="vr">-</span>
             <a href="info/marketing"> <span>Marketing</span> </a>
             <span class="vr">-</span>
-            <a href="info/contact"> <span>Kontakt</span> </a>
+            <a href="{% url 'timee:contact' %}"> <span>Kontakt</span> </a>
     </div>             <!-- DBAR   END -->
     </center>
 
     </div>
+    <script>if(Function('/*@cc_on return 10===document.documentMode@*/')()){document.documentElement.className='ie10';}</script>
+    <div id="copyright"><center><div class="dbar"><span>© 2024 TIME.ba, designed by <a href="https://octagonsolution.com/">Octagonsolutions</a></span></div></center></div>

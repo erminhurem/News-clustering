@@ -18,7 +18,7 @@ from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
 from sklearn import logger
-from .models import Headlines, Source, LastFetchTime, Firme
+from .models import Headlines, Source, LastFetch, Firme
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -1443,6 +1443,7 @@ def parse_date(date_str):
         return None
 
 
+
 def fetch_news():
     logger = logging.getLogger(__name__)
     feeds = [
@@ -1504,6 +1505,9 @@ def fetch_news():
         
 
     ]
+
+    LastFetch.update_last_fetch_time()
+    
 
     with open('last_fetch_time.log', 'w') as f:
         f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -1692,9 +1696,12 @@ def search_news(request):
 
 
 
- def last_cron_run(request):
-    logger = logging.getLogger(__name__)
-    last_updated = LastFetchTime.get_last_update_time()
-    logger.info(f"Vrijeme posljednjeg ažuriranja: {last_updated}")
+
+def last_cron_run(request):
+    # Dobavljanje vremena posljednjeg ažuriranja
+    last_updated = LastFetch.get_last_update_time()
+
+    # Dodajte vrijeme posljednjeg ažuriranja u kontekst
     context = {'last_updated': last_updated}
+    
     return render(request, 'header.html', context)

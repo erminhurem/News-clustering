@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Headlines(models.Model):
     title = models.CharField(max_length=200)
@@ -24,21 +25,24 @@ class Source(models.Model):
     def __str__(self):
         return self.name
     
+class LastFetch(models.Model):
+    last_update_time = models.DateTimeField(default=None)
 
-
-class LastFetchTime(models.Model):
-    update_time = models.DateTimeField()
-
-    @classmethod
-    def get_last_update_time(cls):
-        obj, created = cls.objects.get_or_create(pk=1)
-        return obj.update_time
     
     @classmethod
-    def set_last_update_time(cls, new_time):
-        obj, created = cls.objects.get_or_create(pk=1)
-        obj.update_time = new_time
-        obj.save()
+    def update_last_fetch_time(cls):
+        # Ažuriranje ili stvaranje novog zapisa s trenutnim vremenom
+        last_fetch, created = cls.objects.get_or_create(id=1, defaults={'last_update_time': timezone.now()})
+        if not created:
+            last_fetch.last_update_time = timezone.now()
+            last_fetch.save()
+    
+    @classmethod
+    def get_last_update_time(cls):
+        # Dobavljanje zadnjeg ažuriranog vremena, ili vraćanje None ako ne postoji zapis
+        return cls.objects.last().last_update_time if cls.objects.exists() else None
+
+
 
 class Firme(models.Model):
     id_broj = models.CharField(max_length=100,default=None)
