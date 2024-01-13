@@ -103,21 +103,21 @@
                             <div class="article_body">
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
-                                {% if news.related_news.all %}
-                                {% for related in news.related_news.all|slice:":2" %}
-                                    <div class="related_article">
-                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-					<a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
-                                    </div>
-                                {% endfor %}                           
-                                
-                                <div class="related_article">
-                                
-                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">
-                                        {{ news.related_news.count }} povezanih vijesti
-                                    </a>
-                                </div>
-                            	{% endif %}                       
+                         {% if news.related_news.all %}
+                        {% for related in news.related_news.all|slice:":2" %}
+                            <div class="related_article">
+                                <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+                                <a href="{{ related.link }}" class="r_source">{{ related.source_name }}</a>
+                            </div>
+                        {% endfor %}
+
+                        <div class="related_article">
+                            <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">
+                                {{ news.related_news.count }} povezanih vijesti
+                            </a>
+                        </div>
+                    {% endif %}
+                    
                             </div>
                             <div class="clear"></div>
                         </div>
