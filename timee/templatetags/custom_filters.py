@@ -2,8 +2,10 @@
 
 from django import template
 import re
+import os
 
 register = template.Library()
+
 
 @register.filter
 def remove_images(value):

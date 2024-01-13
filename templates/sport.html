@@ -80,7 +80,7 @@
                                 {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
                                         <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-					<a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
+					                    <a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
                                     </div>
                                 {% endfor %}                           
                                 
@@ -135,7 +135,7 @@
                                 {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
                                         <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-					<a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
+					                    <a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
                                     </div>
                                 {% endfor %}                           
                                 
@@ -154,6 +154,7 @@
             {% endfor %}        
     </div>
 </div>
+
 <div class="clear"></div>
 <!-- Prikaz vijesti iz kategorije "Tenis" -->
 
@@ -189,7 +190,7 @@
                                 {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
                                         <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-					<a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
+					                    <a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
                                     </div>
                                 {% endfor %}                           
                                 

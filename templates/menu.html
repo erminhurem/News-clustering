@@ -5,7 +5,7 @@
             <center>Sport</center><span></span>
         </a><a class="super_btn" href="{% url 'timee:magazin' %}">
             <center>Magazin</center><span></span>
-        </a><a class="extra_btn" id="super_sources" href="{% url 'timee:firme' %}">
+        </a><a class="extra_btn" id="super_sources" href="{% url 'timee:opstine' %}">
             <center>Firme</center><span></span>
         </a><a class="extra_btn" href="{% url 'timee:svi_izvori' %}">
             <center>Izvori</center><span></span>
@@ -24,7 +24,7 @@
 <script>
     $(document).ready(function () {
 
-       
+
         // Definisanje sadr�aja za svaku kategoriju
         var categoriesContent = {
             'vijesti': '<a class="category_btn" href="{% url "timee:bih_category" %}"><center>BIH</center></a>' +
@@ -36,7 +36,7 @@
                 '<a class="category_btn" href="{% url "timee:kultura_category" %}"><center>Kultura</center></a>' +
                 '<a class="category_btn" href="{% url "timee:scena_category" %}"><center>Scena</center></a>',
             'sport': '<a class="category_btn" href="{% url "timee:fudbal_category" %}"><center>Fudbal</center></a>' +
-                '<a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Ko�arka</center></a>' +
+                '<a class="category_btn" href="{% url "timee:kosarka_category" %}"><center>Kosarka</center></a>' +
                 '<a class="category_btn" href="{% url "timee:tenis_category" %}"><center>Tenis</center></a>' +
                 '<a class="category_btn" href="{% url "timee:ostalo_category" %}"><center>Ostalo</center></a>',
             'magazin': '<a class="category_btn" href="{% url "timee:zabava_category" %}"><center>Zabava</center></a>' +
@@ -70,7 +70,7 @@
             'tenis': '#f60',
             'ostalo': '#3c3ca4',
             'fudbal': '#438988',
-            'ko�arka': '#c00',
+            'kosarka': '#c00',
             'zabava': '#438988',
             'automobili': '#c00',
             'tehnologija': '#f60',
@@ -155,9 +155,9 @@
 
         var currentPath = window.location.pathname; // Dohvaćanje trenutne putanje
 
-    
+
         // Ako je korisnik na po�etnoj stranici, postavi 'Vijesti' kao aktivnu kategoriju i u�itaj pod-menij
-        if (currentPath === '/' || currentPath === '/index.html') { 
+        if (currentPath === '/' || currentPath === '/index.html') {
             var category = 'vijesti';
             var color = getCategoryColor(category);
             var fontColor = '#ffffff';

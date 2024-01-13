@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 # Create your tests here.
+import os
 import feedparser
 import logging
 import datetime
@@ -17,7 +18,7 @@ from django.utils.dateparse import parse_datetime
 from dateutil import parser as date_parser
 from django.utils.timezone import make_aware, now
 from sklearn import logger
-from .models import Headlines, Source, LastFetchTime
+from .models import Headlines, Source, LastFetch, Firme
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -37,12 +38,12 @@ from datetime import datetime, timedelta
 from dateutil.parser import parse as parse_date
 from django.db.models import Count
 from django.http import JsonResponse
-
+import traceback
 
 
 
 nltk.download('punkt')
-import traceback
+
 
 
 def get_or_create_sources_for_news(news):
@@ -132,6 +133,12 @@ def get_friendly_source_name(url):
         return 'Slon'
     elif 'rts.rs' in url:
         return 'RTS'
+    elif 'slobodna-bosna.ba' in url:
+        return 'Slobodna Bosna'
+    elif 'radiosarajevo.ba' in url:
+        return 'Radio Sarajevo'
+    elif 'report.ba' in url:
+        return 'Report'
     else:
         return 'Nepoznati izvor'
     
@@ -182,14 +189,13 @@ def index(request):
     all_news = Headlines.objects.all().order_by('-published_date')
     vectorizer = TfidfVectorizer()
     
-    # Izračunavanje TF-IDF vektora za 'description' polje
-    tfidf_matrix = vectorizer.fit_transform(
-    [' '.join(extract_keywords(clean_description(news.description))) for news in all_news]
-  )
-
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
         news.time_since = get_relative_time(news.published_date)
+
+    # Izračunavanje TF-IDF vektora za 'description' polje
+    tfidf_matrix = vectorizer.fit_transform(
+    [' '.join(extract_keywords(clean_description(news.description))) for news in all_news])
 
     # Izračunavanje TF-IDF vektora za trenutnu vijest
     current_tfidf = vectorizer.transform(
@@ -204,7 +210,11 @@ def index(request):
     # Dohvaćanje povezanih vijesti iz baze podataka
     related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id]
     news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
+    related_news = news.related_news.all()
 
+    for related in related_news:
+        related.source_name = get_friendly_source_name(related.source)
+        related.time_since = get_relative_time(related.published_date)
 
     #psotavljanje dobijenih izvora
     sources = get_or_create_sources_for_news(news)
@@ -233,6 +243,7 @@ def index(request):
         'latest_news': latest_news,
         'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
+        'related_news': related_news,
     }
 
     return render(request, "index.html", context)
@@ -658,7 +669,6 @@ def scena_category(request):
 
 # kraj koda vezano za rubriku Vijesti
 
-# početak koda vezano za rubriku Sport
 # pocetak koda vezano za rubriku Sport
 def sport(request):
     latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
@@ -1353,6 +1363,7 @@ def najnovije_vijesti(request):
         'naslov_stranice': 'Vijesti - Time.ba',
         'selected_topic': topic,
         'kategorije': kategorije,
+        'news_page': news_page,
     }
 
     return render(request, "najnovije_vijesti.html", context)
@@ -1430,10 +1441,6 @@ def parse_date(date_str):
     except ValueError as e:
         logger.error(f"Greška prilikom parsiranja datuma: {e}")
         return None
-    
-
-
-
 
 
 
@@ -1481,9 +1488,30 @@ def fetch_news():
         'https://www.24sata.hr/feeds/sport.xml',
         'https://www.24sata.hr/feeds/tech.xml',
         'https://mondo.rs/rss/629/Naslovna',
+        'https://www.slobodna-bosna.ba/rss/100/sve_vijesti.html',
+        'https://www.slobodna-bosna.ba/rss/14/vijesti.html',
+        'https://www.slobodna-bosna.ba/rss/1/politika.html',
+        'https://www.slobodna-bosna.ba/rss/3/hronika.html',
+        'https://www.slobodna-bosna.ba/rss/2/ekonomija.html',
+        'https://www.slobodna-bosna.ba/rss/16/regija.html',
+        'https://www.slobodna-bosna.ba/rss/5/svijet.html',
+        'https://www.slobodna-bosna.ba/rss/7/sport.html',
+        'https://www.slobodna-bosna.ba/rss/18/zdravlje.html',
+        'https://www.slobodna-bosna.ba/rss/10/auto.html',
+        'https://www.slobodna-bosna.ba/rss/22/zabava.html',
+        'https://www.slobodna-bosna.ba/rss/23/sex_i_grad.html',
+        'https://radiosarajevo.ba/rss',
+        'https://raport.ba/feed/'
+        
 
     ]
 
+<<<<<<< HEAD
+=======
+    LastFetch.update_last_fetch_time()
+    
+
+>>>>>>> 5a7ced6e4154dcbbc8cc48aeae691b4996b3c356
     with open('last_fetch_time.log', 'w') as f:
         f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -1522,7 +1550,7 @@ def categorize_news(url):
         'Ostalo': ['plivanje', 'rukomet', 'atletika', 'skijanje'],
         'Automobili': ['automobili', 'auto', 'motori', 'motocikli'],
         'BiH': ['bih', 'bosna-i-hercegovina'],
-        'Balkan': ['balkan', 'region'],
+        'Balkan': ['balkan', 'region', 'regija'],
         'Sarajevo': ['sarajevo'],
         'Svijet': ['svijet', 'svet'],
         'Hronika': ['hronika', 'crna-hronika'],
@@ -1537,7 +1565,7 @@ def categorize_news(url):
         'Magazin': ['magazin'],
         'Scena': ['scena', 'showbiz'],
         'Vijesti': ['vijesti', 'vesti'],
-	'Sport': ['sport']
+	    'Sport': ['sport']
     }
 
     # Provjera svake kategorije
@@ -1617,62 +1645,40 @@ def mobile(request):
 
 
 
-def company_directory(request):
-    file_paths = [
-       
-        settings.BASE_DIR / 'static' / 'Baza 2003.xlsx',
-    ]
-   # Provjeravamo da li fajlovi postoje
-    existing_files = [fp for fp in file_paths if Path(fp).exists()]
-    if not existing_files:
-        # Ako ne postoje fajlovi, vratite odgovarajući kontekst
-        context = {'error': 'Nijedan od navedenih fajlova ne postoji.'}
-        return render(request, 'firme.html', context)
+def opstine_view(request):
+    opstine = Firme.objects.values('opstina').annotate(broj_firmi=Count('id_broj')).order_by('opstina')
 
+    items_per_page = 10
+    paginator = Paginator(opstine, items_per_page)
+    page = request.GET.get("page")
     try:
-        # Pretpostavljamo da funkcija create_company_directory_adjusted pravilno učitava fajlove
-        companies_count_by_city = create_company_directory_adjusted(existing_files)
-    except Exception as e:
-        # Ako dođe do greške prilikom učitavanja, uhvatite je i proslijedite u kontekst
-        context = {'error': f'Došlo je do greške prilikom obrade fajlova: {e}'}
-        return render(request, 'firme.html', context)
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        news_page = paginator.page(1)
+    except EmptyPage:
+        news_page = paginator.page(paginator.num_pages)  
+
+    return render(request, 'firme.html', {'opstine': opstine, 'news_page': news_page})
+
+def firme_view(request, opstina):
+    firme = Firme.objects.filter(opstina=opstina)
+
+    items_per_page = 10
+    paginator = Paginator(firme, items_per_page)
+    page = request.GET.get("page")
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        news_page = paginator.page(1)
+    except EmptyPage:
+        news_page = paginator.page(paginator.num_pages)
 
     context = {
-        'companies_count_by_city': companies_count_by_city,
-    }
-    return render(request, 'firme.html', context)
+        'firme': firme,
+        'opstina': opstina,
+        'news_page': news_page
+    } 
 
-def city_companies(request, city_name):
-    file_paths = [settings.BASE_DIR / 'static' / 'Baza 2003.xlsx']
-    all_data = pd.DataFrame()
-    
-    for fp in file_paths:
-        data = pd.read_excel(fp)
-        all_data = pd.concat([all_data, data], ignore_index=True)
-
-    # Normalizacija Unicode karaktera za kolonu 'Opština'
-    all_data['Opština'] = all_data['Opština'].astype(str).str.strip()
-    all_data['Opština'] = all_data['Opština'].apply(lambda x: unicodedata.normalize('NFKC', x))
-
-    # Dekodiranje i normalizacija za 'city_name'
-    city_name = unquote(city_name).strip()
-    city_name = unicodedata.normalize('NFKC', city_name)
-    
-    # Filtriranje podataka za odabranu opštinu koristeći case insensitive pretragu
-    city_companies_data = all_data[all_data['Opština'].str.contains(city_name, case=False, na=False)]
-    
-    # Kreiranje liste kompanija za kontekst
-    companies_list = city_companies_data.to_dict('records')
-
-    paginator = Paginator(companies_list, 10)  # Prikaži 10 kompanija po stranici
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-        'city_name': city_name,
-    }
-    
     return render(request, 'city_companies.html', context)
 
 def search_news(request):
@@ -1694,9 +1700,12 @@ def search_news(request):
 
 
 
+
 def last_cron_run(request):
-    logger = logging.getLogger(__name__)
-    last_updated = LastFetchTime.get_last_update_time()
-    logger.info(f"Vrijeme posljednjeg ažuriranja: {last_updated}")
+    # Dobavljanje vremena posljednjeg ažuriranja
+    last_updated = LastFetch.get_last_update_time()
+
+    # Dodajte vrijeme posljednjeg ažuriranja u kontekst
     context = {'last_updated': last_updated}
+    
     return render(request, 'header.html', context)
