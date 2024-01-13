@@ -1506,12 +1506,9 @@ def fetch_news():
 
     ]
 
-<<<<<<< HEAD
-=======
     LastFetch.update_last_fetch_time()
     
 
->>>>>>> 5a7ced6e4154dcbbc8cc48aeae691b4996b3c356
     with open('last_fetch_time.log', 'w') as f:
         f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -1524,14 +1521,13 @@ def fetch_news():
                 image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
                 description = clean_description(entry.description)  # Ci�cenje opisa
-                friendly_source_name = get_friendly_source_name(feed_url)
+
                 news_item = Headlines(
                     title=entry.title,
                     link=entry.link,
                     description=description,
                     published_date=published_date,
                     source=feed_url,
-                    source_name=friendly_source_name,
                     category=category, 
                     image_urls=','.join(image_urls) if image_urls else None
                 )
