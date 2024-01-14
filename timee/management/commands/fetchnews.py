@@ -7,3 +7,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         fetch_news()
         self.stdout.write(self.style.SUCCESS('Successfully fetched news'))
+
+
