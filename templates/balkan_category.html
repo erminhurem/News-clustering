@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}  
     <div id="split_pane">
         <div id="news_pane" class="top">
@@ -19,7 +19,7 @@
                     <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>
                     {% if news.image_urls %}
                     <div class="article_image">
-                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url({% static '/script/backgroundsize.min.htc'%});">
+                        <div class="image" style="background-image: url('{{ news.image_urls }}');-ms-behavior: url({/static/script/backgroundsize.min.htc'});">
                             <div class="image_inner">
                                 <a href="{{ news.link }}" class="image_link" target="_blank" rel="noopener noreferrer"></a>
                             </div>

@@ -188,6 +188,7 @@ def index(request):
     latest_news = Headlines.objects.all().order_by('-published_date')[:3]
     all_news = Headlines.objects.all().order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     for news in latest_news:
         news.source_name = get_friendly_source_name(news.source)
@@ -244,6 +245,7 @@ def index(request):
         'naslov_stranice': 'Vijesti - Time.ba',
         'news_by_category': news_by_category,
         'related_news': related_news,
+        'last_updated': last_updated,
     }
 
     return render(request, "index.html", context)
@@ -252,6 +254,7 @@ def index(request):
 def bih_category(request):
     news_items = Headlines.objects.filter(category='BiH').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -298,12 +301,15 @@ def bih_category(request):
         'news_by_category': {'BiH': news_page},
         'naslov_stranice': 'BiH - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated,
+        
     }
     return render(request, "bih_category.html", context)
 
 def ekonomija_category(request):
     news_items = Headlines.objects.filter(category='Ekonomija').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -351,11 +357,13 @@ def ekonomija_category(request):
         'news_by_category': {'Ekonomija': news_page},
         'naslov_stranice': 'Ekonomija - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "ekonomija_category.html", context)
 
 def balkan_category(request):
     news_items = Headlines.objects.filter(category='Balkan').order_by('-published_date')
+    last_updated = LastFetch.get_last_update_time()
 
     vectorizer = TfidfVectorizer()
     
@@ -404,12 +412,14 @@ def balkan_category(request):
         'news_by_category': {'Balkan': news_page},
         'naslov_stranice': 'Balkan - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "balkan_category.html", context)
 
 def svijet_category(request):
     news_items = Headlines.objects.filter(category='Svijet').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -456,12 +466,14 @@ def svijet_category(request):
         'news_by_category': {'Svijet': news_page},
         'naslov_stranice': 'Svijet - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "svijet_category.html", context)
 
 def sarajevo_category(request):
     news_items = Headlines.objects.filter(category='Sarajevo').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -508,12 +520,14 @@ def sarajevo_category(request):
         'news_by_category': {'Sarajevo': news_page},
         'naslov_stranice': 'Sarajevo - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "sarajevo_category.html", context)
 
 def hronika_category(request):
     news_items = Headlines.objects.filter(category='Hronika').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -560,12 +574,14 @@ def hronika_category(request):
         'news_by_category': {'Hronika': news_page},
         'naslov_stranice': 'Hronika - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "hronika_category.html", context)
 
 def kultura_category(request):
     news_items = Headlines.objects.filter(category='Kultura').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -612,12 +628,14 @@ def kultura_category(request):
         'news_by_category': {'Kultura': news_page},
         'naslov_stranice': 'Kultura - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "kultura_category.html", context)
 
 def scena_category(request):
     news_items = Headlines.objects.filter(category='Scena').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -664,6 +682,7 @@ def scena_category(request):
         'news_by_category': {'Scena': news_page},
         'naslov_stranice': 'Scena - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "scena_category.html", context)
 
@@ -672,7 +691,9 @@ def scena_category(request):
 # pocetak koda vezano za rubriku Sport
 def sport(request):
     latest_news_s = Headlines.objects.filter(category="Sport").order_by('-published_date')[:3]
-    vectorizer = TfidfVectorizer()    
+    vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
+
     for news_s in latest_news_s:
         news_s.source_name = get_friendly_source_name(news_s.source)
         news_s.time_since = get_relative_time(news_s.published_date)
@@ -724,12 +745,14 @@ def sport(request):
         'latest_news': latest_news,
         'naslov_stranice': 'Sport - Time.ba',
         'news_by_category': news_by_category,
+        'last_updated': last_updated
     }
     return render(request, "sport.html", context)
 
 def fudbal_category(request):
     news_items = Headlines.objects.filter(category='Fudbal').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -774,12 +797,14 @@ def fudbal_category(request):
         'news_by_category': {'Fudbal': news_page},
         'naslov_stranice': 'Fudbal - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "fudbal_category.html", context)
 
 def kosarka_category(request):
     news_items = Headlines.objects.filter(category='Kosarka').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -823,12 +848,14 @@ def kosarka_category(request):
         'news_by_category': {'Kosarka': news_page},
         'naslov_stranice': 'Kosaraka - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "kosarka_category.html", context)
 
 def tenis_category(request):
     news_items = Headlines.objects.filter(category='Tenis').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -872,12 +899,14 @@ def tenis_category(request):
         'news_by_category': {'Tenis': news_page},
         'naslov_stranice': 'Tenis - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "tenis_category.html", context)
 
 def ostalo_category(request):
     news_items = Headlines.objects.filter(category='Ostalo').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -924,6 +953,7 @@ def ostalo_category(request):
         'news_by_category': {'Ostalo': news_page},
         'naslov_stranice': 'Ostalo - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "ostalo_category.html", context)
 
@@ -934,6 +964,8 @@ def ostalo_category(request):
 def magazin(request):
     vectorizer = TfidfVectorizer()
     latest_news_m = Headlines.objects.filter(category="Magazin").order_by('-published_date')[:3]
+    last_updated = LastFetch.get_last_update_time()
+
     for news_m in latest_news_m:
         news_m.source_name = get_friendly_source_name(news_m.source)
         news_m.time_since = get_relative_time(news_m.published_date)
@@ -983,12 +1015,14 @@ def magazin(request):
         'latest_news_m': latest_news_m,
         'naslov_stranice': 'Magazin - Time.ba',
         'news_by_category': news_by_category,
+        'last_updated': last_updated
     }
     return render(request, "magazin.html", context)
 
 def zabava_category(request):
     news_items = Headlines.objects.filter(category='Zabava').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1034,11 +1068,14 @@ def zabava_category(request):
         'news_by_category': {'Zabava': news_page},
         'naslov_stranice': 'Zabava - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "zabava_category.html", context)
+
 def automobili_category(request):
     news_items = Headlines.objects.filter(category='Automobili').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1084,12 +1121,14 @@ def automobili_category(request):
         'news_by_category': {'Automobili': news_page},
         'naslov_stranice': 'Automobili - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "automobili_category.html", context)
 
 def tehnologija_category(request):
     news_items = Headlines.objects.filter(category='Tehnologija').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1137,6 +1176,7 @@ def tehnologija_category(request):
         'news_by_category': {'Tehnologija': news_page},
         'latest_news': news_page.object_list,
         'naslov_stranice': 'Tehnologija - Time.ba',
+        'last_updated': last_updated
         
     }
 
@@ -1146,6 +1186,7 @@ def tehnologija_category(request):
 def lifestyle_category(request):
     news_items = Headlines.objects.filter(category='Lifestyle').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1191,12 +1232,14 @@ def lifestyle_category(request):
         'news_by_category': {'Lifestyle': news_page},
         'naslov_stranice': 'Lifestyle - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "lifestyle_category.html", context)
 
 def hrana_category(request):
     news_items = Headlines.objects.filter(category='Hrana').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1243,12 +1286,14 @@ def hrana_category(request):
         'news_by_category': {'Hrana': news_page},
         'naslov_stranice': 'Hrana - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "hrana_category.html", context)
 
 def intima_category(request):
     news_items = Headlines.objects.filter(category='Intima').order_by('-published_date')
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
     
     items_per_page = 10
     paginator = Paginator(news_items, items_per_page)
@@ -1295,6 +1340,7 @@ def intima_category(request):
         'news_by_category': {'Intima': news_page},
         'naslov_stranice': 'Intima - Time.ba',
         'latest_news': news_page.object_list,
+        'last_updated': last_updated
     }
     return render(request, "intima_category.html", context)
 
@@ -1303,6 +1349,8 @@ def intima_category(request):
 def najnovije_vijesti(request):
     latest_news = Headlines.objects.all().order_by('-published_date')[:10]
     vectorizer = TfidfVectorizer()
+    last_updated = LastFetch.get_last_update_time()
+
     kategorije = [
         'Ekonomija', 'Sport', 'BiH', 'Balkan', 'Sarajevo',
         'Svijet', 'Hronika', 'Politika', 'Kultura', 'Zabava',
@@ -1364,17 +1412,23 @@ def najnovije_vijesti(request):
         'selected_topic': topic,
         'kategorije': kategorije,
         'news_page': news_page,
+        'last_updated': last_updated
     }
 
     return render(request, "najnovije_vijesti.html", context)
 
 
 def izvori(request):
+    last_updated = LastFetch.get_last_update_time()
 
-    return render(request, "izvori.html")
+    return render(request, "izvori.html", {'last_updated': last_updated})
 
 def firme(request):
-    context = {'naslov_stranice': 'Firme - Time.ba',}
+    last_updated = LastFetch.get_last_update_time()
+
+    context = {'naslov_stranice': 'Firme - Time.ba',
+               'last_updated': last_updated
+               }
     return render(request, "firme.html", context)
 
 
@@ -1575,14 +1629,18 @@ def categorize_news(url):
 
 
 def contact(request):
+    last_updated = LastFetch.get_last_update_time()
     context = {
          'naslov_stranice': 'Kontakt - Time.ba',
+         'last_updated': last_updated
     }
     return render(request, 'kontakt.html', context)
 
 def prognoza(request):
+    last_updated = LastFetch.get_last_update_time()
     context = {
          'naslov_stranice': 'Prognoza - Time.ba',
+         'last_updated': last_updated
     }
     return render(request, 'prognoza.html', context)
 
@@ -1622,26 +1680,33 @@ def news_archive(request):
     return JsonResponse(news_list, safe=False)
 
 def widget(request):
+    last_updated = LastFetch.get_last_update_time()
     context = {
          'naslov_stranice': 'Widget - Time.ba',
+         'last_updated': last_updated
     }
     return render(request, 'widget.html', context)
 
 def rsspage(request):
+    last_updated = LastFetch.get_last_update_time()
     context = {
          'naslov_stranice': 'Rss - Time.ba',
+         'last_updated': last_updated
     }
     return render(request, 'rss.html', context)
 
 def mobile(request):
+    last_updated = LastFetch.get_last_update_time()
     context = {
          'naslov_stranice': 'Mobile - Time.ba',
+         'last_updated': last_updated
     }
     return render(request, 'mobile/index.html', context)
 
 
 
 def opstine_view(request):
+    last_updated = LastFetch.get_last_update_time()
     opstine = Firme.objects.values('opstina').annotate(broj_firmi=Count('id_broj')).order_by('opstina')
 
     items_per_page = 10
@@ -1654,9 +1719,10 @@ def opstine_view(request):
     except EmptyPage:
         news_page = paginator.page(paginator.num_pages)  
 
-    return render(request, 'firme.html', {'opstine': opstine, 'news_page': news_page})
+    return render(request, 'firme.html', {'opstine': opstine, 'news_page': news_page,'last_updated': last_updated})
 
 def firme_view(request, opstina):
+    last_updated = LastFetch.get_last_update_time()
     firme = Firme.objects.filter(opstina=opstina)
 
     items_per_page = 10
@@ -1672,12 +1738,14 @@ def firme_view(request, opstina):
     context = {
         'firme': firme,
         'opstina': opstina,
-        'news_page': news_page
+        'news_page': news_page,
+        'last_updated': last_updated
     } 
 
     return render(request, 'city_companies.html', context)
 
 def search_news(request):
+    last_updated = LastFetch.get_last_update_time()
     query = request.GET.get('q', '')
     news_results = Headlines.objects.filter(title__icontains=query) if query else Headlines.objects.all()
     last_updated = Headlines.objects.latest('published_date').published_date
@@ -1691,6 +1759,7 @@ def search_news(request):
         'news_results': news_page,
         'last_updated': last_updated,
         'total_results': paginator.count,
+        'last_updated': last_updated
     }
     return render(request, 'pretraga_rezultat.html', context)
 

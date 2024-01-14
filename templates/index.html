@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize %}
+
 {% block content %}
 
 <style>
@@ -46,7 +46,7 @@
                                 <div class="related_article">
                                     <p class="rel_title"><a href="{{ related.link }}" target="_blank"
                                             rel="noopener noreferrer">{{ related.title }}</a></p> -
-                                    <a href="{{ related.source_name }}" class="r_source">{{ related.name}}</a>
+                                    <a href="{{ related.source_name }}" class="r_source">{{ related.sorce_name}}</a>
                                 </div>
                                 {% if news.other_sources.all %}
                                     <p class="other_sources">

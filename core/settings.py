@@ -27,9 +27,8 @@ SECRET_KEY = 'django-insecure-u2!6bqy*61$l&e59$e09=h08&63)7#jf36k+$nrww^7nd#2+cp
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.222.21',
-    '185.50.56.145',
-    '127.0.0.1', '*', '185.99.2.200', 'server.time.ba'
+    '159.69.82.151',
+    "127.0.0.1"
 ]
 
 # Celery settings
@@ -42,9 +41,9 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BEAT_SCHEDULE = {
-    'fetch-news-every-two-minutes': {
+    'fetch-news-every-one-minutes': {
         'task': 'timee.tasks.task_fetch_news',
-        'schedule': timedelta(minutes=2),
+        'schedule': timedelta(minutes=1),
     },
 }
 
@@ -60,7 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'timee',
     'dateutil',
-    'django.contrib.humanize'
+  
 
 ]
 
