@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'timeba',
+        'NAME': 'new_timeba',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',   # Ili IP adresa vašeg MySQL servera
