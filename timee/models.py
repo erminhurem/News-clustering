@@ -10,6 +10,7 @@ class Headlines(models.Model):
     source = models.CharField(max_length=100)
     image_urls= models.URLField(max_length=1000,default=None,blank=True, null=True)
     related_news = models.ManyToManyField('self', symmetrical=False, related_name='related_by', blank=True)
+    source_name = models.CharField(max_length=200, blank=True, null=True)
     other_sources = models.ManyToManyField('Source', related_name='headlines')
 
     
