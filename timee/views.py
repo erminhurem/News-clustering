@@ -91,8 +91,8 @@ def get_friendly_source_name(url):
         return 'N1'
     elif 'n1info.hr' in url:
         return 'N1'
-    elif 'klix.ba' in url:
-        return 'Klix'
+    elif 'klix.ba'  in url:
+        return 'Klix'   
     elif 'balkans.aljazeera.net' in url:
         return 'Aljazeera'
     elif 'avaz.ba' in url:
@@ -112,6 +112,8 @@ def get_friendly_source_name(url):
     elif 'blic.rs' in url:
         return 'Blic'
     elif 'mondo.ba' in url:
+        return 'Mondo'
+    elif 'mondo.rs' in url:
         return 'Mondo'
     elif 'namaz.ba' in url:
         return 'Namaz'
@@ -211,11 +213,7 @@ def index(request):
     # Dohvaćanje povezanih vijesti iz baze podataka
     related_news_ids = [all_news[i.item()].id for i in related_articles_indices if all_news[i.item()].id != news.id]
     news.related_news.set(related_news_ids)  # Ovo će postaviti povezane vijesti
-    related_news = news.related_news.all()
-
-    for related in related_news:
-        related.source_name = get_friendly_source_name(related.source)
-        related.time_since = get_relative_time(related.published_date)
+    
 
     #psotavljanje dobijenih izvora
     sources = get_or_create_sources_for_news(news)
@@ -243,8 +241,7 @@ def index(request):
     context = {
         'latest_news': latest_news,
         'naslov_stranice': 'Vijesti - Time.ba',
-        'news_by_category': news_by_category,
-        'related_news': related_news,
+        'news_by_category': news_by_category,        
         'last_updated': last_updated,
     }
 
@@ -1555,8 +1552,21 @@ def fetch_news():
         'https://www.slobodna-bosna.ba/rss/22/zabava.html',
         'https://www.slobodna-bosna.ba/rss/23/sex_i_grad.html',
         'https://radiosarajevo.ba/rss',
-        'https://raport.ba/feed/'
-        
+        'https://raport.ba/feed/',
+        'https://www.index.hr/rss',
+        'https://net.hr/feed',
+        'https://www.telegram.hr/feed/',
+        'https://www.jutarnji.hr/feed',
+        'https://gol.dnevnik.hr/assets/feed/articles',
+        'https://www.tportal.hr/rss-najnovije.xml',
+        'https://www.novilist.hr/feed/',
+        'https://www.gloria.hr/gl/feed',
+        'https://slobodnadalmacija.hr/feed',
+        'https://www.dnevno.hr/feed/',
+        'https://www.journal.hr/feed/',
+        'https://zena.blic.rs/rss',
+        'https://pink.rs/',
+        'https://www.lepotaizdravlje.rs/feed/'
 
     ]
 
@@ -1574,7 +1584,7 @@ def fetch_news():
            
                 image_urls = extract_images(entry)  # Koristi definisanu funkciju za ekstrakciju slika
                 category = categorize_news(entry.link)  # Ovdje dodajemo kategoriju
-                description = clean_description(entry.description)  # Ci�cenje opisa
+                description = clean_description(entry.description)  # Ciscenje opisa
                 friendly_source_name = get_friendly_source_name(feed_url)
 
                 news_item = Headlines(

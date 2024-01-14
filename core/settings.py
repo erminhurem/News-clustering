@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '159.69.82.151',
-    "127.0.0.1"
+    "127.0.0.1",
+    "192.168.222.21"
 ]
 
 # Celery settings
