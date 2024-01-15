@@ -43,18 +43,11 @@
                         <p class="snippet">{{ news.description }}</p>
                         {% if news.related_news.all %}
                             {% for related in news.related_news.all|slice:":3" %}
-                                <div class="related_article">
-                                    <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                            rel="noopener noreferrer">{{ related.title }}</a></p> -
-                                    <a href="{{ related.source_name }}" class="r_source">{{ related.sorce_name}}</a>
-                                </div>
-                                {% if news.other_sources.all %}
-                                    <p class="other_sources">
-                                        {% for source in news.other_sources.all %}
-                                            <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source_name }}</a></span>
-                                        {% endfor %}
-                                    </p>
-                                {% endif %}                                
+                            <div class="related_article">
+                                <p class="rel_title"><a href="{{ related.link }}" target="_blank"
+                                        rel="noopener noreferrer">{{ related.title }}</a></p> -
+                                <a href="{{ related.source_name }}" class="r_source">{{ related.source_name }}</a>
+                            </div>                                                                    
                             {% endfor %}
                             <div class="related_article">                            
                                 <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
@@ -108,7 +101,7 @@
                         {% for related in news.related_news.all|slice:":2" %}
                             <div class="related_article">
                                 <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-                                <a href="{{ related.link }}" class="r_source">{{ related.source_name }}</a>
+                                <a href="{{ related.source_name }}" class="r_source">{{ related.source_name }}</a>
                             </div>
                         {% endfor %}
 
@@ -162,7 +155,7 @@
                                 {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
                                         <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
-					<a href="{{ related.link }}" class="r_source">{{related.source_name}}</a>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
                                 {% endfor %}                           
                                 
@@ -206,7 +199,7 @@
                 {% for news in news_list %}                
                     {% if news.category|lower == "sarajevo" %}
                         <div class="cluster">       
-                            <h2><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h2>          
+                            <h1><a href="{{ news.link }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a></h1>          
                             {% if news.image_urls %}
                                 <div class="article_image">
                                     <div class="wait_image">
@@ -222,25 +215,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                {% endif %}                      
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -280,25 +266,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                    {% endif %}                       
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -339,25 +318,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                {% endif %}                       
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -398,25 +370,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                {% endif %}                        
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -458,25 +423,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                {% endif %}                       
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -517,25 +475,18 @@
                                 <h2><a href="{{ news.source_name }}" class="source">{{ news.source_name }}</a> - <span class="when_now"> {{ news.time_since }}</span></h2>
                                 <p class="snippet">{{ news.description }}</p>
                                 {% if news.related_news.all %}
-                                    {% for related in news.related_news.all|slice:":3" %}
-                                        <div class="related_article">
-                                            <p class="rel_title"><a href="{{ related.link }}" target="_blank"
-                                                    rel="noopener noreferrer">{{ related.title }}</a></p> 
-                                        </div>
-                                    {% endfor %}
-                                
-                                    {% if news.other_sources.all %}
-                                        <p class="other_sources">
-                                            {% for source in news.other_sources.all %}
-                                                <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
+                                {% for related in news.related_news.all|slice:":2" %}
                                     <div class="related_article">
-                                    
-                                        <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                        <p class="rel_title"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer">{{ related.title }}</a></p>
+					                    <a href="{{ related.source_name }}" class="r_source">{{related.source_name}}</a>
                                     </div>
-                                {% endif %}                       
+                                {% endfor %}                           
+                                
+                                <div class="related_article">
+                                
+                                    <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
+                                </div>
+                            	{% endif %}                       
                             </div>
                             <div class="clear"></div>
                         </div>

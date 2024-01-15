@@ -9,9 +9,13 @@
     <div class="dbar"><!-- DBAR   START -->
             <a href="{% url 'timee:svi_izvori' %}"> <span>Izvori</span></a>
             <span class="vr">-</span>
-            <a href="info/site"> <span>O sajtu</span> </a>
+            <a href="{% url 'timee:time_site' %}"> <span>Kako radi TIME.ba?</span> </a>
             <span class="vr">-</span>
-            <a href="info/marketing"> <span>Marketing</span> </a>
+            <a href="{% url 'timee:uslovi_indeksiranja' %}"> <span>Uslovi indeksiranja</span> </a>
+            <span class="vr">-</span>
+            <a href="{% url 'timee:uslovi_koristenja' %}"> <span>Uslovi koristenja</span> </a>
+            <span class="vr">-</span>
+            <a href="{% url 'timee:politika_privatnosti' %}"> <span>Politika privatnosti</span> </a>
             <span class="vr">-</span>
             <a href="{% url 'timee:contact' %}"> <span>Kontakt</span> </a>
     </div>             <!-- DBAR   END -->

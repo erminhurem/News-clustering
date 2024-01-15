@@ -24,17 +24,10 @@
                                 <div class="related_article">
                                     <p class="rel_title"><a href="{{ related.link }}" target="_blank"
                                             rel="noopener noreferrer">{{ related.title }}</a></p> -
-                                    <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                    <a href="{{ related.source_name }}" class="r_source">{{ related.source_name }}</a>
                                 </div>
-                            {% endfor %}
-                        
-                            {% if news.other_sources.all %}
-                                <p class="other_sources">
-                                    {% for source in news.other_sources.all %}
-                                        <span><a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a></span>
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
+                            {% endfor %}                      
+                            
                             <div class="related_article">                            
                                 <a href="{% url 'timee:related_news' pk=news.pk %}" class="other_articles">{{ news.related_news.count }} povezanih vijesti</a>
                             </div>
@@ -408,6 +401,7 @@
             {% endfor %}        
     </div>
 </div>
+<div class="clear"></div>
 
 
 
@@ -444,7 +438,7 @@
                                 {% for related in news.related_news.all %}
                                         <div class="related_article">
                                             <p class="rel_title" style="max-width: 420px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                            <a href="{{ related.source_name }}" class="r_source">{{ related.source_name }}</a>
                                         </div>
                                     {% endfor %}                       
                                 {% endif %}                        
@@ -490,7 +484,7 @@
                                 {% for related in news.related_news.all %}
                                         <div class="related_article">
                                             <p class="rel_title" style="max-width: 400px;"><a href="{{ related.link }}" target="_blank" rel="noopener noreferrer" >{{ related.title }}</a></p> - 
-                                            <a href="{{ related.source }}" class="r_source">{{ related.source_name }}</a>
+                                            <a href="{{ related.source_name }}" class="r_source">{{ related.source_name }}</a>
                                         </div>
                                     {% endfor %}                       
                                 {% endif %}                        
@@ -502,6 +496,7 @@
             {% endfor %}        
     </div>
 </div>
+<div class="h_rule"></div>
 <script>calcNaslov();</script>
 
 {% endblock %}
