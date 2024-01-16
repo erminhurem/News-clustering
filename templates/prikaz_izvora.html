@@ -6,13 +6,19 @@
   <div id="news_pane" class="single_news">
     <div class="k_naslov" id="c0">
       <h10></h10>
-      <span>Kurir</span>
+      
+        <span>Izvor</span>
+      
     </div>
     <div class="pagination">
-      <!-- Linkovi za paginaciju -->
+      {% for i in news_page.paginator.page_range %}
+        {% if i <= 10 %}
+            <a href="?page={{ i }}"><span class="select"><center>{{ i }}</center></a>
+        {% endif %}
+      {% endfor %}
     </div>
     <div class="h_rule"></div>
-    {% for vijest in vijesti %}
+    {% for vijest in vijesti|slice:":10" %}
     <div class="cluster">
 
       <h1><a href="{{ vijest.link }}" target="_blank" rel="noopener noreferrer">{{ vijest.title }}</a></h1>
@@ -29,8 +35,7 @@
       </div>
       {% endif %}
       <div class="article_body">
-        <h2><a href="{{ vijest.source_name }}" class="source">{{ vijest.source_name }}</a> - <span class="when_now"> {{
-            vijest.time_since }}</span></h2>
+        <h2><a href="{{ vijest.source_name }}" class="source">{{ vijest.source_name }}</a> - <span class="when_now"> {{ vijest.time_since }}</span></h2>
         <p>{{ vijest.description }}</p>
         <a href="#" class="other_articles">{{ vijest.related_news.count }} povezane vijesti »</a>
       </div>

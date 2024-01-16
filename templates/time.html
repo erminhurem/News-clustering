@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div id="split_pane" class="infopage">
+    <div id="news_pane">
+        <div class="k_naslov" id="c0">
+            <h10></h10><span>Kako radi TIME.ba?</span>
+        </div>
+        <div class="h_rule"></div>
+
+        <div style="margin-left:8px;">
+            <br>
+            <table id="about">
+                <tbody>
+                    <tr bgcolor="#EBF0F6">
+                        <td width="600"><b>Uvod</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br>
+                            Internet je razbio barijere koje su postojale između ljudi i informacija, efektivno
+                            demokratizovavši pristup ljudskom znanju. Nigdje to nije očiglednije nego u svijetu
+                            vijesti.<br><br>
+
+                            U <b>TIME.ba</b> vjerujemo da više informacija znači više izbora, više slobode i na kraju
+                            više moći za ljude <b>TIME.ba</b> je naš pokušaj da korisnike povežemo sa što više vijesti
+                            koje ih zanimaju. To znači prikazivanje najvažnijih vijesti na našoj naslovnoj stranici,
+                            tako da korisnici ne moraju lutati da dođu do njih.<br><br>
+
+                            Povezujući hiljade ljudi sa vijestima iz svih relevantnih medija u Bosni i Hercegovini,
+                            <b>TIME.ba</b> svojim korisnicima umnogome olakšava praćenje aktuelnosti iz različitih
+                            perspektiva, te traženje više informacija o temama koje ih zanimaju.<br><br>
+
+                            Ključ ovog projekta je poštovanje autorskih prava.<b>TIME.ba</b> nikada ne prikazuje više
+                            od: naslova, jednog fragmenta i male slike vijesti. Ako ljudi žele pročitati cijelu vijest,
+                            trebaju kliknuti na naslov koji ih vodi na originalnu web stranicu i tamo mogu pročitati
+                            cijelu vijest. <b>TIME.ba</b> je sličan Google pretraživaču u kojem se prikupljaju sve
+                            informacije objavljene na Internetu, od tih podataka se kreira indeks i servira putem
+                            jednostavnog web interfejsa.<br><br>
+
+                            Naš cilj je da korisnicima pružimo relevantne i objektivne rezultate, zbog čega naše top
+                            vijesti biramo automatski, kompjuterskim algoritmom, bez ljudske intervencije.<br><br>
+
+                            <b>TIME.ba</b> trenutno uključuje članke iz više od 120 izvora vijesti, a svakim danom
+                            primamo sve više zahtjeva za uvrštavanje u naš indeks.<br><br>
+
+                            Vjerujemo da su takvi agregatori vijesti od stvarne koristi i izvorima vijesti, jer
+                            agregatori usmjeravaju internet promet na svoje web stranice. Prikupljajući vijesti iz više
+                            izvora na jednom mjestu, <b>TIME.ba</b>, čini čitanje vijesti dostupnijim i zanimljivijim,
+                            podstiče ljude da čitaju više i koristi izdavačkoj industriji u cjelini.<br><br>
+
+                        </td>
+                    </tr>
+
+                    <tr bgcolor="#EBF0F6">
+                        <td><b>Како radi TIME.ba</b>?</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{% static 'images/keywords.png' %}" align="left" style="padding:15px;">
+                            <br><b>TIME.ba</b> organizira vijesti tako da se vijesti iz različitih izvora o istom
+                            događaju pojavljuju u jednoj grupi. Ovo zovemo "klaster". <br><br>
+
+                            Ovaj pristup grupiše naslove iz različitih izvora zajedno, pružajući korisnicima različite
+                            perspektive o događaju. Klikom na link "srodne vijesti" možete vidjeti sve objavljene
+                            vijesti o datom događaju. Izdavači nas često pitaju kako odlučujemo koji klaster i
+                            koja<br><br>
+
+                            vrsta vijesti treba da se pojavi na početnoj stranic <b>TIME.ba</b>. <br><br>
+                            Kratak odgovor bi bio: <b>Mi ne odlučujemo .</b>.<br><br>
+
+                            Naslovi na početnoj stranici <b>TIME.ba</b> u potpunosti su odabrani kompjuterskom formulom,
+                            na osnovu nekoliko faktora, uključujući koliko često i na kojim stranicama se priča
+                            pojavljuje. U suštini, brojimo broj originalnih članaka koje su objavili urednici da bismo
+                            odredili veličinu takve priče, koja se također ponderira na osnovu toga koliko je priča
+                            nova.<br><br>
+
+                            Recimo, na primer, da je <b>TIME.ba</b> u periodu od sat vremena registrovao klaster od dve
+                            vijesti o sumo meču u Japanu, ali se pojavljuje i klaster o pregovorima EU sa Kosovom, koji
+                            ima 20 vesti. Algoritam detektuje da je veći i daje mišljenje da drugi klaster ima veći
+                            prioritet.<br><br>
+
+                        </td>
+                    </tr>
+
+                    <tr bgcolor="#EBF0F6">
+                        <td><b>Koliko često se TIME.ba stranice ažuriraju ?</b>?</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br><b>TIME.ba</b> stranice se osvježavaju 720 puta tokom dana, odnosno svaka 2 minute, tako
+                            da ovdje, na jednom mjestu, uvijek možete pronaći najpopularnije vijesti.<br>
+                            <br>
+                        </td>
+                    </tr>
+
+                    <tr bgcolor="#EBF0F6">
+                        <td><b>Šta TIME.ba doprinosi Bosanskom internet prostoru </b>?</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br>Prava demokratija u procesu određivanja <b>TOP VIJESTI </b> dana.<br>
+                            Takođe, grupisanje vijesti omogućava korisnicima da promene klasično
+                            pasivno ponašanje, od:<br>
+                            <ol>
+
+                                <li> izbor izvora vijesti
+                                </li>
+                                <li> čitanje vijesti koje izvor nudi
+                                </li>
+                            </ol>
+                            u aktivnijem čitanju:
+                            <ol>
+                                <li> odabir priče (skup povezanih vijesti)
+                                </li>
+                                <li> istražujući različite perspektive priče<br>koje nude različiti izvori vijesti.
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+
+                    <tr bgcolor="#EBF0F6">
+                        <td><b>Sadržaj vijesti TIME.ba</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <img src="{% static 'images/comp.GIF' %}" width="250" align="left" style="padding:15px;">
+                            <br>
+
+                            Članke i slike koje ćete pronaći na <b>TIME.ba</b> objavljuju treće strane. <br><br>
+                            <b>TIME.ba</b> nema urednika, nema novinara, nema osoblja koje piše ili pregleda vijesti.
+                            <b>TIME.ba</b> ne kreira naslove ili bilo koji drugi dio članka.
+                            Cijeli proces je automatiziran, a vodi ga kompjuter. Od čitanja vijesti, analiziranja,
+                            grupisanja, određivanja TOP VIJESTI do prikazivanja<br><br> <b>U cijelom procesu nema
+                                ljudske intervencije !!! .</b>.<br>
+                            <br>
+                            Ako želite poslati povratnu informaciju o članku koji ste vidjeli na <b>TIME.ba</b>,
+                            morat ćete se povezati direktno s izvorom vijesti. Ako izvor <br><br>
+
+                            vijesti izbriše članak sa svoje web stranice ili izvor vijesti uopće ne radi određeni
+                            period, dobit ćete grešku nakon što kliknete na link
+                            <b>TIME.ba</b>. Izvinjavamo se zbog neugodnosti. Budite uvjereni da radimo na poboljšanju
+                            naše tehnologije. U međuvremenu, podstičemo vas da tražite vijesti na istu temu čitajući
+                            povezane vijesti iz istog klastera.<br><br>
+
+                            <b>TIME.ba</b> se sastoji isključivo od kompjuterskih algoritama. Kao rezultat toga,
+                            povremeno možete vidjeti da se slika pojavljuje izvan konteksta. Konstantno radimo na
+                            poboljšanju naših algoritama za automatski odabir slika.<br><br>
+
+                            Također, za sve greške u tekstovima koji će se pojaviti na <b>TIME.ba</b>, odgovorni su
+                            izvori, čak i ako izvor ispravi grešku na svojoj stranici. (vijesti većinu vremena
+                            preuzimamo
+                            samo jednom, a zatim nastavljamo sa preuzimanjem novih vijesti.)<br><br>
+                        </td>
+                    </tr>
+
+
+                    <tr bgcolor="#EBF0F6">
+                        <td><b>Statistika</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li><b>TIME.ba</b> svakodnevno analizira oko 15.000 vijesti na web stranicama 120 izvora
+                                    (njihove arhive ovdje nisu uključene).
+                                </li>
+                                <li>Od ukupno 15.000 vijesti, oko 3.500 je novih (objavljenih tekućeg dana) (osim
+                                    nedjelje),
+
+                                    <br>a ostale su iz prethodnih dana.
+
+                                </li>
+                                <li>Od 3500 dnevnih vijesti, oko 300 su duplikati, tj. za svaku od tih 350 vijesti
+                                    postoji skoro identična vijest u ostalih 3150. To znači da se oko 10% dnevnih
+                                    vijesti uzima iz nekog izvora i prenosi nepromijenjeno.
+
+                                </li>
+
+                            </ul>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div id="ads_pane" class="blogmenu"><!-- START AD 2_1 -->
+        <div id="adpos2_1" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 600px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_1+2_2 NewMoment Telekom Christmas Continuation">
+            <script language="javascript" src="https://track.adform.net/adfscript/?bn=70558442"
+                adfscript-parsed="true"></script>
+            <script type="text/javascript" src="https://s1.adform.net/stoat/630/s1.adform.net/bootstrap.js"></script>
+            <script type="text/javascript"
+                src="https://track.adform.net/adfserve/?bn=70558442;js=1;adfxid=1x;390;set=en-GB|en-GB|1536X864|0|750|700|24|8|3|7|0|0;cmpgdpr=;cmpgdprconsent=;cmpgpp=;cmpgpp_sid=;fd=0|2&amp;CREFURL=https%3A%2F%2Ftime.mk%2Finfo%2Fsite"
+                attributionsrc=""></script>
+            <div id="adform-adbox-7uwka9u2k0"
+                class="adform-adbox adform-adbox-static adform-adbox-static-T adform-adbox-static-I adform-domevents-hover-2ey31z7abcc adform-domevents-hover-3vvgiwp9b0w adform-domevents-click-2095eiggbdn"
+                style="width: 300px; height: 600px; left: 0px; top: 0px;">
+                <div style="position: relative; width: 100%; height: 100%; overflow: hidden;"> <iframe width="300"
+                        height="600" src="javascript:'';" allowtransparency="true" webkitallowfullscreen=""
+                        mozallowfullscreen="" allowfullscreen="" marginwidth="0" marginheight="0" hspace="0" vspace="0"
+                        frameborder="0" scrolling="no"
+                        data-contents="<!DOCTYPE html><title>ad</title><base href='https://s1.adform.net/Banners/Elements/Files/2009038/14130096/bvpath_257/'><script>try{parent.AdformWinwqroiszf5u(window)}catch(ex){new Image().src='https://track.adform.net/serving/jslog/?src=htmlcb&amp;msg='+encodeURIComponent(''+(ex.stack||ex))}</script><script src='https://s1.adform.net/Banners/Elements/Files/2009038/14130096/14130096.js?ADFassetID=14130096&amp;bv=257' charset='UTF-8'></script>"
+                        data-onload="(function E(a,c){function d(){c?
+p.open():p.open(&quot;text/html&quot;,&quot;replace&quot;);n?l.call(p,b):p.write(b);g.__rendered__=!0}var b=a.getAttribute(&quot;data-contents&quot;),g=a.contentWindow,f=g.parent,p=g.document,e=g.setTimeout;try{var l=f.parent&amp;&amp;f.parent.HTMLDocument&amp;&amp;f.parent.HTMLDocument.prototype.write}catch(q){}var n=l&amp;&amp;f.HTMLDocument&amp;&amp;f.HTMLDocument.prototype.write!==l;-1==a.offsetHeight||g.__rendered__||(g.__rendered__=!0,c?d():e(d,0))})(this,false)"></iframe>
+                </div>
+                <div
+                    style="position: absolute; width: 100%; height: 100%; overflow: hidden; top: 0px; left: 0px; z-index: -1;">
+                    <a href="https://track.adform.net/C/?bn=70558442;adfibeg=0;cdata=L4ipDXqIXmYXmLkJbhDK1XjLHR3i9F0krbr1qd_0lweNQFmkGJyI3w3Qf_oY8_Z4rjYQDoQ7MEKtlRd0QDCVUwkPApXdl6vcXULTpblip01kaWZnvsG6ZAUNxisUsf0zaLKEZbnVyvk1;;fc=1;CREFURL=https%3a%2f%2ftime.mk%2finfo%2fsite"
+                        style="width:1px;height:1px;display:block;border:0;"></a>
+                </div>
+            </div><i style="display:none"></i><noscript>
+                <a href="https://track.adform.net/C/?bn=70558442;C=0" target="_blank">
+                    <img src="https://track.adform.net/adfserve/?bn=70558442;srctype=4;ord=[timestamp]" border="0"
+                        width="300" height="600" alt="" />
+                </a>
+            </noscript>
+        </div><!-- END AD 2_1 -->
+        <div style="width:302px;height:5px;"></div><!-- START AD 2_2 -->
+        <div id="adpos2_2" class="advert_pos"
+            style="border: solid 1px #c3c3c3; width: 300px; height: 250px;margin: 0; padding: 0; position:relative;z-index:2;"
+            ad_name="pos2_2 TIMEMK Setek Winter Sale">
+            <div style="position:absolute;top:0px;padding:0px;margin:0px;"><img
+                    src="ads/406803925a306d817d60f968946426f6.jpg" border="0" width="300" height="250"></div><a
+                href="https://www.setec.mk/" target="_blank"
+                style="position:absolute;display:block;width:100%;height:100%;top:0px;padding:0px;margin:0px;"
+                rel="nofollow"></a>
+        </div><!-- END AD 2_2 -->
+    </div>
+</div>
+
+{% endblock %}
